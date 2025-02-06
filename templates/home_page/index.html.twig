@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prékar - Louez et partagez votre voiture en toute confiance !{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 50px;
+            background-color: #0056b3;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0 15px;
+        }
+        .nav .signup-btn {
+            background-color: white;
+            color: #007bff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .container {
+            text-align: center;
+            padding: 50px;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+    </style>
+
+    <header class="header">
+        Prékar - Louez et partagez votre voiture en toute confiance !
+    </header>
+
+    <nav class="nav">
+        <div>
+            <a href="#">Accueil</a>
+            <a href="#">Offres</a>
+            <a href="#">Contact</a>
+        </div>
+        <a href="/login" class="signup-btn">Connexion</a>
+    </nav>
+
+    <div class="container">
+        <h1>Bienvenue sur Prékar ! 🚗</h1>
+        <p>Louez ou proposez votre voiture en toute simplicité.</p>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Prékar. Tous droits réservés.</p>
+        <p><a href="#" style="color: white; text-decoration: underline;">Mentions légales</a> | <a href="#" style="color: white; text-decoration: underline;">CGU</a> | <a href="#" style="color: white; text-decoration: underline;">Contact</a></p>
+    </footer>
+{% endblock %}

@@ -3,6 +3,7 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
+<div class="form-container">
     <h1>Créer un compte</h1>
 
     {{ form_start(registrationForm) }}
@@ -17,4 +18,5 @@
     {{ form_end(registrationForm) }}
 
     <p>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
+</div>
 {% endblock %}

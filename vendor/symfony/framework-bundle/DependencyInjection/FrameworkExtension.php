@@ -2567,11 +2567,13 @@ class FrameworkExtension extends Extension
                     ->setFactory([ScopingHttpClient::class, 'forBaseUri'])
                     ->setArguments([new Reference('http_client.transport'), $baseUri, $scopeConfig])
                     ->addTag('http_client.client')
+                    ->addTag('kernel.reset', ['method' => 'reset', 'on_invalid' => 'ignore'])
                 ;
             } else {
                 $container->register($name, ScopingHttpClient::class)
                     ->setArguments([new Reference('http_client.transport'), [$scope => $scopeConfig], $scope])
                     ->addTag('http_client.client')
+                    ->addTag('kernel.reset', ['method' => 'reset', 'on_invalid' => 'ignore'])
                 ;
             }
 

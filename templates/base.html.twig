@@ -1,38 +1,203 @@
-<!DOCTYPE html>
-<html>
+{# templates/base.html.twig #}
+<!doctype html>
+<html class="no-js" lang="en">
     <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <!-- meta data -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% block title %}CarVilla{% endblock %}</title>
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/icon" href="{{ asset('assets/logo/favicon.png') }}"/>
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,
+                    400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Rufina:400,700" rel="stylesheet">
+
+        <!-- CSS de la template -->
+        <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/linearicons.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/flaticon.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootsnav.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/style2.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
 
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-
-        {% block stylesheets %}
-        {% endblock %}
-
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+        {% block stylesheets %}{% endblock %}
     </head>
+
     <body>
+        <!-- ==================== NAVBAR ==================== -->
+        <div class="top-area">
+            <div class="header-area">
+                <nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy"
+                     data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+                    <div class="container">
+                        <!-- Start Header Navigation -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <a class="navbar-brand" href="{{ path('homepage') }}">
+                                carvilla<span></span>
+                            </a>
+                        </div>
+                        <!-- End Header Navigation -->
 
-        <header>
-            <nav>
-                <ul>
-                    {% if app.user %}
-                        <li>Bienvenue, {{ app.user.nom }} !</li>
-                        <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
-                    {% else %}
-                        <li><a href="{{ path('app_login') }}">Connexion</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </header>
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                            <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                                <li class="scroll active"><a href="#home">home</a></li>
+                                <li class="scroll"><a href="#service">service</a></li>
+                                <li class="scroll"><a href="#featured-cars">featured cars</a></li>
+                                <li class="scroll"><a href="#new-cars">new cars</a></li>
+                                <li class="scroll"><a href="#brand">brands</a></li>
+                                <li class="scroll"><a href="#contact">contact</a></li>
 
-        <main>
-            {% block body %}{% endblock %}
-        </main>
+                                {# Boutons Connexion / Inscription / Déconnexion #}
+                                {% if app.user %}
+                                    <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+                                {% else %}
+                                    <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                                    <li><a href="{{ path('app_register') }}">Inscription</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!-- ==================== END NAVBAR ==================== -->
 
+        {# Contenu propre à chaque page #}
+        {% block body %}{% endblock %}
+
+        <!-- ==================== FOOTER ==================== -->
+        <footer id="contact" class="contact">
+            <div class="container">
+                <div class="footer-top">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="single-footer-widget">
+                                <div class="footer-logo">
+                                    <a href="{{ path('homepage') }}">carvilla</a>
+                                </div>
+                                <p>
+                                    Ased do eiusm tempor incidi ut labore et dolore magnaian aliqua. 
+                                    Ut enim ad minim veniam.
+                                </p>
+                                <div class="footer-contact">
+                                    <p>info@themesine.com</p>
+                                    <p>+1 (885) 2563154554</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-6">
+                            <div class="single-footer-widget">
+                                <h2>about devloon</h2>
+                                <ul>
+                                    <li><a href="#">about us</a></li>
+                                    <li><a href="#">career</a></li>
+                                    <li><a href="#">terms of service</a></li>
+                                    <li><a href="#">privacy policy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-12">
+                            <div class="single-footer-widget">
+                                <h2>top brands</h2>
+                                <div class="row">
+                                    <div class="col-md-7 col-xs-6">
+                                        <ul>
+                                            <li><a href="#">BMW</a></li>
+                                            <li><a href="#">lamborghini</a></li>
+                                            <li><a href="#">camaro</a></li>
+                                            <li><a href="#">audi</a></li>
+                                            <li><a href="#">infiniti</a></li>
+                                            <li><a href="#">nissan</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-5 col-xs-6">
+                                        <ul>
+                                            <li><a href="#">ferrari</a></li>
+                                            <li><a href="#">porsche</a></li>
+                                            <li><a href="#">land rover</a></li>
+                                            <li><a href="#">aston martin</a></li>
+                                            <li><a href="#">mersedes</a></li>
+                                            <li><a href="#">opel</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-offset-1 col-md-3 col-sm-6">
+                            <div class="single-footer-widget">
+                                <h2>news letter</h2>
+                                <div class="footer-newsletter">
+                                    <p>
+                                        Subscribe to get latest news update and informations
+                                    </p>
+                                </div>
+                                <div class="hm-foot-email">
+                                    <div class="foot-email-box">
+                                        <input type="text" class="form-control" placeholder="Add Email">
+                                    </div>
+                                    <div class="foot-email-subscribe">
+                                        <span><i class="fa fa-arrow-right"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-copyright">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p>
+                                &copy; copyright.designed and developed by 
+                                <a href="https://www.themesine.com/">themesine</a>.
+                            </p>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="footer-social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>	
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-linkedin"></i></a>
+                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                                <a href="#"><i class="fa fa-behance"></i></a>	
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="scroll-Top">
+                <div class="return-to-top">
+                    <i class="fa fa-angle-up" id="scroll-top" data-toggle="tooltip" 
+                       data-placement="top" title="" 
+                       data-original-title="Back to Top" aria-hidden="true"></i>
+                </div>
+            </div>
+        </footer>
+        <!-- ==================== END FOOTER ==================== -->
+
+        <!-- JS SCRIPTS COMMUNS -->
+        <script src="{{ asset('assets/js/jquery.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+        <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('assets/js/bootsnav.js') }}"></script>
+        <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+        {% block javascripts %}{% endblock %}
     </body>
 </html>
+

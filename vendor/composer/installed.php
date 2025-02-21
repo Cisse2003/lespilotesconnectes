@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '9cb02aa2e74de0d7fcec9b8b5c8c1cb145aeddf1',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '8ae6f4109f0290fbdded5f0161a426acc5c32e6b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '9cb02aa2e74de0d7fcec9b8b5c8c1cb145aeddf1',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '8ae6f4109f0290fbdded5f0161a426acc5c32e6b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -182,9 +182,9 @@
             'dev_requirement' => false,
         ),
         'myclabs/deep-copy' => array(
-            'pretty_version' => '1.12.1',
-            'version' => '1.12.1.0',
-            'reference' => '123267b2c49fbf30d78a7b2d333f6be754b94845',
+            'pretty_version' => '1.13.0',
+            'version' => '1.13.0.0',
+            'reference' => '024473a478be9df5fdaca2c793f2232fe788e414',
             'type' => 'library',
             'install_path' => __DIR__ . '/../myclabs/deep-copy',
             'aliases' => array(),
@@ -257,9 +257,9 @@
             'dev_requirement' => false,
         ),
         'phpstan/phpdoc-parser' => array(
-            'pretty_version' => '2.0.0',
-            'version' => '2.0.0.0',
-            'reference' => 'c00d78fb6b29658347f9d37ebe104bffadf36299',
+            'pretty_version' => '2.1.0',
+            'version' => '2.1.0.0',
+            'reference' => '9b30d6fd026b2c132b3985ce6b23bec09ab3aa68',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpstan/phpdoc-parser',
             'aliases' => array(),
@@ -412,8 +412,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '3.0.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache-implementation' => array(
@@ -1287,18 +1287,18 @@
             'dev_requirement' => true,
         ),
         'twig/extra-bundle' => array(
-            'pretty_version' => 'v3.19.0',
-            'version' => '3.19.0.0',
-            'reference' => '9746573ca4bc1cd03a767a183faadaf84e0c31fa',
+            'pretty_version' => 'v3.20.0',
+            'version' => '3.20.0.0',
+            'reference' => '9df5e1dbb6a68c0665ae5603f6f2c20815647876',
             'type' => 'symfony-bundle',
             'install_path' => __DIR__ . '/../twig/extra-bundle',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'twig/twig' => array(
-            'pretty_version' => 'v3.19.0',
-            'version' => '3.19.0.0',
-            'reference' => 'd4f8c2b86374f08efc859323dbcd95c590f7124e',
+            'pretty_version' => 'v3.20.0',
+            'version' => '3.20.0.0',
+            'reference' => '3468920399451a384bef53cf7996965f7cd40183',
             'type' => 'library',
             'install_path' => __DIR__ . '/../twig/twig',
             'aliases' => array(),

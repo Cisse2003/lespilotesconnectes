@@ -1,8 +1,16 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
 
-{% block title %}Inscription{% endblock %}
+    <!-- Liens vers les fichiers CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/style1.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style2.css') }}">
+</head>
+<body>
 
-{% block body %}
 <div class="form-container">
     <h1>Créer un compte</h1>
 
@@ -19,4 +27,7 @@
 
     <p>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
 </div>
-{% endblock %}
+
+</body>
+</html>
+

@@ -1,0 +1,351 @@
+{# templates/home.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}CarVilla - Home{% endblock %}
+
+{% block body %}
+    <!-- ==================== WELCOME-HERO (HOME) ==================== -->
+    <section id="home" class="welcome-hero">
+        <!-- On ne remet pas la navbar, elle est déjà dans base.html.twig -->
+        <div class="container">
+            <div class="welcome-hero-txt">
+                <h2>get your desired car in resonable price</h2>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <button class="welcome-btn" onclick="window.location.href='#'">contact us</button>
+            </div>
+        </div>
+
+        <!-- Section du formulaire de recherche (select year, make, etc.) -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="model-search-content">
+                        <div class="row">
+                            <div class="col-md-offset-1 col-md-2 col-sm-12">
+                                <div class="single-model-search">
+                                    <h2>select year</h2>
+                                    <div class="model-select-icon">
+                                        <select class="form-control">
+                                            <option value="default">year</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2017">2017</option>
+                                            <option value="2016">2016</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="single-model-search">
+                                    <h2>body style</h2>
+                                    <div class="model-select-icon">
+                                        <select class="form-control">
+                                            <option value="default">style</option>
+                                            <option value="sedan">sedan</option>
+                                            <option value="van">van</option>
+                                            <option value="roadster">roadster</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-offset-1 col-md-2 col-sm-12">
+                                <div class="single-model-search">
+                                    <h2>select make</h2>
+                                    <div class="model-select-icon">
+                                        <select class="form-control">
+                                            <option value="default">make</option>
+                                            <option value="toyota">toyota</option>
+                                            <option value="holden">holden</option>
+                                            <option value="maecedes-benz">maecedes-benz.</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="single-model-search">
+                                    <h2>car condition</h2>
+                                    <div class="model-select-icon">
+                                        <select class="form-control">
+                                            <option value="default">condition</option>
+                                            <option value="something">something</option>
+                                            <option value="something">something</option>
+                                            <option value="something">something</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-offset-1 col-md-2 col-sm-12">
+                                <div class="single-model-search">
+                                    <h2>select model</h2>
+                                    <div class="model-select-icon">
+                                        <select class="form-control">
+                                            <option value="default">model</option>
+                                            <option value="kia-rio">kia-rio</option>
+                                            <option value="mitsubishi">mitsubishi</option>
+                                            <option value="ford">ford</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="single-model-search">
+                                    <h2>select price</h2>
+                                    <div class="model-select-icon">
+                                        <select class="form-control">
+                                            <option value="default">price</option>
+                                            <option value="$0.00">$0.00</option>
+                                            <option value="$0.00">$0.00</option>
+                                            <option value="$0.00">$0.00</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 col-sm-12">
+                                <div class="single-model-search text-center">
+                                    <button class="welcome-btn model-search-btn" onclick="window.location.href='#'">
+                                        search
+                                    </button>
+                                </div>
+                            </div>
+                        </div><!--/.row-->
+                    </div><!--/.model-search-content-->
+                </div><!--/.col-md-12-->
+            </div><!--/.row-->
+        </div><!--/.container-->
+    </section>
+    <!-- ==================== END WELCOME-HERO ==================== -->
+
+    <!-- ==================== SERVICE SECTION ==================== -->
+    <section id="service" class="service">
+        <div class="container">
+            <div class="service-content">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="single-service-item">
+                            <div class="single-service-icon">
+                                <i class="flaticon-car"></i>
+                            </div>
+                            <h2><a href="#">largest dealership <span>of</span> car</a></h2>
+                            <p>
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut den fugit sed quia.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="single-service-item">
+                            <div class="single-service-icon">
+                                <i class="flaticon-car-repair"></i>
+                            </div>
+                            <h2><a href="#">unlimited repair warrenty</a></h2>
+                            <p>
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut den fugit sed quia.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="single-service-item">
+                            <div class="single-service-icon">
+                                <i class="flaticon-car-1"></i>
+                            </div>
+                            <h2><a href="#">insurence support</a></h2>
+                            <p>
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut den fugit sed quia.
+                            </p>
+                        </div>
+                    </div>
+                </div><!--/.row-->
+            </div><!--/.service-content-->
+        </div><!--/.container-->
+    </section>
+    <!-- ==================== END SERVICE SECTION ==================== -->
+
+    <!-- ==================== NEW CARS SECTION ==================== -->
+    <section id="new-cars" class="new-cars">
+        <div class="container">
+            <div class="section-header">
+                <p>checkout <span>the</span> latest cars</p>
+                <h2>newest cars</h2>
+            </div>
+            <div class="new-cars-content">
+                <div class="owl-carousel owl-theme" id="new-cars-carousel">
+                    <!-- .new-cars-item 1 -->
+                    <div class="new-cars-item">
+                        <div class="single-new-cars-item">
+                            <div class="row">
+                                <div class="col-md-7 col-sm-12">
+                                    <div class="new-cars-img">
+                                        <img src="{{ asset('assets/images/new-cars-model/ncm1.png') }}" alt="img"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 col-sm-12">
+                                    <div class="new-cars-txt">
+                                        <h2><a href="#">chevrolet camaro <span> za100</span></a></h2>
+                                        <p>
+                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                        </p>
+                                        <p class="new-cars-para2">
+                                            Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                                        </p>
+                                        <button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
+                                            view details
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- .new-cars-item 2 -->
+                    <div class="new-cars-item">
+                        <div class="single-new-cars-item">
+                            <div class="row">
+                                <div class="col-md-7 col-sm-12">
+                                    <div class="new-cars-img">
+                                        <img src="{{ asset('assets/images/new-cars-model/ncm2.png') }}" alt="img"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 col-sm-12">
+                                    <div class="new-cars-txt">
+                                        <h2><a href="#">BMW series-3 wagon</a></h2>
+                                        <p>
+                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                        </p>
+                                        <p class="new-cars-para2">
+                                            Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                                        </p>
+                                        <button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
+                                            view details
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- .new-cars-item 3 -->
+                    <div class="new-cars-item">
+                        <div class="single-new-cars-item">
+                            <div class="row">
+                                <div class="col-md-7 col-sm-12">
+                                    <div class="new-cars-img">
+                                        <img src="{{ asset('assets/images/new-cars-model/ncm3.png') }}" alt="img"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 col-sm-12">
+                                    <div class="new-cars-txt">
+                                        <h2><a href="#">ferrari 488 superfast</a></h2>
+                                        <p>
+                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                        </p>
+                                        <p class="new-cars-para2">
+                                            Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                                        </p>
+                                        <button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
+                                            view details
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {# Ajoute d'autres slides si nécessaire #}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ==================== END NEW CARS SECTION ==================== -->
+
+    <!-- ==================== FEATURED CARS SECTION ==================== -->
+    <section id="featured-cars" class="featured-cars">
+        <div class="container">
+            <div class="section-header">
+                <p>checkout <span>the</span> featured cars</p>
+                <h2>featured cars</h2>
+            </div>
+            <div class="featured-cars-content">
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="single-featured-cars">
+                            <div class="featured-img-box">
+                                <div class="featured-cars-img">
+                                    <img src="{{ asset('assets/images/featured-cars/fc1.png') }}" alt="cars">
+                                </div>
+                                <div class="featured-model-info">
+                                    <p>
+                                        model: 2017
+                                        <span class="featured-mi-span"> 3100 mi</span> 
+                                        <span class="featured-hp-span"> 240HP</span>
+                                        automatic
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="featured-cars-txt">
+                                <h2><a href="#">BMW 6-series gran coupe</a></h2>
+                                <h3>$89,395</h3>
+                                <p>
+                                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {# Ajoute les autres .single-featured-cars pour fc2, fc3, etc. #}
+                </div>
+                {# Ajoute la 2e rangée si nécessaire #}
+            </div>
+        </div>
+    </section>
+    <!-- ==================== END FEATURED CARS SECTION ==================== -->
+
+    <!-- ==================== CLIENTS SAY SECTION ==================== -->
+    <section id="clients-say" class="clients-say">
+        <div class="container">
+            <div class="section-header">
+                <h2>what our clients say</h2>
+            </div>
+            <div class="row">
+                <div class="owl-carousel testimonial-carousel">
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="single-testimonial-box">
+                            <div class="testimonial-description">
+                                <div class="testimonial-info">
+                                    <div class="testimonial-img">
+                                        <img src="{{ asset('assets/images/clients/c1.png') }}" alt="image of clients person" />
+                                    </div>
+                                </div>
+                                <div class="testimonial-comment">
+                                    <p>
+                                        Sed ut pers unde omnis iste natus error sit voluptatem accusantium dolor laudan rem aperiam.
+                                    </p>
+                                </div>
+                                <div class="testimonial-person">
+                                    <h2><a href="#">tomas lili</a></h2>
+                                    <h4>new york</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {# Ajoute d'autres témoignages (c2.png, c3.png, etc.) #}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ==================== END CLIENTS SAY SECTION ==================== -->
+
+    <!-- ==================== BRAND SECTION ==================== -->
+    <section id="brand" class="brand">
+        <div class="container">
+            <div class="brand-area">
+                <div class="owl-carousel owl-theme brand-item">
+                    <div class="item">
+                        <a href="#">
+                            <img src="{{ asset('assets/images/brand/br1.png') }}" alt="brand-image" />
+                        </a>
+                    </div>
+                    {# Ajoute les autres items (br2.png, br3.png, etc.) #}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ==================== END BRAND SECTION ==================== -->
+
+    {# Le footer et la section "contact" sont déjà dans base.html.twig #}
+
+{% endblock %}
+

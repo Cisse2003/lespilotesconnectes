@@ -14,15 +14,28 @@
 <div class="form-container">
     <h1>Créer un compte</h1>
 
+    <!-- Affichage des messages Flash d'erreur -->
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     {{ form_start(registrationForm) }}
+
         {{ form_row(registrationForm.email) }}
+        
+
         {{ form_row(registrationForm.plainPassword.first) }}
         {{ form_row(registrationForm.plainPassword.second) }}
+
         {{ form_row(registrationForm.nom) }}
         {{ form_row(registrationForm.prenom) }}
         {{ form_row(registrationForm.telephone) }}
         {{ form_row(registrationForm.adresse) }}
+
         <button type="submit">S'inscrire</button>
+    
     {{ form_end(registrationForm) }}
 
     <p>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>

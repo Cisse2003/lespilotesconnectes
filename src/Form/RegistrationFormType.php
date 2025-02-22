@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -14,7 +14,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[UniqueEntity(fields: ['email'], message: '⚠️ Cet email est déjà utilisé. Veuillez en choisir un autre.')]
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -25,6 +28,9 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer une adresse email',
+                    ]),
+                    new Email([
+                        'message' => 'Veuillez entrer une adresse email valide.',
                     ]),
                 ],
             ])
@@ -45,30 +51,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('nom', TextType::class, [
-                'label' => 'Nom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre nom',
-                    ]),
-                ],
-            ])
-            ->add('prenom', TextType::class, [
-                'label' => 'Prénom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre prénom',
-                    ]),
-                ],
-            ])
-            ->add('telephone', TextType::class, [
-                'label' => 'Téléphone',
-                'required' => false, // Le champ téléphone est optionnel
-            ])
-            ->add('adresse', TextType::class, [
-                'label' => 'Adresse',
-                'required' => false, // Le champ adresse est optionnel
-            ])
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('telephone', TextType::class, ['required' => false])
+            ->add('adresse', TextType::class, ['required' => false])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -82,7 +68,10 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Utilisateur::class,
         ]);
     }
 }
+
+
+

@@ -12,8 +12,16 @@
 </head>
 <body>
 
-    <!-- FORMULAIRE DE CONNEXION -->
     <div class="login-container">
+        {# Affichage des messages flash (succès, erreurs, etc.) #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Profil</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <!-- Ton CSS personnalisé -->
+    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}">
+</head>
+<body>
+<div class="container mt-5">
+    <!-- Messages Flash (succès, erreur) -->
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <div class="row">
+        <!-- Colonne de gauche : Photo + Infos utilisateur -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <!-- Photo de profil -->
+                    <img src="{{ asset(user.profileImage ? 'uploads/profile_images/' ~ user.profileImage : 'assets/images/profile.png') }}"
+                         alt="Photo de profil"
+                         class="rounded-circle mb-3"
+                         style="width: 120px; height: 120px; object-fit: cover;">
+
+                    <!-- Nom complet -->
+                    <h4 class="card-title">
+                        {{ user.nom }} {{ user.prenom }}
+                    </h4>
+                    <!-- Infos de contact -->
+                    <p class="card-text mb-1">
+                        <strong>Email :</strong> {{ user.email }}
+                    </p>
+                    <p class="card-text mb-1">
+                        <strong>Téléphone :</strong> {{ user.telephone }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Adresse :</strong> {{ user.adresse }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne de droite : Formulaire d'édition -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h3 class="mb-0">Modifier mon profil</h3>
+                </div>
+                <div class="card-body">
+                    {{ form_start(profileForm) }}
+                        <!-- Nom -->
+                        <div class="form-group mb-3">
+                            {{ form_label(profileForm.nom, 'Nom') }}
+                            {{ form_widget(profileForm.nom, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(profileForm.nom) }}
+                        </div>
+
+                        <!-- Prénom -->
+                        <div class="form-group mb-3">
+                            {{ form_label(profileForm.prenom, 'Prénom') }}
+                            {{ form_widget(profileForm.prenom, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(profileForm.prenom) }}
+                        </div>
+
+                        <!-- Téléphone -->
+                        <div class="form-group mb-3">
+                            {{ form_label(profileForm.telephone, 'Téléphone') }}
+                            {{ form_widget(profileForm.telephone, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(profileForm.telephone) }}
+                        </div>
+
+                        <!-- Adresse -->
+                        <div class="form-group mb-3">
+                            {{ form_label(profileForm.adresse, 'Adresse') }}
+                            {{ form_widget(profileForm.adresse, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(profileForm.adresse) }}
+                        </div>
+
+                        <!-- Photo de profil -->
+                        <div class="form-group mb-4">
+                            {{ form_label(profileForm.profileImage, 'Photo de profil (PNG, JPEG ou GIF)') }}
+                            {{ form_widget(profileForm.profileImage, {'attr': {'class': 'form-control-file'}}) }}
+                            {{ form_errors(profileForm.profileImage) }}
+                        </div>
+
+                        <hr>
+                        <h5>Changer le mot de passe</h5>
+
+                        <!-- Ancien mot de passe -->
+                        <div class="form-group mb-3">
+                            {{ form_label(profileForm.oldPassword, 'Ancien mot de passe') }}
+                            {{ form_widget(profileForm.oldPassword, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(profileForm.oldPassword) }}
+                        </div>
+
+                        <!-- Nouveau mot de passe -->
+                        <div class="form-group mb-3">
+                            {{ form_label(profileForm.newPassword.first, 'Nouveau mot de passe') }}
+                            {{ form_widget(profileForm.newPassword.first, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(profileForm.newPassword.first) }}
+                        </div>
+
+                        <!-- Confirmation du nouveau mot de passe -->
+                        <div class="form-group mb-4">
+                            {{ form_label(profileForm.newPassword.second, 'Confirmer le nouveau mot de passe') }}
+                            {{ form_widget(profileForm.newPassword.second, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(profileForm.newPassword.second) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            Enregistrer les modifications
+                        </button>
+                    {{ form_end(profileForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Bootstrap -->
+<script src="{{ asset('assets/js/jquery.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+</body>
+</html>
+

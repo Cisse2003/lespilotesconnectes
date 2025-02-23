@@ -2,10 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription</title>
-
-    <!-- Liens vers les fichiers CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Liens vers tes fichiers CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style1.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style2.css') }}">
 </head>
@@ -14,7 +13,14 @@
 <div class="form-container">
     <h1>Créer un compte</h1>
 
-    <!-- Affichage des messages Flash d'erreur -->
+    {# Affichage des messages Flash de succès #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {# Affichage des messages Flash d'erreur #}
     {% for message in app.flashes('error') %}
         <div class="alert alert-danger">
             {{ message }}
@@ -24,15 +30,13 @@
     {{ form_start(registrationForm) }}
 
         {{ form_row(registrationForm.email) }}
-        
-
         {{ form_row(registrationForm.plainPassword.first) }}
         {{ form_row(registrationForm.plainPassword.second) }}
-
         {{ form_row(registrationForm.nom) }}
         {{ form_row(registrationForm.prenom) }}
         {{ form_row(registrationForm.telephone) }}
         {{ form_row(registrationForm.adresse) }}
+        
 
         <button type="submit">S'inscrire</button>
     

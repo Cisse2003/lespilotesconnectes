@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -7,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity]
-#[UniqueEntity(fields: ['email'], message: '⚠️ Cet email est déjà utilisé. Veuillez en choisir un autre.')] // ✅ Ajout ici
+#[UniqueEntity(fields: ['email'], message: '⚠️ Cet email est déjà utilisé. Veuillez en choisir un autre.')]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -21,7 +22,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 100, unique: true)] // ✅ L'email doit être UNIQUE en base
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 15)]
@@ -31,7 +32,13 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $adresse = null;
 
     #[ORM\Column(type: "string", length: 255)]
-    private ?string $password = null; // ✅ Ajout du champ password
+    private ?string $password = null;
+
+    // ***************** Nouveau champ pour la photo de profil *****************
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImage = null;
+
+    // *************************************************************************
 
     public function getId(): ?int
     {
@@ -104,6 +111,21 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // ***************** Getters et setters pour profileImage *****************
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(?string $profileImage): static
+    {
+        $this->profileImage = $profileImage;
+        return $this;
+    }
+
+    // *************************************************************************
+
     public function eraseCredentials(): void
     {
         // Méthode requise par UserInterface mais non utilisée
@@ -119,6 +141,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return ['ROLE_USER'];
     }
 }
+
 
 
 

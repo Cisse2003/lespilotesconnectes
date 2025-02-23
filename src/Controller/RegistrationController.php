@@ -3,15 +3,13 @@ namespace App\Controller;
 
 use App\Entity\Utilisateur;
 use App\Form\RegistrationFormType;
-use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException; // ✅ Importation de l'exception
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
@@ -19,7 +17,6 @@ class RegistrationController extends AbstractController
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        Security $security,
         EntityManagerInterface $entityManager
     ): Response {
         $user = new Utilisateur();
@@ -27,9 +24,9 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifier si l'email existe déjà
-            $existingUser = $entityManager->getRepository(Utilisateur::class)->findOneBy(['email' => $user->getEmail()]);
-           
+            // Vérifie si l'email existe déjà
+            $existingUser = $entityManager->getRepository(Utilisateur::class)
+                ->findOneBy(['email' => $user->getEmail()]);
 
             try {
                 // Encode le mot de passe
@@ -40,8 +37,11 @@ class RegistrationController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Connexion automatique après inscription
-                return $security->login($user, UserAuthenticator::class, 'main');
+                // Ajoute un message flash de succès
+                $this->addFlash('success', 'Votre compte a été créé avec succès. Veuillez vous connecter.');
+
+                // Redirige vers la page de connexion
+                return $this->redirectToRoute('app_login');
             } catch (UniqueConstraintViolationException $e) {
                 $this->addFlash('error', 'Cet email est déjà utilisé.');
                 return $this->redirectToRoute('app_register');
@@ -49,9 +49,8 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form,
+            'registrationForm' => $form->createView(),
         ]);
     }
 }
-
 

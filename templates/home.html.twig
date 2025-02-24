@@ -159,99 +159,42 @@
     </section>
     <!-- ==================== END SERVICE SECTION ==================== -->
 
-    <!-- ==================== NEW CARS SECTION ==================== -->
-    <section id="new-cars" class="new-cars">
-        <div class="container">
-            <div class="section-header">
-                <p>checkout <span>the</span> latest cars</p>
-                <h2>newest cars</h2>
-            </div>
-            <div class="new-cars-content">
-                <div class="owl-carousel owl-theme" id="new-cars-carousel">
-                    <!-- .new-cars-item 1 -->
-                    <div class="new-cars-item">
-                        <div class="single-new-cars-item">
-                            <div class="row">
-                                <div class="col-md-7 col-sm-12">
-                                    <div class="new-cars-img">
-                                        <img src="{{ asset('assets/images/new-cars-model/ncm1.png') }}" alt="img"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 col-sm-12">
-                                    <div class="new-cars-txt">
-                                        <h2><a href="#">chevrolet camaro <span> za100</span></a></h2>
-                                        <p>
-                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                        </p>
-                                        <p class="new-cars-para2">
-                                            Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                                        </p>
-                                        <button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
-                                            view details
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- .new-cars-item 2 -->
-                    <div class="new-cars-item">
-                        <div class="single-new-cars-item">
-                            <div class="row">
-                                <div class="col-md-7 col-sm-12">
-                                    <div class="new-cars-img">
-                                        <img src="{{ asset('assets/images/new-cars-model/ncm2.png') }}" alt="img"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 col-sm-12">
-                                    <div class="new-cars-txt">
-                                        <h2><a href="#">BMW series-3 wagon</a></h2>
-                                        <p>
-                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                        </p>
-                                        <p class="new-cars-para2">
-                                            Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                                        </p>
-                                        <button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
-                                            view details
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- .new-cars-item 3 -->
-                    <div class="new-cars-item">
-                        <div class="single-new-cars-item">
-                            <div class="row">
-                                <div class="col-md-7 col-sm-12">
-                                    <div class="new-cars-img">
-                                        <img src="{{ asset('assets/images/new-cars-model/ncm3.png') }}" alt="img"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 col-sm-12">
-                                    <div class="new-cars-txt">
-                                        <h2><a href="#">ferrari 488 superfast</a></h2>
-                                        <p>
-                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                        </p>
-                                        <p class="new-cars-para2">
-                                            Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                                        </p>
-                                        <button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
-                                            view details
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {# Ajoute d'autres slides si nécessaire #}
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ==================== END NEW CARS SECTION ==================== -->
+	<!-- ==================== DÉPOSER UNE OFFRE ==================== -->
+	<section id="deposer-offre" class="deposer-offre">
+	    <div class="container">
+		<div class="section-header text-center">
+		    <p class="subtitle">Vous souhaitez louer votre voiture ?</p>
+		    <h2 class="title">Déposez Votre Offre Maintenant</h2>
+		</div>
+		<div class="row align-items-center">
+		    <div class="col-md-6">
+		        <div class="offer-img">
+		            <img src="{{ asset('assets/images/deposer-offre.jpg') }}" alt="Déposer une offre" class="img-fluid shadow-lg">
+		        </div>
+		    </div>
+		    <div class="col-md-6">
+		        <div class="offer-txt">
+		            <h3><strong>Gagnez De L'argent En Louant Votre Voiture</strong></h3>
+		            <p class="offer-description">
+		                Mettez votre véhicule en location en quelques clics. Remplissez un simple formulaire 
+		                et trouvez rapidement des locataires sérieux.
+		            </p>
+		            <ul class="offer-list">
+		                <li><i class="fa fa-check"></i> Simple et rapide</li>
+		                <li><i class="fa fa-check"></i> Sécurisé et fiable</li>
+		                <li><i class="fa fa-check"></i> Paiement sécurisé</li>
+		            </ul>
+		            <a href="{{ path('app_deposer_offre') }}" class="btn btn-primary btn-lg shadow">
+		                <i class="fa fa-arrow-right"></i> Continuer vers la Page de Dépôt
+		            </a>
+		        </div>
+		    </div>
+		</div>
+	    </div>
+	</section>
+	<!-- ==================== FIN DÉPOSER UNE OFFRE ==================== -->
+
+
 
     <!-- ==================== FEATURED CARS SECTION ==================== -->
     <section id="featured-cars" class="featured-cars">

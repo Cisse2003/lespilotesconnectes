@@ -1,5 +1,6 @@
 parameters:
     profile_images_directory: '%kernel.project_dir%/public/uploads/profile_images'
+    images_directory: '%kernel.project_dir%/public/uploads/offres'
 
 services:
     # default configuration for services in *this* file

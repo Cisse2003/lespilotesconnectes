@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Déposer une Offre</title>
+    <!-- Inclusion de Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="card">
+        <h2 class="text-center text-primary">Déposer une Offre</h2>
+        <hr>
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+        
+        <div class="row">
+          <div class="col-md-6">
+            {{ form_row(form.image, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.voiture, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.lieuGarage, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.prix, {'attr': {'class': 'form-control'}}) }}
+          </div>
+          <div class="col-md-6">
+            {{ form_row(form.disponibilite, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.dateDisponibilite, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.proposeLivraison, {'attr': {'class': 'form-check-input'}}) }}
+            <div id="livraisonFields" style="display: none;">
+              {{ form_row(form.livraison) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-success px-5 py-2">Soumettre</button>
+        </div>
+
+        {{ form_end(form) }}
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          let livraisonCheckbox = document.querySelector("#{{ form.proposeLivraison.vars.id }}");
+          let livraisonFields = document.querySelector("#livraisonFields");
+          livraisonCheckbox.addEventListener("change", function() {
+              livraisonFields.style.display = this.checked ? "block" : "none";
+          });
+      });
+    </script>
+  </body>
+</html>
+

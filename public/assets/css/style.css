@@ -729,6 +729,119 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     font-size: 18px;
 }
 
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Section Déposer une Offre */
+.deposer-offre {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    padding: 80px 0;
+    text-align: center;
+}
+
+.deposer-offre .section-header {
+    margin-bottom: 40px;
+}
+
+.deposer-offre .subtitle {
+    color: #777;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.deposer-offre .title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+}
+
+.deposer-offre .offer-img img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.deposer-offre .offer-txt {
+    text-align: left;
+    padding: 20px;
+}
+
+.deposer-offre .offer-txt h3 {
+    font-size: 24px;
+    color: #222;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.deposer-offre .offer-description {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.deposer-offre .offer-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.deposer-offre .offer-list li {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.deposer-offre .offer-list li i {
+    color: #007bff;
+    margin-right: 8px;
+}
+
+.deposer-offre .btn-primary {
+    background: #007bff;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.deposer-offre .btn-primary i {
+    margin-left: 10px;
+}
+
+.deposer-offre .btn-primary:hover {
+    background: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .deposer-offre .row {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .deposer-offre .offer-txt {
+        text-align: center;
+        padding-top: 20px;
+    }
+
+    .deposer-offre .offer-list li {
+        justify-content: center;
+    }
+}
+
+
 
 
 /*========================Thank you=================

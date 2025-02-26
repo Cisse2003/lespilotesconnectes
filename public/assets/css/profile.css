@@ -1,0 +1,170 @@
+/* === Style général du body === */
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 20px !important;
+}
+
+/* === Conteneur principal === */
+.container {
+    max-width: 900px !important;
+    background: white !important;
+    border-radius: 12px !important;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2) !important;
+    padding: 30px !important;
+    animation: fadeIn 0.5s ease-in-out !important;
+}
+
+/* === Effet d'apparition === */
+@keyframes fadeIn {
+    from {
+        opacity: 0 !important;
+        transform: translateY(-20px) !important;
+    }
+    to {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+}
+
+/* === Cartes de profil et formulaire === */
+.card {
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+    overflow: hidden !important;
+}
+
+/* === Photo de profil cliquable === */
+.card-body img {
+    width: 120px !important;
+    height: 120px !important;
+    object-fit: cover !important;
+    cursor: pointer !important;
+    transition: transform 0.3s ease-in-out !important;
+}
+
+.card-body img:hover {
+    transform: scale(1.1) !important;
+}
+
+/* === Boutons stylisés === */
+.btn {
+    font-weight: bold !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    padding: 10px 15px !important;
+    transition: 0.3s ease !important;
+}
+
+.btn-warning {
+    font-weight: bold !important;
+    background: #ffcc00 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.btn-warning:hover {
+    background: #e6b800 !important;
+}
+
+.btn-danger {
+    font-weight: bold !important;
+    background: #ff4d4d !important;
+    color: white !important;
+    border: none !important;
+}
+
+.btn-danger:hover {
+    background: #cc0000 !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #556cd6, #5a3d91) !important;
+}
+
+/* === Style des champs de formulaire === */
+.form-control {
+    border-radius: 8px !important;
+    border: 1px solid #ddd !important;
+    transition: 0.3s ease !important;
+}
+
+.form-control:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3) !important;
+}
+
+/* === Titres et textes === */
+h3 {
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+h4 {
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    color: #444 !important;
+}
+
+/* === Messages flash === */
+.alert {
+    padding: 10px !important;
+    border-radius: 8px !important;
+    margin-bottom: 15px !important;
+    font-size: 14px !important;
+}
+
+.alert-success {
+    background: #d4edda !important;
+    color: #155724 !important;
+    border-left: 4px solid #28a745 !important;
+
+}
+
+.alert-danger {
+    background: #ffdddd !important;
+    color: #d9534f !important;
+    border-left: 4px solid #d9534f !important;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+    border: none !important;
+
+    padding: 10px 15px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    transition: 0.3s ease !important;
+    font-weight: bold !important;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #556cd6, #5a3d91) !important;
+}
+
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px !important;
+    }
+
+    .btn {
+        width: 100% !important;
+        margin-top: 5px !important;
+    }
+}

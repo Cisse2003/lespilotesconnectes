@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="Modification sur le bouton de retour">
-      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
+    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="Système de notification des inscription (Email)">
+      <change afterPath="$PROJECT_DIR$/public/assets/css/profile.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,7 +255,7 @@
       <workItem from="1740406936515" duration="3090000" />
       <workItem from="1740478055789" duration="929000" />
       <workItem from="1740587075673" duration="3850000" />
-      <workItem from="1740602825342" duration="5971000" />
+      <workItem from="1740602825342" duration="6896000" />
     </task>
     <task id="LOCAL-00001" summary="FormulaireFait">
       <option name="closed" value="true" />
@@ -305,7 +305,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740608578905</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Système de notification des inscription (Email)">
+      <option name="closed" value="true" />
+      <created>1740608944169</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1740608944169</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -318,7 +326,8 @@
     <MESSAGE value="Mise à jour du tableur d'avancement" />
     <MESSAGE value="Supprimer photo profile, supprimer compte &amp; bouton retour a l'acceuil" />
     <MESSAGE value="Modification sur le bouton de retour" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modification sur le bouton de retour" />
+    <MESSAGE value="Système de notification des inscription (Email)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Système de notification des inscription (Email)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

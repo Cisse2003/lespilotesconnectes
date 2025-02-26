@@ -5,14 +5,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 /* === Conteneur principal === */
 .login-container {
-    width: 400px;
-    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
     background: white;
     border-radius: 12px;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
@@ -34,7 +37,7 @@ body {
 
 /* === Titre === */
 .login-container h1 {
-    font-size: 26px;
+    font-size: 24px;
     color: #333;
     margin-bottom: 20px;
     font-weight: 600;
@@ -116,6 +119,7 @@ body {
     border-left: 4px solid #d9534f;
 }
 
+/* === Bouton retour === */
 .btn-retour {
     display: inline-block !important;
     margin-top: 15px !important;
@@ -125,10 +129,51 @@ body {
     text-decoration: none !important;
     border-radius: 5px !important;
     font-weight: bold !important;
-    text-decoration: none !important;
 }
 .btn-retour:hover {
     background: linear-gradient(135deg, #556cd6, #5a3d91) !important;
-    color: white !important;
-    text-decoration: none !important;
+}
+
+/* === RESPONSIVE DESIGN === */
+
+/* Petits écrans (mobiles) */
+@media screen and (max-width: 480px) {
+    .login-container {
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .login-container h1 {
+        font-size: 22px;
+    }
+
+    .login-container input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .login-container button {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .btn-retour {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+/* Tablettes (entre 481px et 768px) */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 30px;
+    }
+
+    .login-container {
+        max-width: 350px;
+    }
+
+    .login-container h1 {
+        font-size: 24px;
+    }
 }

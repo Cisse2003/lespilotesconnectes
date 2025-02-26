@@ -5,14 +5,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 /* === Conteneur principal === */
 .form-container {
-    width: 450px;
-    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
     background: white;
     border-radius: 12px;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
@@ -34,7 +37,7 @@ body {
 
 /* === Titre === */
 .form-container h1 {
-    font-size: 26px;
+    font-size: 24px;
     color: #333;
     margin-bottom: 20px;
     font-weight: 600;
@@ -122,3 +125,41 @@ body {
     border-left: 4px solid #d9534f;
 }
 
+/* === RESPONSIVE DESIGN === */
+
+/* Petits écrans (mobiles) */
+@media screen and (max-width: 480px) {
+    .form-container {
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .form-container h1 {
+        font-size: 22px;
+    }
+
+    .form-container input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .form-container button {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+/* Tablettes (entre 481px et 768px) */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 30px;
+    }
+
+    .form-container {
+        max-width: 350px;
+    }
+
+    .form-container h1 {
+        font-size: 24px;
+    }
+}

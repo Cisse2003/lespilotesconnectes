@@ -4,46 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    
-    <!-- Liens vers les fichiers CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style1.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 </head>
 <body>
-    <div class="login-container">
-        {# Affichage des messages flash (succès, erreurs, etc.) #}
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
+
+<div class="login-container">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
         {% endfor %}
+    {% endfor %}
 
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
 
-        <h1>Connexion</h1>
+    <h1>Connexion</h1>
 
-        <form method="post">
-            <label for="inputEmail">Email</label>
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" required autofocus>
+    <form method="post">
+        <label for="inputEmail">Email</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" required autofocus>
 
-            <label for="inputPassword">Mot de passe</label>
-            <input type="password" name="password" id="inputPassword" required>
+        <label for="inputPassword">Mot de passe</label>
+        <input type="password" name="password" id="inputPassword" required>
 
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <button type="submit">Se connecter</button>
-        </form>
+        <button type="submit">Se connecter</button>
+    </form>
 
-        <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a></p>
-    </div>
+    <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a></p>
 
-    <!-- Scripts JS -->
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <a href="{{ path('homepage') }}" class="btn-retour">← Retour</a>
+</div>
+
+<style>
+    .btn-retour {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .btn-retour:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+
 </body>
 </html>
-

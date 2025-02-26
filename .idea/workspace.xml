@@ -4,35 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="L'enti">
-      <change afterPath="$PROJECT_DIR$/public/uploads/profile_images/default-photo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/Proprietaire.php" afterDir="false" />
+    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="Supprimer photo profile, supprimer compte &amp; bouton retour a l'acceuil">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_10_37__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_10_39__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_10_40__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_10_46__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_11_15__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_11_22__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_12_14__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_12_15__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_02_2025_12_28__Changes_1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tableur d'avancement/Tableur d'avancement.ods" beforeDir="false" afterPath="$PROJECT_DIR$/Tableur d'avancement/Tableur d'avancement.ods" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/css/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ProfileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ProfileController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/profile/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile/profile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.php.meta" beforeDir="false" afterPath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.php.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.preload.php" beforeDir="false" afterPath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.preload.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.xml" beforeDir="false" afterPath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.xml.meta" beforeDir="false" afterPath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainer.xml.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainerCompiler.log" beforeDir="false" afterPath="$PROJECT_DIR$/var/cache/dev/App_KernelDevDebugContainerCompiler.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/composer/installed.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/installed.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/register.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/security/login.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/login.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,24 +199,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "PHPUnit.Main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/cisse/Documents/L2-info/S4/IG/TP1-cisse112u/S6/PPIL_EQUIPE_6/lespilotesconnectes/public/uploads/profile_images",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;PHPUnit.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/cisse/Documents/L2-info/S4/IG/TP1-cisse112u/S6/PPIL_EQUIPE_6/lespilotesconnectes/public/uploads/profile_images&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/uploads/profile_images" />
@@ -282,7 +258,7 @@
       <workItem from="1740406936515" duration="3090000" />
       <workItem from="1740478055789" duration="929000" />
       <workItem from="1740587075673" duration="3850000" />
-      <workItem from="1740602825342" duration="4554000" />
+      <workItem from="1740602825342" duration="5570000" />
     </task>
     <task id="LOCAL-00001" summary="FormulaireFait">
       <option name="closed" value="true" />
@@ -316,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740407018932</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Supprimer photo profile, supprimer compte &amp; bouton retour a l'acceuil">
+      <option name="closed" value="true" />
+      <created>1740607782807</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740607782807</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -327,7 +311,8 @@
     <MESSAGE value="Ajout connexion" />
     <MESSAGE value="Bug sur les connexions, l'inscription et la photo de profil corrigé" />
     <MESSAGE value="Mise à jour du tableur d'avancement" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mise à jour du tableur d'avancement" />
+    <MESSAGE value="Supprimer photo profile, supprimer compte &amp; bouton retour a l'acceuil" />
+    <option name="LAST_COMMIT_MESSAGE" value="Supprimer photo profile, supprimer compte &amp; bouton retour a l'acceuil" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

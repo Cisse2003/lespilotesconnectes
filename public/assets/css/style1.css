@@ -116,3 +116,19 @@ body {
     border-left: 4px solid #d9534f;
 }
 
+.btn-retour {
+    display: inline-block !important;
+    margin-top: 15px !important;
+    padding: 10px 15px !important;
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+    text-decoration: none !important;
+    border-radius: 5px !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+}
+.btn-retour:hover {
+    background: linear-gradient(135deg, #556cd6, #5a3d91) !important;
+    color: white !important;
+    text-decoration: none !important;
+}

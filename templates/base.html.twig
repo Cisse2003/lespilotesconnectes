@@ -65,7 +65,7 @@
 				    <li class="nav-item">
 					<a class="nav-link profile-link" href="{{ path('app_profile') }}">
 					    <div style="display: flex; flex-direction: column; align-items: center;">
-						<img src="{{ asset(app.user.profileImage ? 'uploads/profile_images/' ~ app.user.profileImage : 'assets/images/profile.png') }}"
+                        <img src="{{ asset(app.user.profileImage ? 'uploads/profile_images/' ~ app.user.profileImage : 'uploads/profile_images/default-photo.png') }}"
 						     alt="Profil"
 						     style="
 						       width:50px !important;
@@ -74,6 +74,7 @@
 						       max-height:none !important;
 						       border-radius:50% !important;
 						       object-fit:cover !important;
+						       margin-top: -15px !important;
 						     ">
 					    </div>
 					</a>

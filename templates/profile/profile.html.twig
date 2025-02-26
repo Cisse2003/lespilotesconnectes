@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Mon Profil</title>
+    <!-- Ton CSS personnalisé -->
+    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}?v={{ random() }}">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-    <!-- Ton CSS personnalisé -->
-    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}">
+
 </head>
 <body>
 <div class="container mt-5">
@@ -24,12 +25,28 @@
         <div class="col-md-4 mb-4">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <!-- Photo de profil -->
-                    <img src="{{ asset(user.profileImage ? 'uploads/profile_images/' ~ user.profileImage : 'assets/images/profile.png') }}"
-                         alt="Photo de profil"
-                         class="rounded-circle mb-3"
-                         style="width: 120px; height: 120px; object-fit: cover;">
+                    <!-- Photo de profil cliquable -->
+                    <form id="profileImageForm" method="post" enctype="multipart/form-data" action="{{ path('profile_upload_photo') }}">
+                        <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;" onchange="document.getElementById('profileImageForm').submit();">
 
+                        <label for="profileImageInput">
+                            <img src="{{ asset(user.profileImage ? 'uploads/profile_images/' ~ user.profileImage : 'uploads/profile_images/default-photo.png') }}"
+                                 alt="Photo de profil"
+                                 class="rounded-circle mb-3"
+                                 style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;"
+                                 title="Cliquez pour changer la photo">
+                        </label>
+                    </form>
+
+                    <!-- Bouton supprimer la photo -->
+                    <form method="post" action="{{ path('profile_remove_photo') }}" class="mb-3">
+                        <button type="submit" class="btn btn-warning">Supprimer la photo</button>
+                    </form>
+
+                    <!-- Bouton supprimer le compte -->
+                    <form method="post" action="{{ path('profile_delete_account') }}" onsubmit="return confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.');">
+                        <button type="submit" class="btn btn-danger">Supprimer mon compte</button>
+                    </form>
                     <!-- Nom complet -->
                     <h4 class="card-title">
                         {{ user.nom }} {{ user.prenom }}
@@ -119,9 +136,14 @@
                             Enregistrer les modifications
                         </button>
                     {{ form_end(profileForm) }}
+
                 </div>
+
             </div>
+
         </div>
+        <!-- Bouton Accueil -->
+        <a href="{{ path('homepage') }}" class="btn btn-secondary mt-3">Accueil</a>
     </div>
 </div>
 

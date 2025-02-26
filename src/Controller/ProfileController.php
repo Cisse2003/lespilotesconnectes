@@ -12,6 +12,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 
 class ProfileController extends AbstractController
 {
@@ -30,7 +34,7 @@ class ProfileController extends AbstractController
             $profileFile = $form->get('profileImage')->getData();
 
             if ($profileFile) {
-                $newFilename = uniqid().'.'.$profileFile->guessExtension();
+                $newFilename = uniqid() . '.' . $profileFile->guessExtension();
                 try {
                     $profileFile->move(
                         $this->getParameter('profile_images_directory'),
@@ -74,6 +78,66 @@ class ProfileController extends AbstractController
             'profileForm' => $form->createView(),
             'user' => $user,
         ]);
+
     }
+
+    #[Route('/profile/remove-photo', name: 'profile_remove_photo', methods: ['POST'])]
+    public function removePhoto(EntityManagerInterface $entityManager, UserInterface $user)
+    {
+        // Suppression de la photo et remise à l'image par défaut
+        $user->setProfileImage(null);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre photo de profil a été supprimée.');
+        return $this->redirectToRoute('app_profile');
+    }
+
+    #[Route('/profile/delete-account', name: 'profile_delete_account', methods: ['POST'])]
+    public function deleteAccount(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, UserInterface $user)
+    {
+        // Déconnexion de l'utilisateur avant suppression
+        $tokenStorage->setToken(null);
+
+        // Suppression de l'utilisateur
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+        return $this->redirectToRoute('homepage');
+    }
+
+    #[Route('/profile/upload-photo', name: 'profile_upload_photo', methods: ['POST'])]
+    public function uploadPhoto(Request $request, EntityManagerInterface $entityManager, UserInterface $user)
+    {
+        $file = $request->files->get('profileImage');
+
+        if ($file) {
+            $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads/profile_images';
+
+            // Générer un nom unique pour la photo
+            $newFilename = uniqid() . '.' . $file->guessExtension();
+
+            // Déplacer le fichier uploadé
+            $file->move($uploadsDirectory, $newFilename);
+
+            // Supprimer l'ancienne photo si ce n'est pas la photo par défaut
+            if ($user->getProfileImage() && $user->getProfileImage() !== 'default-photo.png') {
+                @unlink($uploadsDirectory . '/' . $user->getProfileImage());
+            }
+
+            // Mettre à jour le profil de l'utilisateur
+            $user->setProfileImage($newFilename);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre photo de profil a été mise à jour.');
+        } else {
+            $this->addFlash('error', 'Une erreur est survenue lors du téléchargement.');
+        }
+
+        return $this->redirectToRoute('app_profile');
+    }
+
 }
 

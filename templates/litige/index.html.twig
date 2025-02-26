@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signaler un Litige{% endblock %}
+
+{% block body %}
+    <!-- Section Litige centrée -->
+    <div class="container-fluid" style="height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="col-md-8 col-lg-6" style="background-color: #f9f9f9; padding: 60px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 class="text-center mb-4" style="font-size: 2.5rem; font-weight: bold;">🚨 Signaler un Litige</h2>
+
+            <form method="post">
+                <!-- Choix du rôle -->
+                <div class="mb-4">
+                    <label class="form-label" style="font-size: 1.5rem; font-weight: bold;">Vous êtes :</label><br>
+                    <input type="radio" name="role" value="proprietaire" id="proprietaire" onclick="showFields()" required> 
+                    <label for="proprietaire" style="font-size: 1.5rem;">Propriétaire</label>
+                    <input type="radio" name="role" value="emprunteur" id="emprunteur" onclick="showFields()" required> 
+                    <label for="emprunteur" style="font-size: 1.5rem;">Emprunteur</label>
+                </div>
+
+                <!-- Champs spécifiques pour le propriétaire -->
+                <div id="proprietaireFields" style="display: none;">
+                    <label class="form-label" style="font-size: 1.5rem;">Problème rencontré :</label>
+                    <select class="form-control" style="font-size: 1.3rem; padding: 10px;">
+                        <option value="retard">Retard de retour</option>
+                        <option value="dommages">Dommages sur la voiture</option>
+                        <option value="paiement">Problème de paiement</option>
+                    </select>
+                    <br>
+                    <label class="form-label" style="font-size: 1.5rem;">Détails supplémentaires :</label>
+                    <textarea class="form-control" rows="6" placeholder="Décrivez votre problème..." required style="font-size: 1.3rem; padding: 10px;"></textarea>
+                </div>
+
+                <!-- Champs spécifiques pour l'emprunteur -->
+                <div id="emprunteurFields" style="display: none;">
+                    <label class="form-label" style="font-size: 1.5rem;">Problème rencontré :</label>
+                    <select class="form-control" style="font-size: 1.3rem; padding: 10px;">
+                        <option value="etat">État de la voiture non conforme</option>
+                        <option value="retard">Propriétaire en retard</option>
+                        <option value="autre">Autre problème</option>
+                    </select>
+                    <br>
+                    <label class="form-label" style="font-size: 1.5rem;">Détails supplémentaires :</label>
+                    <textarea class="form-control" rows="6" placeholder="Décrivez votre problème..." required style="font-size: 1.3rem; padding: 10px;"></textarea>
+                </div>
+
+                <!-- Date de l'incident -->
+                <div class="mt-4">
+                    <label class="form-label" style="font-size: 1.5rem;">Date de l'incident :</label>
+                    <input type="date" class="form-control" required style="font-size: 1.3rem; padding: 10px;">
+                </div>
+
+                <!-- Documents ou photos (facultatif) -->
+                <div class="mt-4">
+                    <label class="form-label" style="font-size: 1.5rem;">Ajouter des documents ou photos (facultatif) :</label>
+                    <input type="file" class="form-control" style="font-size: 1.3rem; padding: 10px;">
+                </div>
+
+                <!-- Description du litige -->
+<div class="mt-4">
+    <label class="form-label" style="font-size: 1.5rem;">Description du litige :</label>
+    <textarea class="form-control" rows="8" placeholder="Décrivez votre problème..." required 
+              style="font-size: 1.3rem; padding: 10px;"></textarea>
+</div>
+
+<!-- ESPACE entre la zone de description et le premier bouton -->
+<div class="mt-5"></div>
+
+<!-- Bouton Envoyer -->
+<div class="text-center">
+    <button type="submit" class="btn btn-danger btn-lg"
+       style="font-size: 1.5rem; padding: 14px 40px; min-width: 250px;">
+        🚨 Envoyer le Litige
+    </button>
+</div>
+
+<!-- ESPACE PLUS GRAND entre les boutons -->
+<div class="mt-5"></div>
+
+<!-- Bouton Retour à l'accueil -->
+<div class="text-center">
+    <a href="{{ path('homepage') }}" class="btn btn-primary btn-lg"
+       style="font-size: 1.5rem; padding: 14px 40px; min-width: 250px; background-color: #4e4ffa; 
+              border: none; border-radius: 8px; font-weight: bold; text-transform: uppercase;
+              transition: all 0.3s ease-in-out;">
+        ⬅️ Retour à l'accueil
+    </a>
+</div>
+
+
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showFields() {
+            // Montre ou cache les champs selon le rôle sélectionné
+            document.getElementById("proprietaireFields").style.display = 
+                document.getElementById("proprietaire").checked ? "block" : "none";
+            document.getElementById("emprunteurFields").style.display = 
+                document.getElementById("emprunteur").checked ? "block" : "none";
+        }
+    </script>
+{% endblock %}

@@ -15,7 +15,50 @@
                     Envie de liberté sur la route ? Découvrez notre large gamme de véhicules modernes et confortables à des prix imbattables.  
                     Que ce soit pour un week-end, un voyage d’affaires ou des vacances inoubliables, trouvez la voiture parfaite et partez l’esprit léger !
                 </p>
-                <button class="welcome-btn" onclick="window.location.href='#'">Réservez dès maintenant</button>
+                <div class="container text-center" style="margin-top: 20px;">
+   <div class="container text-center" style="margin-top: 20px;">
+    <!-- Bouton Réserver -->
+    <button class="welcome-btn" onclick="window.location.href='#'">Réservez dès maintenant</button>
+
+    <!-- Espacement entre les boutons -->
+    <div style="margin-top: 20px;">
+        <!-- Bouton Signaler un Litige -->
+        <button class="btn btn-danger btn-lg" onclick="window.location.href='{{ path('app_litige') }}'" style="
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 8px;
+            background-color: #d9534f;
+            border: none;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            color: white;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+        ">
+            🚨 Signaler un Litige
+        </button>
+    </div>
+</div>
+
+<script>
+    document.querySelector('.btn-danger').addEventListener('mouseover', function() {
+        this.style.backgroundColor = '#c9302c';
+    });
+    document.querySelector('.btn-danger').addEventListener('mouseout', function() {
+        this.style.backgroundColor = '#d9534f';
+    });
+</script>
+
+
+
+
+
+    </div>
+</div>
+
             </div>
         </div>
 

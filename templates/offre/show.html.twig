@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de l'Offre</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/deposer.css') }}">
+    <style>
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: rgb(75, 27, 248); /* Violet (comme dans deposer.css) */
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: rgb(24, 3, 102); /* Légèrement plus foncé au survol */
+        }
+
+        .btn:active {
+            background-color: rgb(53, 0, 247); /* Légèrement plus foncé au clic */
+        }
+
+        .offre-detail {
+            margin-top: 30px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            margin: 5px 0;
+        }
+
+        .photo-preview {
+            margin-top: 20px;
+            height: 200px; /* Espace réservé pour les photos */
+            background-color: #f1f1f1;
+            border: 1px dashed #ccc;
+            text-align: center;
+            line-height: 200px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    {# Fil d’Ariane (breadcrumb) #}
+    <nav class="breadcrumb">
+        <a href="{{ path('homepage') }}">Accueil</a> &gt; Voir l'offre
+    </nav>
+
+    <div class="offre-detail">
+        <h1>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h1>
+        <div class="section">
+        <h3>Informations détaillées :</h3>
+        <p><strong>Prix :</strong> {{ offre.prix }} € / jour</p>
+        <p><strong>Lieu de garage :</strong> {{ offre.lieuGarage }}</p>
+        <p><strong>Date de création :</strong> {{ offre.dateCreation|date('d/m/Y') }}</p>
+        <p><strong>Disponibilité :</strong> 
+            {% if offre.disponibilite %} ✅ Disponible {% else %} ❌ Non disponible {% endif %}
+        </p>
+        <p><strong>Date de début de disponibilité :</strong> {{ offre.dateDebutDisponibilite ? offre.dateDebutDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
+        <p><strong>Date de fin de disponibilité :</strong> {{ offre.dateFinDisponibilite ? offre.dateFinDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
+        <p><strong>Description :</strong> {{ offre.description ? offre.description : 'Aucune description disponible' }}</p>
+        </div>
+
+        {# Section informations du véhicule #}
+        <div class="section">
+            <h3>Informations du véhicule</h3>
+            <p><strong>Marque :</strong> {{ offre.voiture.marque }}</p>
+            <p><strong>Modèle :</strong> {{ offre.voiture.modele }}</p>
+            <p><strong>Immatriculation :</strong> {{ offre.voiture.immatriculation }}</p>
+            <p><strong>Année :</strong> {{ offre.voiture.annee }}</p>
+            <p><strong>Nombre de places :</strong> {{ offre.voiture.nombrePlaces }}</p>
+            <p><strong>Volume du coffre :</strong> {{ offre.voiture.volumeCoffre }} L</p>
+            <p><strong>Type d'essence :</strong> {{ offre.voiture.typeEssence }}</p>
+        </div>
+
+        {# Section informations de l'offre #}
+        <div class="section">
+            <h3>Informations de l'offre</h3>
+            <p><strong>Lieu de garage :</strong> {{ offre.lieuGarage }}</p>
+            <p><strong>Prix par jour :</strong> {{ offre.prix }} €</p>
+        </div>
+
+        {# Espace réservé pour les photos #}
+        <div class="photo-preview">
+            <p>Photo</p>
+        </div>
+
+        <a href="{{ path('app_offres') }}" class="btn">Retour aux offres</a>
+    </div>
+</div>
+
+<script>
+    // Vous pouvez ajouter un script similaire si vous avez des éléments interactifs
+</script>
+</body>
+</html>

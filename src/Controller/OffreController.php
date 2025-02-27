@@ -75,5 +75,26 @@ class OffreController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    #[Route('/offres', name: 'app_offres')]
+public function index(EntityManagerInterface $em): Response
+{
+    $offres = $em->getRepository(Offre::class)->findAll();
+
+    return $this->render('offre/index.html.twig', [
+        'offres' => $offres,
+    ]);
+}
+
+#[Route('/offres/{id}', name: 'app_offre_show')]
+public function show(Offre $offre): Response
+{
+    return $this->render('offre/show.html.twig', [
+        'offre' => $offre,
+    ]);
+}
+
+
 }
 

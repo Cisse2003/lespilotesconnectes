@@ -1,0 +1,48 @@
+{# templates/offre/index.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Offres</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/deposer.css') }}">
+</head>
+<body>
+<div class="container">
+    {# Affichage des messages flash #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {# Fil d’Ariane (breadcrumb) #}
+    <nav class="breadcrumb">
+        <a href="{{ path('homepage') }}">Accueil</a> &gt; Liste des Offres
+    </nav>
+
+    <h1>Nos Offres Disponibles</h1>
+
+    {# Zone de chaque offre dans une carte individuelle #}
+    <div class="offres-container">
+        {% for offre in offres %}
+            <div class="offre-card" style="background-color:rgb(208, 199, 224); padding: 20px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); border-radius: 5px;">
+                <h2>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h2>
+                <p><strong>Prix :</strong> {{ offre.prix }} € / jour</p>
+                <p><strong>Lieu de garage :</strong> {{ offre.lieuGarage }}</p>
+                <p><strong>Date de début :</strong> {{ offre.dateDebutDisponibilite ? offre.dateDebutDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
+                <p><strong>Date de fin :</strong> {{ offre.dateFinDisponibilite ? offre.dateFinDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
+                <a href="{{ path('app_offre_show', { id: offre.id }) }}" class="btn" style="display: inline-block; padding: 10px 20px; background-color:rgb(75, 27, 248); color: #fff; text-decoration: none; border-radius: 5px; transition: background-color 0.3s;">Voir l'offre</a>
+            </div>
+        {% else %}
+            <p>Aucune offre disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    // Vous pouvez ajouter un script similaire pour prévisualiser les images si nécessaire
+</script>
+</body>
+</html>

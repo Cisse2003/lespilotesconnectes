@@ -38,8 +38,9 @@ class Offre
     private ?Voiture $voiture = null;
 
     #[ORM\ManyToOne(targetEntity: Proprietaire::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Proprietaire $proprietaire = null;
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+	private ?Proprietaire $proprietaire = null;
+
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null; // Ajout du champ description

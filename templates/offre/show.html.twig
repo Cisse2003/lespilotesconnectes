@@ -51,6 +51,7 @@
             line-height: 200px;
             color: #aaa;
         }
+        
     </style>
 </head>
 <body>
@@ -62,8 +63,10 @@
 
     <div class="offre-detail">
         <h1>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h1>
+        <div class="button-top">
         <a href="{{ path('app_offre_edit', {'id': offre.id}) }}" class="btn btn-primary">Modifier l'Offre</a>
-
+        </div>
+    
 
         {# Section informations du véhicule #}
         <div class="section">

@@ -1,52 +1,214 @@
-<!doctype html>
+{# templates/offre/deposer.html.twig #}
+<!DOCTYPE html>
 <html lang="fr">
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Déposer une Offre</title>
-    <!-- Inclusion de Bootstrap via CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  </head>
-  <body>
-    <div class="container mt-5">
-      <div class="card">
-        <h2 class="text-center text-primary">Déposer une Offre</h2>
-        <hr>
-        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
-        
-        <div class="row">
-          <div class="col-md-6">
-            {{ form_row(form.image, {'attr': {'class': 'form-control'}}) }}
-            {{ form_row(form.voiture, {'attr': {'class': 'form-control'}}) }}
-            {{ form_row(form.lieuGarage, {'attr': {'class': 'form-control'}}) }}
-            {{ form_row(form.prix, {'attr': {'class': 'form-control'}}) }}
-          </div>
-          <div class="col-md-6">
-            {{ form_row(form.disponibilite, {'attr': {'class': 'form-control'}}) }}
-            {{ form_row(form.dateDisponibilite, {'attr': {'class': 'form-control'}}) }}
-            {{ form_row(form.proposeLivraison, {'attr': {'class': 'form-check-input'}}) }}
-            <div id="livraisonFields" style="display: none;">
-              {{ form_row(form.livraison) }}
+    <link rel="stylesheet" href="{{ asset('assets/css/deposer.css') }}">
+</head>
+<body>
+
+<div class="container">
+    {# Fil d’Ariane (breadcrumb) #}
+    <nav class="breadcrumb">
+        <a href="{{ path('homepage') }}">Accueil</a> &gt; Déposer une Offre
+    </nav>
+
+    <h1>Déposer une Nouvelle Offre de Location</h1>
+
+    {{ form_start(form, {
+        'attr': {
+            'class': 'offer-form',
+            'enctype': 'multipart/form-data'
+        }
+    }) }}
+
+    {# SECTION : Informations du véhicule #}
+    <div class="section">
+        <h2>Informations du véhicule</h2>
+        <div class="form-group">
+            <div class="form-field">
+                <label for="marque">Marque</label>
+                <input list="liste-marques"
+                       id="marque"
+                       {{ form_widget(form.marque, {
+                           'id': 'marque',
+                           'attr': {
+                               'placeholder': 'Sélectionnez ou saisissez une marque',
+                               'list': 'liste-marques'
+                           }
+                       }) }}>
+                <datalist id="liste-marques">
+                    <option value="Toyota">
+                    <option value="Honda">
+                    <option value="Ford">
+                    <option value="Peugeot">
+                    <option value="Renault">
+                    <option value="Citroën">
+                    <option value="Mercedes">
+                    <option value="BMW">
+                    <option value="Volkswagen">
+                </datalist>
             </div>
-          </div>
+            <div class="form-field">
+                {{ form_row(form.modele, {
+                    'attr': {'placeholder': 'Ex: Clio, Golf, Corolla...'}
+                }) }}
+            </div>
         </div>
-
-        <div class="text-center mt-4">
-          <button type="submit" class="btn btn-success px-5 py-2">Soumettre</button>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.immatriculation, {
+                    'attr': {'placeholder': 'Ex: XX-123-XX'}
+                }) }}
+            </div>
+            <div class="form-field">
+                {{ form_row(form.annee, {
+                    'attr': {
+                        'placeholder': '2023',
+                        'min': '1970',
+                        'max': '2050'
+                    }
+                }) }}
+            </div>
         </div>
-
-        {{ form_end(form) }}
-      </div>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.nombrePlaces, {
+                    'attr': {'placeholder': 'Ex: 5', 'min': '1', 'max': '9'}
+                }) }}
+            </div>
+            <div class="form-field">
+                {{ form_row(form.volumeCoffre, {
+                    'attr': {'placeholder': 'Ex: 300 (L)'}
+                }) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.typeEssence) }}
+            </div>
+        </div>
     </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-          let livraisonCheckbox = document.querySelector("#{{ form.proposeLivraison.vars.id }}");
-          let livraisonFields = document.querySelector("#livraisonFields");
-          livraisonCheckbox.addEventListener("change", function() {
-              livraisonFields.style.display = this.checked ? "block" : "none";
-          });
-      });
-    </script>
-  </body>
+    {# SECTION : Informations de l'offre #}
+    <div class="section">
+        <h2>Informations de l'offre</h2>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.dateDebutDisponibilite, { 'label': 'Date de début' }) }}
+            </div>
+            <div class="form-field">
+                {{ form_row(form.dateFinDisponibilite, { 'label': 'Date de fin' }) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.lieuGarage, {
+                    'attr': {'placeholder': 'Ex: Paris 12ème'}
+                }) }}
+            </div>
+            <div class="form-field">
+                {{ form_row(form.prix, {
+                    'label': 'Prix (€/jour)',
+                    'attr': {'min': '0', 'placeholder': 'Ex: 50'}
+                }) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.description, {
+                    'attr': {
+                        'placeholder': 'Décrivez brièvement le véhicule...',
+                        'rows': 3
+                    }
+                }) }}
+            </div>
+        </div>
+    </div>
+
+    {# SECTION : Informations de livraison (adresse supprimée) #}
+    <div class="section">
+        <h2>Informations de livraison</h2>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.livraisonTarifs, {
+                    'attr': {'placeholder': 'Ex: 20', 'min': '0'}
+                }) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-field switch-field">
+                <span class="switch-text">Livraison disponible ?</span>
+                <label class="switch-label" for="livraisonDisponibilite">
+                    {{ form_widget(form.livraisonDisponibilite, { 'id': 'livraisonDisponibilite' }) }}
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    {# SECTION : Photos du véhicule #}
+    <div class="section">
+        <h2>Photos du véhicule</h2>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_label(form.photos, 'Sélectionnez vos photos') }}
+                {{ form_widget(form.photos, {
+                    'attr': {
+                        'id': 'photos',
+                        'multiple': true,
+                        'accept': 'image/*'
+                    }
+                }) }}
+                <div class="photo-info">
+                    <span id="photoCount" class="photo-count">Aucune photo sélectionnée</span>
+                </div>
+                <div class="photo-preview" id="photoPreview"></div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="submit-btn">Soumettre l'Offre</button>
+    
+    {{ form_end(form) }}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputPhotos = document.getElementById('photos');
+    const previewContainer = document.getElementById('photoPreview');
+    const photoCount = document.getElementById('photoCount');
+
+    if (!inputPhotos) {
+        console.error("L'élément input pour les photos est introuvable !");
+        return;
+    }
+    
+    inputPhotos.addEventListener('change', () => {
+        previewContainer.innerHTML = '';
+        if (!inputPhotos.files || inputPhotos.files.length === 0) {
+            photoCount.textContent = 'Aucune photo sélectionnée';
+            return;
+        }
+        const nbPhotos = inputPhotos.files.length;
+        photoCount.textContent = nbPhotos + (nbPhotos > 1 ? ' photos sélectionnées' : ' photo sélectionnée');
+        Array.from(inputPhotos.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            };
+            reader.onerror = (e) => {
+                console.error("Erreur lors de la lecture du fichier :", file.name, e);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+});
+</script>
+
+</body>
 </html>
 

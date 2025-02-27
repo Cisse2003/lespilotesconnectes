@@ -38,5 +38,82 @@ class Voiture
     {
         return $this->id;
     }
+    public function setMarque(string $marque): self
+{
+    $this->marque = $marque;
+    return $this;
+}
+
+public function getMarque(): ?string
+{
+    return $this->marque;
+}
+
+public function setModele(string $modele): self
+{
+    $this->modele = $modele;
+    return $this;
+}
+
+public function getModele(): ?string
+{
+    return $this->modele;
+}
+
+public function setImmatriculation(string $immatriculation): self
+{
+    $this->immatriculation = $immatriculation;
+    return $this;
+}
+
+public function getImmatriculation(): ?string
+{
+    return $this->immatriculation;
+}
+
+public function setAnnee(int $annee): self
+{
+    $this->annee = $annee;
+    return $this;
+}
+
+public function getAnnee(): ?int
+{
+    return $this->annee;
+}
+
+public function setNombrePlaces(int $nombrePlaces): self
+{
+    $this->nombrePlaces = $nombrePlaces;
+    return $this;
+}
+
+public function getNombrePlaces(): ?int
+{
+    return $this->nombrePlaces;
+}
+
+public function setVolumeCoffre(int $volumeCoffre): self
+{
+    $this->volumeCoffre = $volumeCoffre;
+    return $this;
+}
+
+public function getVolumeCoffre(): ?int
+{
+    return $this->volumeCoffre;
+}
+
+public function setTypeEssence(string $typeEssence): self
+{
+    $this->typeEssence = $typeEssence;
+    return $this;
+}
+
+public function getTypeEssence(): ?string
+{
+    return $this->typeEssence;
+}
+
 }
 

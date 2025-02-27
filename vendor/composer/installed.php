@@ -3,7 +3,11 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+<<<<<<< HEAD
         'reference' => '35cc5b1b1251a101a89c826a2d269f47c7e8a77a',
+=======
+        'reference' => 'ed5c926e2b4ca92652cd84bc5eba1faf5ef39e01',
+>>>>>>> 9d26745 (deposer un offre)
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +17,11 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+<<<<<<< HEAD
             'reference' => '35cc5b1b1251a101a89c826a2d269f47c7e8a77a',
+=======
+            'reference' => 'ed5c926e2b4ca92652cd84bc5eba1faf5ef39e01',
+>>>>>>> 9d26745 (deposer un offre)
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

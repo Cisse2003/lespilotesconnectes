@@ -1,85 +1,95 @@
 <?php
 
-
 namespace App\Form;
 
-use App\Entity\Offre;
-use App\Entity\Voiture;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
-use App\Form\LivraisonType; 
+use App\Entity\Offre;
 
 class OffreType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('image', FileType::class, [
-                'label'    => 'Photos de la voiture',
-                'mapped'   => false,
-                'multiple' => true,
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'mimeTypes'        => ['image/jpeg', 'image/png'],
-                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG/PNG)',
-                    ])
-                ],
+            // Champs liés à l'entité Offre
+            ->add('dateDebutDisponibilite', DateType::class, [
+                'widget' => 'single_text',
+                'label' => 'Date de début de disponibilité',
             ])
-            ->add('voiture', EntityType::class, [
-                'class'        => Voiture::class,
-                'choice_label' => function (Voiture $voiture) {
-                    return $voiture->getMarque() . ' ' . $voiture->getModele() . ' (' . $voiture->getAnnee() . ')';
-                },
-                'label'        => 'Sélectionnez une voiture',
-                'placeholder'  => 'Choisissez une voiture',
+            ->add('dateFinDisponibilite', DateType::class, [
+                'widget' => 'single_text',
+                'label' => 'Date de fin de disponibilité',
             ])
             ->add('lieuGarage', TextType::class, [
-                'label' => 'Lieu de garage',
+                'label' => 'Lieu du garage',
             ])
             ->add('prix', MoneyType::class, [
-                'label' => 'Prix de location (€/jour)',
+                'currency' => 'EUR',
+                'label' => 'Prix de location',
             ])
-            ->add('disponibilite', ChoiceType::class, [
-                'label'   => 'Disponibilité',
-                'choices' => [
-                    'Disponible'   => true,
-                    'Indisponible' => false,
-                ],
-                'expanded' => true,
-            ])
-            ->add('dateDisponibilite', DateType::class, [
-                'label'   => 'Disponible à partir de',
-                'widget'  => 'single_text',
-                'required'=> false,
-            ])
-            ->add('proposeLivraison', CheckboxType::class, [
-                'label'    => 'Proposer une livraison ?',
+            ->add('description', TextareaType::class, [
                 'required' => false,
-                'mapped'   => false,
+                'label' => 'Description',
             ])
-            ->add('livraison', LivraisonType::class, [
-                'label'    => 'Informations de livraison',
+            // Champs pour la Voiture (non mappés)
+            ->add('marque', TextType::class, [
+                'mapped' => false,
+                'label' => 'Marque',
+            ])
+            ->add('modele', TextType::class, [
+                'mapped' => false,
+                'label' => 'Modèle',
+            ])
+            ->add('immatriculation', TextType::class, [
+                'mapped' => false,
+                'label' => 'Immatriculation',
+            ])
+            ->add('annee', IntegerType::class, [
+                'mapped' => false,
+                'label' => 'Année',
+            ])
+            ->add('nombrePlaces', IntegerType::class, [
+                'mapped' => false,
+                'label' => 'Nombre de places',
+            ])
+            ->add('volumeCoffre', IntegerType::class, [
+                'mapped' => false,
+                'label' => 'Volume du coffre',
+            ])
+            ->add('typeEssence', TextType::class, [
+                'mapped' => false,
+                'label' => 'Type d\'essence',
+            ])
+           
+            ->add('livraisonTarifs', MoneyType::class, [
+                'mapped' => false,
+                'currency' => 'EUR',
+                'label' => 'Tarifs de livraison',
+            ])
+            ->add('livraisonDisponibilite', CheckboxType::class, [
+                'mapped' => false,
                 'required' => false,
-                'mapped'   => false, // Ce champ n'est pas mappé à Offre
+                'label' => 'Livraison disponible',
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Déposer l\'offre',
-                'attr'  => ['class' => 'btn btn-primary']
-            ]);
+            // Champ pour l'upload de photos (non mappé)
+            ->add('photos', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'multiple' => true,
+                'label' => 'Photos du véhicule',
+            ])
+        ;
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Offre::class,

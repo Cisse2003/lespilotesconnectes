@@ -30,5 +30,51 @@ class Livraison
     {
         return $this->id;
     }
+
+
+    public function setAdresse(?string $adresse): self
+    {
+        $this->adresse = $adresse;
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setTarifs(?float $tarifs): self
+    {
+        $this->tarifs = $tarifs;
+        return $this;
+    }
+
+    public function getTarifs(): ?float
+    {
+        return $this->tarifs;
+    }
+
+    public function setDisponibilite(?bool $disponibilite): self
+    {
+        $this->disponibilite = $disponibilite;
+        return $this;
+    }
+
+    public function getDisponibilite(): ?bool
+    {
+        return $this->disponibilite;
+    }
+
+    public function setOffre(?Offre $offre): self
+    {
+        $this->offre = $offre;
+        return $this;
+    }
+
+    public function getOffre(): ?Offre
+    {
+        return $this->offre;
+    }
 }
+
 

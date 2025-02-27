@@ -1,87 +1,99 @@
 <?php
 
-
-// src/Controller/OffreController.php
-
 namespace App\Controller;
 
 use App\Entity\Offre;
+use App\Entity\Voiture;
+use App\Entity\Livraison;
+use App\Entity\Utilisateur;
 use App\Form\OffreType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class OffreController extends AbstractController
 {
-    #[Route('/deposer-offre', name: 'app_deposer_offre')]
-    public function deposer(
-        Request $request, 
-        EntityManagerInterface $em, 
-        Security $security, 
-        SluggerInterface $slugger
-    ): Response {
-        // Vérifier que l'utilisateur est connecté
-        $utilisateur = $security->getUser();
-        if (!$utilisateur) {
-            return $this->redirectToRoute('app_login');
+    #[Route('/offre/deposer', name: 'app_deposer_offre')]
+    public function deposer(Request $request, EntityManagerInterface $em): Response
+    {
+        // ✅ Vérifier que l'utilisateur est connecté
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté pour déposer une offre.');
+            return $this->redirectToRoute('app_login'); // Assurez-vous que 'app_login' est bien votre route de connexion
         }
 
+        // ✅ Vérifier que l'utilisateur est bien une instance de Utilisateur
+        if (!$user instanceof Utilisateur) {
+            throw new \Exception("Erreur : L'utilisateur connecté n'est pas un utilisateur valide.");
+        }
+
+        // ✅ Création de l'offre et association avec l'utilisateur
         $offre = new Offre();
         $offre->setDateCreation(new \DateTime());
-        
-        // Création du formulaire
+        $offre->setProprietaire($user);
+
         $form = $this->createForm(OffreType::class, $offre);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifier que l'utilisateur est un propriétaire
-            $proprietaire = $utilisateur->getProprietaire();
-            if (!$proprietaire) {
-                $this->addFlash('danger', 'Vous devez être un propriétaire pour déposer une offre.');
-                return $this->redirectToRoute('app_home');
+            // ✅ Gestion des données de la Voiture
+            $voiture = new Voiture();
+            $voiture->setMarque($form->get('marque')->getData());
+            $voiture->setModele($form->get('modele')->getData());
+            $voiture->setImmatriculation($form->get('immatriculation')->getData());
+            $voiture->setAnnee($form->get('annee')->getData());
+            $voiture->setNombrePlaces($form->get('nombrePlaces')->getData());
+            $voiture->setVolumeCoffre($form->get('volumeCoffre')->getData());
+            $voiture->setTypeEssence($form->get('typeEssence')->getData());
+
+            // Persister la voiture
+            $em->persist($voiture);
+            $em->flush();
+
+            // Associer la voiture à l'offre
+            $offre->setVoiture($voiture);
+
+            // ✅ Gestion des données de Livraison (si renseignées)
+            $livraisonTarifs = $form->get('livraisonTarifs')->getData();
+            $livraisonDisponibilite = $form->get('livraisonDisponibilite')->getData();
+
+            if ($livraisonTarifs !== null) { // Vérification pour éviter les erreurs
+                $livraison = new Livraison();
+                $livraison->setTarifs($livraisonTarifs);
+                $livraison->setDisponibilite($livraisonDisponibilite);
+                $livraison->setOffre($offre);
+
+                $em->persist($livraison);
             }
 
-            // Associer l'offre au propriétaire
-            $offre->setProprietaire($proprietaire);
+            // ✅ Gestion de l'upload des photos
+            $photos = $form->get('photos')->getData();
+            if ($photos) {
+                $photosPaths = [];
+                $uploadDirectory = $this->getParameter('photos_directory');
 
-            // Gestion de la livraison si l'utilisateur a coché "Proposer une livraison"
-            if ($form->get('proposeLivraison')->getData()) {
-                $livraison = $form->get('livraison')->getData();
-                if ($livraison) {
-                    $livraison->setOffre($offre);
-                    $em->persist($livraison);
-                }
-            }
+                foreach ($photos as $photo) {
+                    $originalFilename = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
+                    $newFilename = uniqid() . '.' . $photo->guessExtension();
 
-            // Gestion de l'upload des images
-            $imageFiles = $form->get('image')->getData();
-            if ($imageFiles) {
-                $uploadedFilenames = [];
-                foreach ($imageFiles as $imageFile) {
-                    $newFilename = $slugger->slug(pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME))
-                        . '-' . uniqid() . '.' . $imageFile->guessExtension();
                     try {
-                        $imageFile->move($this->getParameter('images_directory'), $newFilename);
-                        $uploadedFilenames[] = $newFilename;
-                    } catch (FileException $e) {
-                        $this->addFlash('danger', 'Erreur lors du téléchargement des images.');
+                        $photo->move($uploadDirectory, $newFilename);
+                        $photosPaths[] = $newFilename;
+                    } catch (\Exception $e) {
+                        $this->addFlash('error', 'Erreur lors de l\'upload d\'une photo.');
                     }
                 }
-                // Stocker les images au format JSON dans l'entité Offre
-                $offre->setImage(json_encode($uploadedFilenames));
             }
 
-            // Enregistrer l'offre en base
+            // ✅ Persister l'offre
             $em->persist($offre);
             $em->flush();
 
-            $this->addFlash('success', 'Votre offre a bien été enregistrée !');
-            return $this->redirectToRoute('app_home');
+            $this->addFlash('success', 'Votre offre a été déposée avec succès !');
+            return $this->redirectToRoute('app_deposer_offre');
         }
 
         return $this->render('offre/deposer.html.twig', [
@@ -89,5 +101,4 @@ class OffreController extends AbstractController
         ]);
     }
 }
-
 

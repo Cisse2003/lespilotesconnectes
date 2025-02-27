@@ -39,6 +39,19 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $profileImage = null;
 
     // *************************************************************************
+	#[ORM\OneToOne(targetEntity: Proprietaire::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
+	private ?Proprietaire $proprietaire = null;
+
+	public function getProprietaire(): ?Proprietaire
+	{
+	    return $this->proprietaire;
+	}
+
+	public function setProprietaire(?Proprietaire $proprietaire): self
+	{
+	    $this->proprietaire = $proprietaire;
+	    return $this;
+	}
 
     public function getId(): ?int
     {

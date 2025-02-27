@@ -1,155 +1,170 @@
+{# templates/profile/profile.html.twig #}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Mon Profil</title>
-    <!-- Ton CSS personnalisé -->
-    <link rel="stylesheet" href="{{ asset('assets/css/profile.css') }}?v={{ random() }}">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-
+    {# On réutilise ici le CSS de "Déposer une Offre" #}
+    <link rel="stylesheet" href="{{ asset('assets/css/deposer.css') }}?v={{ random() }}">
 </head>
 <body>
-<div class="container mt-5">
-    <!-- Messages Flash (succès, erreur) -->
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
+<div class="container">
+    {# Affichage des messages flash #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            {# label peut être "success", "error", etc. #}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
 
-    <div class="row">
-        <!-- Colonne de gauche : Photo + Infos utilisateur -->
-        <div class="col-md-4 mb-4">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <!-- Photo de profil cliquable -->
-                    <form id="profileImageForm" method="post" enctype="multipart/form-data" action="{{ path('profile_upload_photo') }}">
-                        <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;" onchange="document.getElementById('profileImageForm').submit();">
+    {# Fil d’Ariane (breadcrumb) #}
+    <nav class="breadcrumb">
+        <a href="{{ path('homepage') }}">Accueil</a> &gt; Mon Profil
+    </nav>
 
-                        <label for="profileImageInput">
-                            <img src="{{ asset(user.profileImage ? 'uploads/profile_images/' ~ user.profileImage : 'uploads/profile_images/default-photo.png') }}"
-                                 alt="Photo de profil"
-                                 class="rounded-circle mb-3"
-                                 style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;"
-                                 title="Cliquez pour changer la photo">
-                        </label>
-                    </form>
+    <h1>Mon Profil</h1>
 
-                    <!-- Bouton supprimer la photo -->
-                    <form method="post" action="{{ path('profile_remove_photo') }}" class="mb-3">
-                        <button type="submit" class="btn btn-warning">Supprimer la photo</button>
-                    </form>
+    {# SECTION : Informations de l'utilisateur #}
+    <div class="section">
+        <h2>Informations personnelles</h2>
 
-                    <!-- Bouton supprimer le compte -->
-                    <form method="post" action="{{ path('profile_delete_account') }}" onsubmit="return confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.');">
-                        <button type="submit" class="btn btn-danger">Supprimer mon compte</button>
-                    </form>
-                    <!-- Nom complet -->
-                    <h4 class="card-title">
-                        {{ user.nom }} {{ user.prenom }}
-                    </h4>
-                    <!-- Infos de contact -->
-                    <p class="card-text mb-1">
-                        <strong>Email :</strong> {{ user.email }}
-                    </p>
-                    <p class="card-text mb-1">
-                        <strong>Téléphone :</strong> {{ user.telephone }}
-                    </p>
-                    <p class="card-text">
-                        <strong>Adresse :</strong> {{ user.adresse }}
-                    </p>
-                </div>
+        {# Groupe pour la photo et les infos #}
+        <div class="form-group">
+            {# Photo de profil cliquable #}
+            <div class="form-field">
+                <form id="profileImageForm"
+                      method="post"
+                      enctype="multipart/form-data"
+                      action="{{ path('profile_upload_photo') }}">
+                    <input type="file"
+                           id="profileImageInput"
+                           name="profileImage"
+                           accept="image/*"
+                           style="display: none;"
+                           onchange="document.getElementById('profileImageForm').submit();">
+
+                    <label for="profileImageInput" style="display: inline-block; cursor: pointer;">
+                        <img src="{{ asset(user.profileImage ? 'uploads/profile_images/' ~ user.profileImage : 'uploads/profile_images/default-photo.png') }}"
+                             alt="Photo de profil"
+                             style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;"
+                             title="Cliquez pour changer la photo">
+                    </label>
+                </form>
+            </div>
+
+            {# Informations de contact #}
+            <div class="form-field" style="justify-content: center;">
+                <p><strong>Nom :</strong> {{ user.nom }}</p>
+                <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+                <p><strong>Email :</strong> {{ user.email }}</p>
+                <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+                <p><strong>Adresse :</strong> {{ user.adresse }}</p>
             </div>
         </div>
 
-        <!-- Colonne de droite : Formulaire d'édition -->
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h3 class="mb-0">Modifier mon profil</h3>
-                </div>
-                <div class="card-body">
-                    {{ form_start(profileForm) }}
-                        <!-- Nom -->
-                        <div class="form-group mb-3">
-                            {{ form_label(profileForm.nom, 'Nom') }}
-                            {{ form_widget(profileForm.nom, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(profileForm.nom) }}
-                        </div>
-
-                        <!-- Prénom -->
-                        <div class="form-group mb-3">
-                            {{ form_label(profileForm.prenom, 'Prénom') }}
-                            {{ form_widget(profileForm.prenom, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(profileForm.prenom) }}
-                        </div>
-
-                        <!-- Téléphone -->
-                        <div class="form-group mb-3">
-                            {{ form_label(profileForm.telephone, 'Téléphone') }}
-                            {{ form_widget(profileForm.telephone, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(profileForm.telephone) }}
-                        </div>
-
-                        <!-- Adresse -->
-                        <div class="form-group mb-3">
-                            {{ form_label(profileForm.adresse, 'Adresse') }}
-                            {{ form_widget(profileForm.adresse, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(profileForm.adresse) }}
-                        </div>
-
-                        <!-- Photo de profil -->
-                        <div class="form-group mb-4">
-                            {{ form_label(profileForm.profileImage, 'Photo de profil (PNG, JPEG ou GIF)') }}
-                            {{ form_widget(profileForm.profileImage, {'attr': {'class': 'form-control-file'}}) }}
-                            {{ form_errors(profileForm.profileImage) }}
-                        </div>
-
-                        <hr>
-                        <h5>Changer le mot de passe</h5>
-
-                        <!-- Ancien mot de passe -->
-                        <div class="form-group mb-3">
-                            {{ form_label(profileForm.oldPassword, 'Ancien mot de passe') }}
-                            {{ form_widget(profileForm.oldPassword, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(profileForm.oldPassword) }}
-                        </div>
-
-                        <!-- Nouveau mot de passe -->
-                        <div class="form-group mb-3">
-                            {{ form_label(profileForm.newPassword.first, 'Nouveau mot de passe') }}
-                            {{ form_widget(profileForm.newPassword.first, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(profileForm.newPassword.first) }}
-                        </div>
-
-                        <!-- Confirmation du nouveau mot de passe -->
-                        <div class="form-group mb-4">
-                            {{ form_label(profileForm.newPassword.second, 'Confirmer le nouveau mot de passe') }}
-                            {{ form_widget(profileForm.newPassword.second, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(profileForm.newPassword.second) }}
-                        </div>
-
-                        <button type="submit" class="btn btn-success">
-                            Enregistrer les modifications
-                        </button>
-                    {{ form_end(profileForm) }}
-
-                </div>
-
+        {# Groupe pour les actions de suppression #}
+        <div class="form-group">
+            <div class="form-field">
+                <form method="post"
+                      action="{{ path('profile_remove_photo') }}"
+                      onsubmit="return confirm('Voulez-vous vraiment supprimer votre photo ?');">
+                    <button type="submit" class="submit-btn" style="background: #ffcc00; color: #000;">
+                        Supprimer la photo
+                    </button>
+                </form>
             </div>
 
+            <div class="form-field">
+                <form method="post"
+                      action="{{ path('profile_delete_account') }}"
+                      onsubmit="return confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.');">
+                    <button type="submit" class="submit-btn" style="background: #ff4d4d;">
+                        Supprimer mon compte
+                    </button>
+                </form>
+            </div>
         </div>
-        <!-- Bouton Accueil -->
-        <a href="{{ path('homepage') }}" class="btn btn-secondary mt-3">Accueil</a>
     </div>
-</div>
 
-<!-- JS Bootstrap -->
-<script src="{{ asset('assets/js/jquery.js') }}"></script>
-<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    {# SECTION : Formulaire d'édition du profil #}
+    <div class="section">
+        <h2>Modifier mon profil</h2>
+
+        {{ form_start(profileForm) }}
+            {# Ligne 1 : Nom + Prénom #}
+            <div class="form-group">
+                <div class="form-field">
+                    {{ form_label(profileForm.nom, 'Nom', {'label_attr': {'style': 'color: #fff;'}}) }}
+                    {{ form_widget(profileForm.nom, {'attr': {'placeholder': 'Votre nom'}}) }}
+                    {{ form_errors(profileForm.nom) }}
+                </div>
+                <div class="form-field">
+                    {{ form_label(profileForm.prenom, 'Prénom', {'label_attr': {'style': 'color: #fff;'}}) }}
+                    {{ form_widget(profileForm.prenom, {'attr': {'placeholder': 'Votre prénom'}}) }}
+                    {{ form_errors(profileForm.prenom) }}
+                </div>
+            </div>
+
+            {# Ligne 2 : Téléphone + Adresse #}
+            <div class="form-group">
+                <div class="form-field">
+                    {{ form_label(profileForm.telephone, 'Téléphone', {'label_attr': {'style': 'color: #fff;'}}) }}
+                    {{ form_widget(profileForm.telephone, {'attr': {'placeholder': 'Ex: 0600000000'}}) }}
+                    {{ form_errors(profileForm.telephone) }}
+                </div>
+                <div class="form-field">
+                    {{ form_label(profileForm.adresse, 'Adresse', {'label_attr': {'style': 'color: #fff;'}}) }}
+                    {{ form_widget(profileForm.adresse, {'attr': {'placeholder': 'Votre adresse'}}) }}
+                    {{ form_errors(profileForm.adresse) }}
+                </div>
+            </div>
+
+            {# Ligne 3 : Upload photo via formulaire #}
+            <div class="form-group">
+                <div class="form-field">
+                    {{ form_label(profileForm.profileImage, 'Photo de profil (PNG, JPEG, GIF)', {'label_attr': {'style': 'color: #fff;'}}) }}
+                    {{ form_widget(profileForm.profileImage) }}
+                    {{ form_errors(profileForm.profileImage) }}
+                </div>
+            </div>
+
+            <hr style="border-color: rgba(255,255,255,0.3); margin: 20px 0;">
+
+            <h3 style="color: #fff;">Changer le mot de passe</h3>
+            {# Ancien mot de passe #}
+            <div class="form-group">
+                <div class="form-field">
+                    {{ form_label(profileForm.oldPassword, 'Ancien mot de passe', {'label_attr': {'style': 'color: #fff;'}}) }}
+                    {{ form_widget(profileForm.oldPassword, {'attr': {'placeholder': 'Votre ancien mot de passe'}}) }}
+                    {{ form_errors(profileForm.oldPassword) }}
+                </div>
+                <div class="form-field">
+                    {# Nouveau mot de passe #}
+                    {{ form_label(profileForm.newPassword.first, 'Nouveau mot de passe', {'label_attr': {'style': 'color: #fff;'}}) }}
+                    {{ form_widget(profileForm.newPassword.first, {'attr': {'placeholder': 'Votre nouveau mot de passe'}}) }}
+                    {{ form_errors(profileForm.newPassword.first) }}
+                </div>
+            </div>
+
+            {# Confirmation du nouveau mot de passe #}
+            <div class="form-group">
+                <div class="form-field">
+                    {{ form_label(profileForm.newPassword.second, 'Confirmer le nouveau mot de passe', {'label_attr': {'style': 'color: #fff;'}}) }}
+                    {{ form_widget(profileForm.newPassword.second, {'attr': {'placeholder': 'Répétez votre nouveau mot de passe'}}) }}
+                    {{ form_errors(profileForm.newPassword.second) }}
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Enregistrer les modifications
+            </button>
+        {{ form_end(profileForm) }}
+    </div>
+
+   
+</div>
 </body>
 </html>
 

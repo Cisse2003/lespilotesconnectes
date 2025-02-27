@@ -186,12 +186,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const previewContainer = document.getElementById('photoPreview');
     const photoCount = document.getElementById('photoCount');
 
+    console.log("inputPhotos :", inputPhotos);
     if (!inputPhotos) {
         console.error("L'élément input pour les photos est introuvable !");
         return;
     }
     
     inputPhotos.addEventListener('change', () => {
+        console.log("Changement détecté sur l'input photos.");
         previewContainer.innerHTML = '';
         if (!inputPhotos.files || inputPhotos.files.length === 0) {
             photoCount.textContent = 'Aucune photo sélectionnée';
@@ -200,8 +202,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const nbPhotos = inputPhotos.files.length;
         photoCount.textContent = nbPhotos + (nbPhotos > 1 ? ' photos sélectionnées' : ' photo sélectionnée');
         Array.from(inputPhotos.files).forEach(file => {
+            console.log("Fichier sélectionné :", file);
             const reader = new FileReader();
             reader.onload = (e) => {
+                console.log("Image chargée :", e.target.result);
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 previewContainer.appendChild(img);

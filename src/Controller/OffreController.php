@@ -58,10 +58,7 @@ class OffreController extends AbstractController
             $photos = $form->get('photos')->getData();
             if ($photos) {
                 foreach ($photos as $photo) {
-                    // Exemple de traitement : générer un nom unique et déplacer le fichier
-                    // $nomPhoto = md5(uniqid()) . '.' . $photo->guessExtension();
-                    // $photo->move($this->getParameter('photos_directory'), $nomPhoto);
-                    // Vous pouvez sauvegarder le chemin dans une entité dédiée.
+                 
                 }
             }
             

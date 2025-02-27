@@ -18,19 +18,19 @@ class OffreController extends AbstractController
     #[Route('/offre/deposer', name: 'app_deposer_offre')]
     public function deposer(Request $request, EntityManagerInterface $em): Response
     {
-        // ✅ Vérifier que l'utilisateur est connecté
+       
         $user = $this->getUser();
         if (!$user) {
             $this->addFlash('error', 'Vous devez être connecté pour déposer une offre.');
             return $this->redirectToRoute('app_login'); // Assurez-vous que 'app_login' est bien votre route de connexion
         }
 
-        // ✅ Vérifier que l'utilisateur est bien une instance de Utilisateur
+       
         if (!$user instanceof Utilisateur) {
             throw new \Exception("Erreur : L'utilisateur connecté n'est pas un utilisateur valide.");
         }
 
-        // ✅ Création de l'offre et association avec l'utilisateur
+        
         $offre = new Offre();
         $offre->setDateCreation(new \DateTime());
         $offre->setProprietaire($user);
@@ -39,7 +39,7 @@ class OffreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // ✅ Gestion des données de la Voiture
+            
             $voiture = new Voiture();
             $voiture->setMarque($form->get('marque')->getData());
             $voiture->setModele($form->get('modele')->getData());
@@ -69,7 +69,7 @@ class OffreController extends AbstractController
                 $em->persist($livraison);
             }
 
-            // ✅ Gestion de l'upload des photos
+            
             $photos = $form->get('photos')->getData();
             if ($photos) {
                 $photosPaths = [];
@@ -88,7 +88,7 @@ class OffreController extends AbstractController
                 }
             }
 
-            // ✅ Persister l'offre
+          
             $em->persist($offre);
             $em->flush();
 

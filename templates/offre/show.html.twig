@@ -102,8 +102,11 @@
         <a href="{{ path('app_offres') }}" class="btn">Retour aux offres</a>
         <form action="{{ path('app_offre_delete', {id: offre.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ offre.id) }}">
-        <button type="submit" class="btn btn-danger">Supprimer</button>
+        <button type="submit" class="btn btn-danger" style="background-color: red; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+        ❌ Supprimer cette offre
+        </button>
         </form>
+
 
     </div>
 </div>

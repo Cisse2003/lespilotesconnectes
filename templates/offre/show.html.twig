@@ -62,18 +62,8 @@
 
     <div class="offre-detail">
         <h1>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h1>
-        <div class="section">
-        <h3>Informations détaillées :</h3>
-        <p><strong>Prix :</strong> {{ offre.prix }} € / jour</p>
-        <p><strong>Lieu de garage :</strong> {{ offre.lieuGarage }}</p>
-        <p><strong>Date de création :</strong> {{ offre.dateCreation|date('d/m/Y') }}</p>
-        <p><strong>Disponibilité :</strong> 
-            {% if offre.disponibilite %} ✅ Disponible {% else %} ❌ Non disponible {% endif %}
-        </p>
-        <p><strong>Date de début de disponibilité :</strong> {{ offre.dateDebutDisponibilite ? offre.dateDebutDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
-        <p><strong>Date de fin de disponibilité :</strong> {{ offre.dateFinDisponibilite ? offre.dateFinDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
-        <p><strong>Description :</strong> {{ offre.description ? offre.description : 'Aucune description disponible' }}</p>
-        </div>
+        <a href="{{ path('app_offre_edit', {'id': offre.id}) }}" class="btn btn-primary">Modifier l'Offre</a>
+
 
         {# Section informations du véhicule #}
         <div class="section">
@@ -93,6 +83,19 @@
             <p><strong>Lieu de garage :</strong> {{ offre.lieuGarage }}</p>
             <p><strong>Prix par jour :</strong> {{ offre.prix }} €</p>
         </div>
+
+        <div class="section">
+        <h3>Informations détaillées :</h3>
+        <p><strong>Date de création :</strong> {{ offre.dateCreation|date('d/m/Y') }}</p>
+        <p><strong>Disponibilité :</strong> 
+            {% if offre.disponibilite %} ✅ Disponible {% else %} ❌ Non disponible {% endif %}
+        </p>
+        <p><strong>Date de début de disponibilité :</strong> {{ offre.dateDebutDisponibilite ? offre.dateDebutDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
+        <p><strong>Date de fin de disponibilité :</strong> {{ offre.dateFinDisponibilite ? offre.dateFinDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
+        <p><strong>Description :</strong> {{ offre.description ? offre.description : 'Aucune description disponible' }}</p>
+        </div>
+
+        
 
         {# Espace réservé pour les photos #}
         <div class="photo-preview">

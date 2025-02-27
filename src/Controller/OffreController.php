@@ -122,6 +122,33 @@ public function delete(Offre $offre, EntityManagerInterface $em, Request $reques
 }
 
 
+#[Route('/offres/{id}/edit', name: 'app_offre_edit')]
+public function edit(Request $request, Offre $offre, EntityManagerInterface $em): Response
+{
+    // Vérifier si l'utilisateur est bien le propriétaire de l'offre
+    if ($offre->getProprietaire() !== $this->getUser()->getProprietaire()) {
+        throw $this->createAccessDeniedException("🚫 Vous n'avez pas le droit de modifier cette offre !");
+    }
+
+    // Créer le formulaire pré-rempli avec l'offre existante
+    $form = $this->createForm(OffreType::class, $offre);
+    $form->handleRequest($request);
+
+    // Si le formulaire est soumis et valide, on enregistre les modifications
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em->flush();  // Enregistrer les modifications dans la base de données
+        $this->addFlash('success', '✅ Offre modifiée avec succès !');
+        return $this->redirectToRoute('app_offre_show', ['id' => $offre->getId()]);
+    }
+
+    // Afficher le formulaire pour l'édition de l'offre
+    return $this->render('offre/edit.html.twig', [
+        'form' => $form->createView(),
+        'offre' => $offre,
+    ]);
+}
+
+
 
 
 }

@@ -19,20 +19,19 @@
         {% endfor %}
     {% endfor %}
 
-    {# Fil d’Ariane (breadcrumb) #}
+    
     <nav class="breadcrumb">
         <a href="{{ path('homepage') }}">Accueil</a> &gt; Mon Profil
     </nav>
 
     <h1>Mon Profil</h1>
 
-    {# SECTION : Informations de l'utilisateur #}
     <div class="section">
         <h2>Informations personnelles</h2>
 
-        {# Groupe pour la photo et les infos #}
+      
         <div class="form-group">
-            {# Photo de profil cliquable #}
+          
             <div class="form-field">
                 <form id="profileImageForm"
                       method="post"
@@ -54,7 +53,7 @@
                 </form>
             </div>
 
-            {# Informations de contact #}
+          
             <div class="form-field" style="justify-content: center;">
                 <p><strong>Nom :</strong> {{ user.nom }}</p>
                 <p><strong>Prénom :</strong> {{ user.prenom }}</p>
@@ -64,7 +63,7 @@
             </div>
         </div>
 
-        {# Groupe pour les actions de suppression #}
+        
         <div class="form-group">
             <div class="form-field">
                 <form method="post"
@@ -88,7 +87,7 @@
         </div>
     </div>
 
-    {# SECTION : Formulaire d'édition du profil #}
+    
     <div class="section">
         <h2>Modifier mon profil</h2>
 
@@ -107,7 +106,7 @@
                 </div>
             </div>
 
-            {# Ligne 2 : Téléphone + Adresse #}
+            {
             <div class="form-group">
                 <div class="form-field">
                     {{ form_label(profileForm.telephone, 'Téléphone', {'label_attr': {'style': 'color: #fff;'}}) }}
@@ -121,7 +120,7 @@
                 </div>
             </div>
 
-            {# Ligne 3 : Upload photo via formulaire #}
+            
             <div class="form-group">
                 <div class="form-field">
                     {{ form_label(profileForm.profileImage, 'Photo de profil (PNG, JPEG, GIF)', {'label_attr': {'style': 'color: #fff;'}}) }}
@@ -148,7 +147,7 @@
                 </div>
             </div>
 
-            {# Confirmation du nouveau mot de passe #}
+           
             <div class="form-group">
                 <div class="form-field">
                     {{ form_label(profileForm.newPassword.second, 'Confirmer le nouveau mot de passe', {'label_attr': {'style': 'color: #fff;'}}) }}

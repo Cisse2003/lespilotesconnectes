@@ -1,11 +1,10 @@
 <?php
-
+// src/Controller/OffreController.php
 namespace App\Controller;
 
 use App\Entity\Offre;
 use App\Entity\Voiture;
-use App\Entity\Livraison;
-use App\Entity\Utilisateur;
+use App\Entity\Proprietaire;
 use App\Form\OffreType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,84 +17,63 @@ class OffreController extends AbstractController
     #[Route('/offre/deposer', name: 'app_deposer_offre')]
     public function deposer(Request $request, EntityManagerInterface $em): Response
     {
-       
+        // Récupérer l'utilisateur connecté
         $user = $this->getUser();
         if (!$user) {
-            $this->addFlash('error', 'Vous devez être connecté pour déposer une offre.');
-            return $this->redirectToRoute('app_login'); // Assurez-vous que 'app_login' est bien votre route de connexion
+            return $this->redirectToRoute('app_login');
         }
-
-       
-        if (!$user instanceof Utilisateur) {
-            throw new \Exception("Erreur : L'utilisateur connecté n'est pas un utilisateur valide.");
-        }
-
         
+        // Vérifier si l'utilisateur est déjà propriétaire, sinon le créer
+        $proprietaire = $user->getProprietaire();
+        if (!$proprietaire) {
+            $proprietaire = new Proprietaire();
+            $proprietaire->setUtilisateur($user);
+            $user->setProprietaire($proprietaire);
+            $em->persist($proprietaire);
+        }
+        
+        // Création d'une nouvelle voiture et d'une nouvelle offre
+        $voiture = new Voiture();
         $offre = new Offre();
         $offre->setDateCreation(new \DateTime());
-        $offre->setProprietaire($user);
-
+        $offre->setVoiture($voiture);
+        $offre->setProprietaire($proprietaire);
+        
+        // Création du formulaire à partir du type OffreType
         $form = $this->createForm(OffreType::class, $offre);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            
-            $voiture = new Voiture();
-            $voiture->setMarque($form->get('marque')->getData());
-            $voiture->setModele($form->get('modele')->getData());
-            $voiture->setImmatriculation($form->get('immatriculation')->getData());
-            $voiture->setAnnee($form->get('annee')->getData());
-            $voiture->setNombrePlaces($form->get('nombrePlaces')->getData());
-            $voiture->setVolumeCoffre($form->get('volumeCoffre')->getData());
-            $voiture->setTypeEssence($form->get('typeEssence')->getData());
-
-            // Persister la voiture
-            $em->persist($voiture);
-            $em->flush();
-
-            // Associer la voiture à l'offre
-            $offre->setVoiture($voiture);
-
-            // ✅ Gestion des données de Livraison (si renseignées)
-            $livraisonTarifs = $form->get('livraisonTarifs')->getData();
-            $livraisonDisponibilite = $form->get('livraisonDisponibilite')->getData();
-
-            if ($livraisonTarifs !== null) { // Vérification pour éviter les erreurs
-                $livraison = new Livraison();
-                $livraison->setTarifs($livraisonTarifs);
-                $livraison->setDisponibilite($livraisonDisponibilite);
-                $livraison->setOffre($offre);
-
-                $em->persist($livraison);
+            // Vérification du format de l'immatriculation (format français : XX-123-XX)
+            $immatriculation = $voiture->getImmatriculation();
+            $immatriculation = strtoupper($immatriculation);
+            if (!preg_match('/^[A-Z]{2}-\d{3}-[A-Z]{2}$/', $immatriculation)) {
+                $this->addFlash('error', "L'immatriculation n'est pas valide. Format attendu : XX-123-XX");
+                return $this->render('offre/deposer.html.twig', [
+                    'form' => $form->createView(),
+                ]);
             }
-
             
+            // Traitement des fichiers uploadés (photos) si nécessaire
             $photos = $form->get('photos')->getData();
             if ($photos) {
-                $photosPaths = [];
-                $uploadDirectory = $this->getParameter('photos_directory');
-
                 foreach ($photos as $photo) {
-                    $originalFilename = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
-                    $newFilename = uniqid() . '.' . $photo->guessExtension();
-
-                    try {
-                        $photo->move($uploadDirectory, $newFilename);
-                        $photosPaths[] = $newFilename;
-                    } catch (\Exception $e) {
-                        $this->addFlash('error', 'Erreur lors de l\'upload d\'une photo.');
-                    }
+                    // Exemple de traitement : générer un nom unique et déplacer le fichier
+                    // $nomPhoto = md5(uniqid()) . '.' . $photo->guessExtension();
+                    // $photo->move($this->getParameter('photos_directory'), $nomPhoto);
+                    // Vous pouvez sauvegarder le chemin dans une entité dédiée.
                 }
             }
-
-          
+            
+            // Persister la voiture et l'offre
+            $em->persist($voiture);
             $em->persist($offre);
             $em->flush();
-
-            $this->addFlash('success', 'Votre offre a été déposée avec succès !');
-            return $this->redirectToRoute('app_deposer_offre');
+            
+            $this->addFlash('success', 'Offre déposée avec succès !');
+            return $this->redirectToRoute('homepage');
         }
-
+        
         return $this->render('offre/deposer.html.twig', [
             'form' => $form->createView(),
         ]);

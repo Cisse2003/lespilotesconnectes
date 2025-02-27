@@ -3,11 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-<<<<<<< HEAD
-        'reference' => '35cc5b1b1251a101a89c826a2d269f47c7e8a77a',
-=======
-        'reference' => 'ed5c926e2b4ca92652cd84bc5eba1faf5ef39e01',
->>>>>>> 9d26745 (deposer un offre)
+        'reference' => 'a781587a2fdd3e3ecd30f959ff5f09930bd2e1e5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -17,11 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-<<<<<<< HEAD
-            'reference' => '35cc5b1b1251a101a89c826a2d269f47c7e8a77a',
-=======
-            'reference' => 'ed5c926e2b4ca92652cd84bc5eba1faf5ef39e01',
->>>>>>> 9d26745 (deposer un offre)
+            'reference' => 'a781587a2fdd3e3ecd30f959ff5f09930bd2e1e5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -420,8 +412,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '3.0.0',
-                1 => '1.0|2.0|3.0',
+                0 => '1.0|2.0|3.0',
+                1 => '3.0.0',
             ),
         ),
         'psr/simple-cache-implementation' => array(

@@ -2,11 +2,12 @@
 
 
 namespace App\Entity;
-use App\Entity\Utilisateur;
+
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OffreRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: OffreRepository::class)]
 class Offre
 {
     #[ORM\Id]
@@ -18,10 +19,7 @@ class Offre
     private ?\DateTimeInterface $dateCreation = null;
 
     #[ORM\Column(type: "date", nullable: true)]
-    private ?\DateTimeInterface $dateDebutDisponibilite = null; // ✅ Ajout
-
-    #[ORM\Column(type: "date", nullable: true)]
-    private ?\DateTimeInterface $dateFinDisponibilite = null; // ✅ Ajout
+    private ?\DateTimeInterface $dateDisponibilite = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
@@ -41,35 +39,51 @@ class Offre
 
     #[ORM\ManyToOne(targetEntity: Proprietaire::class)]
     #[ORM\JoinColumn(nullable: false)]
-   private ?Utilisateur $proprietaire = null;
+    private ?Proprietaire $proprietaire = null;
 
     #[ORM\Column(type: "text", nullable: true)]
-    private ?string $description = null;
+    private ?string $description = null; // Ajout du champ description
 
-    // 🚀 GETTERS & SETTERS pour la disponibilité
-    public function getDateDebutDisponibilite(): ?\DateTimeInterface
+    // 🚀 GETTER & SETTER pour la description
+    public function getDescription(): ?string
     {
-        return $this->dateDebutDisponibilite;
+        return $this->description;
     }
 
-    public function setDateDebutDisponibilite(?\DateTimeInterface $date): self
+    public function setDescription(?string $description): self
     {
-        $this->dateDebutDisponibilite = $date;
+        $this->description = $description;
         return $this;
     }
+        #[ORM\Column(type: "date", nullable: true)]
+	private ?\DateTimeInterface $dateDebutDisponibilite = null;
 
-    public function getDateFinDisponibilite(): ?\DateTimeInterface
-    {
-        return $this->dateFinDisponibilite;
-    }
+	#[ORM\Column(type: "date", nullable: true)]
+	private ?\DateTimeInterface $dateFinDisponibilite = null;
 
-    public function setDateFinDisponibilite(?\DateTimeInterface $date): self
-    {
-        $this->dateFinDisponibilite = $date;
-        return $this;
-    }
+	public function getDateDebutDisponibilite(): ?\DateTimeInterface
+	{
+	    return $this->dateDebutDisponibilite;
+	}
 
-    // ✅ Ajout des Getters et Setters existants
+	public function setDateDebutDisponibilite(?\DateTimeInterface $dateDebutDisponibilite): self
+	{
+	    $this->dateDebutDisponibilite = $dateDebutDisponibilite;
+	    return $this;
+	}
+
+	public function getDateFinDisponibilite(): ?\DateTimeInterface
+	{
+	    return $this->dateFinDisponibilite;
+	}
+
+	public function setDateFinDisponibilite(?\DateTimeInterface $dateFinDisponibilite): self
+	{
+	    $this->dateFinDisponibilite = $dateFinDisponibilite;
+	    return $this;
+	}
+
+    // Méthodes existantes
     public function getId(): ?int { return $this->id; }
     public function getDateCreation(): ?\DateTimeInterface { return $this->dateCreation; }
     public function setDateCreation(\DateTimeInterface $date): self { $this->dateCreation = $date; return $this; }
@@ -81,18 +95,10 @@ class Offre
     public function setDisponibilite(bool $disponibilite): self { $this->disponibilite = $disponibilite; return $this; }
     public function getVoiture(): ?Voiture { return $this->voiture; }
     public function setVoiture(Voiture $voiture): self { $this->voiture = $voiture; return $this; }
-public function getProprietaire(): ?Utilisateur
-{
-    return $this->proprietaire;
+    public function getProprietaire(): ?Proprietaire { return $this->proprietaire; }
+    public function setProprietaire(Proprietaire $proprietaire): self { $this->proprietaire = $proprietaire; return $this; }
+    public function getDateDisponibilite(): ?\DateTimeInterface { return $this->dateDisponibilite; }
+    public function setDateDisponibilite(?\DateTimeInterface $dateDisponibilite): self { $this->dateDisponibilite = $dateDisponibilite; return $this; }
 }
-    public function setProprietaire(Utilisateur $proprietaire): self
-{
-    $this->proprietaire = $proprietaire;
-    return $this;
-}
-    public function getDescription(): ?string { return $this->description; }
-    public function setDescription(?string $description): self { $this->description = $description; return $this; }
-}
-
 
 

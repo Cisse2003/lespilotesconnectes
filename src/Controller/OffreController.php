@@ -95,6 +95,34 @@ public function show(Offre $offre): Response
     ]);
 }
 
+#[Route('/offres/{id}/supprimer', name: 'app_offre_delete', methods: ['POST', 'DELETE'])]
+public function delete(Offre $offre, EntityManagerInterface $em, Request $request): Response
+{
+    // Vérifier si l'utilisateur est connecté
+    $user = $this->getUser();
+    if (!$user) {
+        return $this->redirectToRoute('app_login');
+    }
+
+    // Vérifier si l'utilisateur est bien le propriétaire de l'offre
+    if ($offre->getProprietaire() !== $user->getProprietaire()) {
+        throw $this->createAccessDeniedException("Vous n'avez pas le droit de supprimer cette offre.");
+    }
+
+    // Vérifier la validité du token CSRF
+    if ($this->isCsrfTokenValid('delete' . $offre->getId(), $request->request->get('_token'))) {
+        $em->remove($offre);
+        $em->flush();
+        $this->addFlash('success', 'Offre supprimée avec succès.');
+    } else {
+        $this->addFlash('error', 'Token CSRF invalide, suppression annulée.');
+    }
+
+    return $this->redirectToRoute('app_offres');
+}
+
+
+
 
 }
 

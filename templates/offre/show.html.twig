@@ -100,6 +100,11 @@
         </div>
 
         <a href="{{ path('app_offres') }}" class="btn">Retour aux offres</a>
+        <form action="{{ path('app_offre_delete', {id: offre.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ offre.id) }}">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+        </form>
+
     </div>
 </div>
 

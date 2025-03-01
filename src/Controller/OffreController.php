@@ -149,6 +149,25 @@ public function edit(Request $request, Offre $offre, EntityManagerInterface $em)
 }
 
 
+#[Route('/offres/{id}/toggle-disponibilite', name: 'app_offre_toggle_disponibilite', methods: ['POST'])]
+public function toggleDisponibilite(Offre $offre, EntityManagerInterface $em): Response
+{
+    // Vérifier si l'utilisateur est bien le propriétaire de l'offre
+    if ($offre->getProprietaire() !== $this->getUser()->getProprietaire()) {
+        return $this->json(['success' => false, 'message' => "Accès refusé"], Response::HTTP_FORBIDDEN);
+    }
+
+    // Inverser la disponibilité
+    $offre->setDisponibilite(!$offre->getDisponibilite());
+
+    // Sauvegarder en base de données
+    $em->flush();
+
+    return $this->json([
+        'success' => true,
+        'newDisponibilite' => $offre->getDisponibilite(),
+    ]);
+}
 
 
 }

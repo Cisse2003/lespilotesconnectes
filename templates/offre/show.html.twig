@@ -51,7 +51,41 @@
             line-height: 200px;
             color: #aaa;
         }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button-container .btn {
+            font-size: 14px;  /* Taille plus petite pour les boutons "Retour" et "Supprimer" */
+            padding: 8px 16px; /* Un peu plus petit en termes de padding */
+        }
+
+        .button-container .btn-back {
+            width: 20%; /* Largeur du bouton "Retour aux offres" */
+        }
+
+        .button-container .btn-delete {
+            width: 100%; /* Largeur du bouton "Supprimer" */
+            background-color: red;
+        }
         
+        .toggle-dispo-btn {
+            display: block;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-delete:hover {
+        background-color: rgb(80, 1, 1); /* Un rouge plus foncé au survol */
+    }
+
+    /* Effet de survol pour "Suspendre l'offre" */
+    #toggle-dispo-btn:hover {
+        background-color: rgb(80, 1, 1); /* Un rouge plus foncé au survol */
+    }
     </style>
 </head>
 <body>
@@ -64,9 +98,8 @@
     <div class="offre-detail">
         <h1>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h1>
         <div class="button-top">
-        <a href="{{ path('app_offre_edit', {'id': offre.id}) }}" class="btn btn-primary">Modifier l'Offre</a>
+            <a href="{{ path('app_offre_edit', {'id': offre.id}) }}" class="btn btn-primary">Modifier l'Offre</a>
         </div>
-    
 
         {# Section informations du véhicule #}
         <div class="section">
@@ -88,37 +121,72 @@
         </div>
 
         <div class="section">
-        <h3>Informations détaillées :</h3>
-        <p><strong>Date de création :</strong> {{ offre.dateCreation|date('d/m/Y') }}</p>
-        <p><strong>Disponibilité :</strong> 
-            {% if offre.disponibilite %} ✅ Disponible {% else %} ❌ Non disponible {% endif %}
-        </p>
-        <p><strong>Date de début de disponibilité :</strong> {{ offre.dateDebutDisponibilite ? offre.dateDebutDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
-        <p><strong>Date de fin de disponibilité :</strong> {{ offre.dateFinDisponibilite ? offre.dateFinDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
-        <p><strong>Description :</strong> {{ offre.description ? offre.description : 'Aucune description disponible' }}</p>
+            <h3>Informations détaillées :</h3>
+            <p><strong>Date de création :</strong> {{ offre.dateCreation|date('d/m/Y') }}</p>
+            <p><strong>Disponibilité :</strong> 
+                {% if offre.disponibilite %} ✅ Disponible {% else %} ❌ Non disponible {% endif %}
+            </p>
+            <p><strong>Date de début de disponibilité :</strong> {{ offre.dateDebutDisponibilite ? offre.dateDebutDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
+            <p><strong>Date de fin de disponibilité :</strong> {{ offre.dateFinDisponibilite ? offre.dateFinDisponibilite|date('d/m/Y') : 'Non précisé' }}</p>
+            <p><strong>Description :</strong> {{ offre.description ? offre.description : 'Aucune description disponible' }}</p>
         </div>
-
-        
 
         {# Espace réservé pour les photos #}
         <div class="photo-preview">
             <p>Photo</p>
         </div>
 
-        <a href="{{ path('app_offres') }}" class="btn">Retour aux offres</a>
-        <form action="{{ path('app_offre_delete', {id: offre.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
-        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ offre.id) }}">
-        <button type="submit" class="btn btn-danger" style="background-color: red; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
-        ❌ Supprimer cette offre
+        <button id="toggle-dispo-btn" class="btn toggle-dispo-btn"
+        style="background-color: {% if offre.disponibilite %} red {% else %} green {% endif %};"
+        data-id="{{ offre.id }}">
+        {% if offre.disponibilite %} Suspendre l'offre {% else %} Activer l'offre {% endif %}
         </button>
-        </form>
 
+        <div class="button-container">
+            <a href="{{ path('app_offres') }}" class="btn btn-back">Retour aux offres</a>
+
+            <form action="{{ path('app_offre_delete', {id: offre.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ offre.id) }}">
+                <button type="submit" class="btn btn-delete">
+                    ❌ Supprimer cette offre
+                </button>
+            </form>
+        </div>
 
     </div>
 </div>
 
 <script>
-    // Vous pouvez ajouter un script similaire si vous avez des éléments interactifs
+document.getElementById('toggle-dispo-btn').addEventListener('click', function () {
+    let button = this;
+    let offreId = button.getAttribute('data-id');
+    let statusText = document.getElementById('disponibilite-status');
+
+    fetch(`/offres/${offreId}/toggle-disponibilite`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.newDisponibilite) {
+                button.textContent = "Suspendre l'offre";
+                button.style.backgroundColor = "red";
+                statusText.innerHTML = "✅ Disponible";
+            } else {
+                button.textContent = "Activer l'offre";
+                button.style.backgroundColor = "green";
+                statusText.innerHTML = "❌ Non disponible";
+            }
+        } else {
+            alert("Erreur : " + data.message);
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+});
 </script>
+
 </body>
 </html>

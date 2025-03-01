@@ -82,7 +82,7 @@ public function index(EntityManagerInterface $em): Response
 {
     $offres = $em->getRepository(Offre::class)->findAll();
 
-    return $this->render('offre/index.html.twig', [
+    return $this->render('offre/form.html.twig', [
         'offres' => $offres,
     ]);
 }

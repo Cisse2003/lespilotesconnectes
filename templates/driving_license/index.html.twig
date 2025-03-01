@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification du Permis de Conduire</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/permis.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Vérification du Permis de Conduire ✅</h1>
+
+    <form action="{{ path('upload_license_form') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="license" required>
+        <br>
+        <button type="submit" class="btn-upload">Téléverser</button>
+    </form>
+
+    {% if dataExtracted %}
+        <div class="result-box">
+            <h2>Informations Extraites :</h2>
+            <p><strong>Nom :</strong> {{ dataExtracted.nom }}</p>
+            <p><strong>Numéro de permis :</strong> {{ dataExtracted.numero_permis }}</p>
+            <p><strong>Date d'expiration :</strong> {{ dataExtracted.date_expiration }}</p>
+        </div>
+    {% endif %}
+
+    {% for message in app.flashes('error') %}
+        <p style="color: red;">{{ message }}</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>

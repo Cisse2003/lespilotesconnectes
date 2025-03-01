@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permis Valide</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/permis_valide.css') }}">
+</head>
+<body>
+<div class="container">
+    {# Fil d’Ariane (breadcrumb) #}
+    <nav class="breadcrumb">
+        <a href="{{ path('homepage') }}">Accueil</a> &gt; Permis de Conduire
+    </nav>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <h2>Permis de Conduire</h2>
+
+    {% if emprunteur is defined and emprunteur is not null %}
+        <p><strong>Nom :</strong> {{ emprunteur.utilisateur.nom }}</p>
+        <p><strong>Prénom :</strong> {{ emprunteur.utilisateur.prenom }}</p>
+        <p><strong>Date d'expiration :</strong> {{ emprunteur.dateExpiration|date('d/m/Y') }}</p>
+        <!-- <button class="btn-success">✅ Valide</button> -->
+        <form action="{{ path('supprimer_permis', { 'id': emprunteur.id }) }}" method="post" style="display:inline;">
+            <button type="submit" class="btn-danger">❌ Supprimer le Permis</button>
+        </form>
+    {% else %}
+        <p style="color: red;">Aucun permis valide trouvé.</p>
+    {% endif %}
+</div>
+</body>
+</html>

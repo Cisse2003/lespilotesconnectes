@@ -96,7 +96,7 @@ class SecurityController extends AbstractController
                     <p>Bonjour {$utilisateur->getPrenom()},</p>
                     <p>Votre mot de passe a été modifié avec succès.</p>
                     <p>Si vous n'êtes pas à l'origine de cette modification, veuillez nous contacter immédiatement.</p>
-                    <p>Cordialement, <br>Les pilotes connectés !</p>
+                    <p>Cordialement, <br>L\'équipe PRÉKAR !</p>
                 ");
 
                 $mailer->send($email);

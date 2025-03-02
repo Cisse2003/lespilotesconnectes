@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="Vérification du permis de conduire &amp; Mise en place de l’authentification">
-      <change afterPath="$PROJECT_DIR$/public/assets/css/forgot.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/css/reset.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/security/forgot_password.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/security/reset_password.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="Changement de mot de passe oublié">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/security/login.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/login.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Proprietaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Proprietaire.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -288,7 +283,8 @@
       <workItem from="1740609808117" duration="3836000" />
       <workItem from="1740858269489" duration="7135000" />
       <workItem from="1740865417255" duration="25000" />
-      <workItem from="1740865450631" duration="7658000" />
+      <workItem from="1740865450631" duration="9733000" />
+      <workItem from="1740885302190" duration="2920000" />
     </task>
     <task id="LOCAL-00001" summary="FormulaireFait">
       <option name="closed" value="true" />
@@ -370,7 +366,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740869636794</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Changement de mot de passe oublié">
+      <option name="closed" value="true" />
+      <created>1740882248929</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1740882248929</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -386,17 +390,7 @@
     <MESSAGE value="Système de notification des inscription (Email)" />
     <MESSAGE value="Modification sur la responsive" />
     <MESSAGE value="Vérification du permis de conduire &amp; Mise en place de l’authentification" />
-    <option name="LAST_COMMIT_MESSAGE" value="Vérification du permis de conduire &amp; Mise en place de l’authentification" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/templates/profile/profile.html.twig</url>
-          <line>22</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Changement de mot de passe oublié" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changement de mot de passe oublié" />
   </component>
 </project>

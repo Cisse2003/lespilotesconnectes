@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity;  // Ajoute ceci
 
 use App\Repository\ProprietaireRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,8 +30,6 @@ class Proprietaire
     public function setUtilisateur(Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
-
         return $this;
     }
 }
-

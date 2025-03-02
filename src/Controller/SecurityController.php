@@ -89,7 +89,7 @@ class SecurityController extends AbstractController
                 $entityManager->flush();
 
                 $email = (new Email())
-                    ->from('no-reply@votre-site.com')
+                    ->from('lespilotes@lespilotesconnectes.com')
                     ->to($utilisateur->getEmail())
                     ->subject('Votre mot de passe a été modifié')
                     ->html("

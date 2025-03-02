@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="Bug fixer">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Security/UserAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/UserAuthenticator.php" afterDir="false" />
+    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="Système de confirmation de mail">
+      <change beforePath="$PROJECT_DIR$/src/Entity/Utilisateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Utilisateur.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -284,7 +282,7 @@
       <workItem from="1740858269489" duration="7135000" />
       <workItem from="1740865417255" duration="25000" />
       <workItem from="1740865450631" duration="9733000" />
-      <workItem from="1740885302190" duration="4489000" />
+      <workItem from="1740885302190" duration="4906000" />
     </task>
     <task id="LOCAL-00001" summary="FormulaireFait">
       <option name="closed" value="true" />
@@ -390,7 +388,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740923801578</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Système de confirmation de mail">
+      <option name="closed" value="true" />
+      <created>1740927324365</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1740927324365</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -409,6 +415,7 @@
     <MESSAGE value="Changement de mot de passe oublié" />
     <MESSAGE value="Big fixer" />
     <MESSAGE value="Bug fixer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug fixer" />
+    <MESSAGE value="Système de confirmation de mail" />
+    <option name="LAST_COMMIT_MESSAGE" value="Système de confirmation de mail" />
   </component>
 </project>

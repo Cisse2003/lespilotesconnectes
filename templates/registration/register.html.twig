@@ -24,16 +24,75 @@
         </div>
     {% endfor %}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword.first) }}
-        {{ form_row(registrationForm.plainPassword.second) }}
-        {{ form_row(registrationForm.nom) }}
-        {{ form_row(registrationForm.prenom) }}
-        {{ form_row(registrationForm.telephone) }}
-        {{ form_row(registrationForm.adresse) }}
 
-        <button type="submit">S'inscrire</button>
+    {{ form_start(registrationForm) }}
+
+    <div>
+        {{ form_label(registrationForm.email, 'Adresse Email *') }}
+        {{ form_widget(registrationForm.email) }}
+        {% for error in registrationForm.email.vars.errors %}
+            <p class="error-message">{{ error.message }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe *') }}
+        {{ form_widget(registrationForm.plainPassword.first) }}
+        {% for error in registrationForm.plainPassword.first.vars.errors %}
+            <p class="error-message">{{ error.message }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form_label(registrationForm.plainPassword.second, 'Confirmez le mot de passe *') }}
+        {{ form_widget(registrationForm.plainPassword.second) }}
+        {% for error in registrationForm.plainPassword.second.vars.errors %}
+            <p class="error-message">{{ error.message }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form_label(registrationForm.nom, 'Nom *') }}
+        {{ form_widget(registrationForm.nom) }}
+        {% for error in registrationForm.nom.vars.errors %}
+            <p class="error-message">{{ error.message }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form_label(registrationForm.prenom, 'Prénom *') }}
+        {{ form_widget(registrationForm.prenom) }}
+        {% for error in registrationForm.prenom.vars.errors %}
+            <p class="error-message">{{ error.message }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form_label(registrationForm.telephone, 'Téléphone') }}
+        {{ form_widget(registrationForm.telephone) }}
+        {% for error in registrationForm.telephone.vars.errors %}
+            <p class="error-message">{{ error.message }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form_label(registrationForm.adresse, 'Adresse') }}
+        {{ form_widget(registrationForm.adresse) }}
+        {% for error in registrationForm.adresse.vars.errors %}
+            <p class="error-message">{{ error.message }}</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form_widget(registrationForm.agreeTerms) }}
+        {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions d\'utilisation *') }}
+        {% for error in registrationForm.agreeTerms.vars.errors %}
+            <p class="error-message">{{ error.message }}</p>
+        {% endfor %}
+    </div>
+
+    <button type="submit">S'inscrire</button>
+
     {{ form_end(registrationForm) }}
 
     <p>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
@@ -42,6 +101,12 @@
 </div>
 
 <style>
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
     .btn-retour {
         display: inline-block !important;
         margin-top: 15px !important;

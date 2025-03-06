@@ -39,36 +39,18 @@ class OffreController extends AbstractController
         $offre->setVoiture($voiture);
         $offre->setProprietaire($proprietaire);
         
-        // Création du formulaire à partir du type OffreType
+        // Création du formulaire
         $form = $this->createForm(OffreType::class, $offre);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérification du format de l'immatriculation (format français : XX-123-XX)
-            $immatriculation = $voiture->getImmatriculation();
-            $immatriculation = strtoupper($immatriculation);
-            if (!preg_match('/^[A-Z]{2}-\d{3}-[A-Z]{2}$/', $immatriculation)) {
-                $this->addFlash('error', "L'immatriculation n'est pas valide. Format attendu : XX-123-XX");
-                return $this->render('offre/deposer.html.twig', [
-                    'form' => $form->createView(),
-                ]);
-            }
-            
-            // Traitement des fichiers uploadés (photos) si nécessaire
-            $photos = $form->get('photos')->getData();
-            if ($photos) {
-                foreach ($photos as $photo) {
-                 
-                }
-            }
-            
             // Persister la voiture et l'offre
             $em->persist($voiture);
             $em->persist($offre);
             $em->flush();
             
             $this->addFlash('success', 'Offre déposée avec succès !');
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('app_offres');
         }
         
         return $this->render('offre/deposer.html.twig', [
@@ -78,49 +60,39 @@ class OffreController extends AbstractController
 
 
     #[Route('/offres', name: 'app_offres')]
-public function index(EntityManagerInterface $em): Response
-{
-    $offres = $em->getRepository(Offre::class)->findAll();
-
-    return $this->render('offre/index.html.twig', [
-        'offres' => $offres,
-    ]);
-}
-
-#[Route('/offres/{id}', name: 'app_offre_show')]
-public function show(Offre $offre): Response
-{
-    return $this->render('offre/show.html.twig', [
-        'offre' => $offre,
-    ]);
-}
-
-#[Route('/offres/{id}/supprimer', name: 'app_offre_delete', methods: ['POST', 'DELETE'])]
-public function delete(Offre $offre, EntityManagerInterface $em, Request $request): Response
-{
-    // Vérifier si l'utilisateur est connecté
-    $user = $this->getUser();
-    if (!$user) {
-        return $this->redirectToRoute('app_login');
+    public function index(EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        
+        // Récupérer les offres du propriétaire connecté
+        $proprietaire = $user->getProprietaire();
+        $offres = $proprietaire ? $proprietaire->getOffres() : [];
+        
+        return $this->render('offre/index.html.twig', [
+            'offres' => $offres,
+        ]);
     }
 
-    // Vérifier si l'utilisateur est bien le propriétaire de l'offre
-    if ($offre->getProprietaire() !== $user->getProprietaire()) {
-        throw $this->createAccessDeniedException("Vous n'avez pas le droit de supprimer cette offre.");
+    #[Route('/offres/{id}', name: 'app_offre_show')]
+    public function show(Offre $offre): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        
+        // Vérifier si l'offre appartient à l'utilisateur connecté
+        if ($offre->getProprietaire() !== $user->getProprietaire()) {
+            throw $this->createAccessDeniedException("Vous n'avez pas accès à cette offre.");
+        }
+        
+        return $this->render('offre/show.html.twig', [
+            'offre' => $offre,
+        ]);
     }
-
-    // Vérifier la validité du token CSRF
-    if ($this->isCsrfTokenValid('delete' . $offre->getId(), $request->request->get('_token'))) {
-        $em->remove($offre);
-        $em->flush();
-        $this->addFlash('success', 'Offre supprimée avec succès.');
-    } else {
-        $this->addFlash('error', 'Token CSRF invalide, suppression annulée.');
-    }
-
-    return $this->redirectToRoute('app_offres');
-}
-
 
 #[Route('/offres/{id}/edit', name: 'app_offre_edit')]
 public function edit(Request $request, Offre $offre, EntityManagerInterface $em): Response
@@ -167,6 +139,33 @@ public function toggleDisponibilite(Offre $offre, EntityManagerInterface $em): R
         'success' => true,
         'newDisponibilite' => $offre->getDisponibilite(),
     ]);
+}
+
+
+#[Route('/offres/{id}/supprimer', name: 'app_offre_delete', methods: ['POST', 'DELETE'])]
+public function delete(Offre $offre, EntityManagerInterface $em, Request $request): Response
+{
+    // Vérifier si l'utilisateur est connecté
+    $user = $this->getUser();
+    if (!$user) {
+        return $this->redirectToRoute('app_login');
+    }
+
+    // Vérifier si l'utilisateur est bien le propriétaire de l'offre
+    if ($offre->getProprietaire() !== $user->getProprietaire()) {
+        throw $this->createAccessDeniedException("Vous n'avez pas le droit de supprimer cette offre.");
+    }
+
+    // Vérifier la validité du token CSRF
+    if ($this->isCsrfTokenValid('delete' . $offre->getId(), $request->request->get('_token'))) {
+        $em->remove($offre);
+        $em->flush();
+        $this->addFlash('success', 'Offre supprimée avec succès.');
+    } else {
+        $this->addFlash('error', 'Token CSRF invalide, suppression annulée.');
+    }
+
+    return $this->redirectToRoute('app_offres');
 }
 
 

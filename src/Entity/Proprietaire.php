@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;  // Ajoute ceci
+namespace App\Entity;
 
 use App\Repository\ProprietaireRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -40,7 +40,6 @@ class Proprietaire
     public function setUtilisateur(Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
-<<<<<<< HEAD
         return $this;
     }
 
@@ -70,8 +69,6 @@ class Proprietaire
             }
         }
 
-=======
->>>>>>> refs/remotes/origin/main
         return $this;
     }
 }

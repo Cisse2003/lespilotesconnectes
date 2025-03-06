@@ -46,11 +46,13 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
                 }
 
                 // Vérifier si l'utilisateur a confirmé son email
+                /*
                 if (!$user->isVerified()) {
                     throw new CustomUserMessageAuthenticationException(
                         'Votre compte n\'est pas encore activé. Veuillez confirmer votre email.'
                     );
                 }
+                    */
 
                 return $user;
             }),

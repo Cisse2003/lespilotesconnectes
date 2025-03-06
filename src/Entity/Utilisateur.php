@@ -25,7 +25,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 15)]
+    #[ORM\Column(length: 15, nullable: true)]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -34,24 +34,30 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255)]
     private ?string $password = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true, unique: true)]
+    private ?string $confirmationToken = null;
+
     // ***************** Nouveau champ pour la photo de profil *****************
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profileImage = null;
 
     // *************************************************************************
-	#[ORM\OneToOne(targetEntity: Proprietaire::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
-	private ?Proprietaire $proprietaire = null;
+    #[ORM\OneToOne(targetEntity: Proprietaire::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
+    private ?Proprietaire $proprietaire = null;
 
-	public function getProprietaire(): ?Proprietaire
-	{
-	    return $this->proprietaire;
-	}
+    public function getProprietaire(): ?Proprietaire
+    {
+        return $this->proprietaire;
+    }
 
-	public function setProprietaire(?Proprietaire $proprietaire): self
-	{
-	    $this->proprietaire = $proprietaire;
-	    return $this;
-	}
+    public function setProprietaire(?Proprietaire $proprietaire): self
+    {
+        $this->proprietaire = $proprietaire;
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -137,6 +143,28 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+        return $this;
+    }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
+        return $this;
+    }
+
     // *************************************************************************
 
     public function eraseCredentials(): void
@@ -154,8 +182,3 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return ['ROLE_USER'];
     }
 }
-
-
-
-
-

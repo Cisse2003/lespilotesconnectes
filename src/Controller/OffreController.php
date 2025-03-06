@@ -60,6 +60,7 @@ class OffreController extends AbstractController
 
 
     #[Route('/offres', name: 'app_offres')]
+<<<<<<< HEAD
     public function index(EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
@@ -74,6 +75,32 @@ class OffreController extends AbstractController
         return $this->render('offre/index.html.twig', [
             'offres' => $offres,
         ]);
+=======
+public function index(EntityManagerInterface $em): Response
+{
+    $offres = $em->getRepository(Offre::class)->findAll();
+
+    return $this->render('offre/form.html.twig', [
+        'offres' => $offres,
+    ]);
+}
+
+#[Route('/offres/{id}', name: 'app_offre_show')]
+public function show(Offre $offre): Response
+{
+    return $this->render('offre/show.html.twig', [
+        'offre' => $offre,
+    ]);
+}
+
+#[Route('/offres/{id}/supprimer', name: 'app_offre_delete', methods: ['POST', 'DELETE'])]
+public function delete(Offre $offre, EntityManagerInterface $em, Request $request): Response
+{
+    // Vérifier si l'utilisateur est connecté
+    $user = $this->getUser();
+    if (!$user) {
+        return $this->redirectToRoute('app_login');
+>>>>>>> refs/remotes/origin/main
     }
 
     #[Route('/offres/{id}', name: 'app_offre_show')]

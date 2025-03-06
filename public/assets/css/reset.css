@@ -1,0 +1,170 @@
+/* === Style général du body === */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* === Conteneur principal === */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* === Effet d'apparition === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === Titre === */
+.login-container h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* === Informations utilisateur === */
+.login-container p {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+/* === Style des labels === */
+.login-container label {
+    display: block;
+    text-align: left;
+    font-weight: 500;
+    margin: 10px 0 5px;
+    color: #555;
+}
+
+/* === Champs de formulaire === */
+.login-container input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.3s ease;
+}
+
+/* === Effet focus sur les champs === */
+.login-container input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+    outline: none;
+}
+
+/* === Bouton de soumission === */
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 15px;
+    transition: 0.3s ease;
+}
+
+/* === Effet hover bouton === */
+.login-container button:hover {
+    background: linear-gradient(135deg, #556cd6, #5a3d91);
+}
+
+/* === Bouton retour === */
+.btn-retour {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.btn-retour:hover {
+    background: linear-gradient(135deg, #556cd6, #5a3d91);
+}
+
+/* === Messages d'erreur === */
+.alert {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background: #ffdddd;
+    color: #d9534f;
+    border-left: 4px solid #d9534f;
+}
+
+/* === Responsive Design === */
+
+/* Petits écrans (mobiles) */
+@media screen and (max-width: 480px) {
+    .login-container {
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .login-container h1 {
+        font-size: 22px;
+    }
+
+    .login-container input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .login-container button {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .btn-retour {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+/* Tablettes (entre 481px et 768px) */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 30px;
+    }
+
+    .login-container {
+        max-width: 350px;
+    }
+
+    .login-container h1 {
+        font-size: 24px;
+    }
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Permis</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/permis.css') }}">
+</head>
+<body>
+
+<div class="container">
+    {# Fil d’Ariane (breadcrumb) #}
+    <nav class="breadcrumb">
+        <a href="{{ path('homepage') }}">Accueil</a> &gt; Ajouter votre permis
+    </nav>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <h1>Ajouter votre permis</h1>
+
+    {{ form_start(form) }}
+
+    <div class="form-group">
+        <div class="form-field">
+            <label>{{ form_label(form.nom) }}</label>
+            {{ form_widget(form.nom) }}
+            {{ form_errors(form.nom) }}
+        </div>
+
+        <div class="form-field">
+            <label>{{ form_label(form.numeroPermis) }}</label>
+            {{ form_widget(form.numeroPermis) }}
+            {{ form_errors(form.numeroPermis) }}
+        </div>
+    </div>
+
+    <div class="form-field">
+        <label>{{ form_label(form.dateExpiration) }}</label>
+        {{ form_widget(form.dateExpiration) }}
+        {{ form_errors(form.dateExpiration) }}
+    </div>
+
+    <button type="submit" class="submit-btn">Valider</button>
+
+    {{ form_end(form) }}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-error">{{ message }}</div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

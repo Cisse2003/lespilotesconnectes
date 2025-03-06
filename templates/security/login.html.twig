@@ -37,6 +37,8 @@
         <button type="submit">Se connecter</button>
     </form>
 
+    <p><a href="{{ path('app_forgot_password') }}">Mot de passe oublié ?</a></p>
+
     <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a></p>
 
     <a href="{{ path('homepage') }}" class="btn-retour">Retour</a>
@@ -52,12 +54,9 @@
         text-decoration: none !important;
         border-radius: 5px !important;
         font-weight: bold !important;
-        text-decoration: none !important;
     }
     .btn-retour:hover {
         background: linear-gradient(135deg, #556cd6, #5a3d91) !important;
-        color: white !important;
-        text-decoration: none !important;
     }
 </style>
 

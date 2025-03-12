@@ -16,10 +16,7 @@ class LivraisonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('adresse', TextType::class, [
-                'label'    => 'Adresse de livraison',
-                'required' => false,
-            ])
+
             ->add('tarifs', MoneyType::class, [
                 'label'    => 'Tarif de livraison (€)',
                 'required' => false,

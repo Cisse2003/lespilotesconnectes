@@ -13,34 +13,21 @@ class Livraison
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $adresse = null;
-
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2, nullable: true)]
     private ?float $tarifs = null;
+
 
     #[ORM\Column]
     private ?bool $disponibilite = null;
 
-    #[ORM\ManyToOne(targetEntity: Offre::class)]
+    #[ORM\OneToOne(inversedBy: 'livraison', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Offre $offre = null;
+
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-
-    public function setAdresse(?string $adresse): self
-    {
-        $this->adresse = $adresse;
-        return $this;
-    }
-
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
     }
 
     public function setTarifs(?float $tarifs): self
@@ -76,5 +63,3 @@ class Livraison
         return $this->offre;
     }
 }
-
-

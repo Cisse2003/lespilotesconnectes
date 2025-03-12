@@ -133,12 +133,12 @@
         </div>
     </div>
 
-    {# SECTION : Informations de livraison (adresse supprimée) #}
+    {# SECTION : Informations de livraison #}
     <div class="section">
         <h2>Informations de livraison</h2>
         <div class="form-group">
             <div class="form-field">
-                {{ form_row(form.livraisonTarifs, {
+                {{ form_row(form.livraison.tarifs, {
                     'attr': {'placeholder': 'Ex: 20', 'min': '0'}
                 }) }}
             </div>
@@ -147,12 +147,14 @@
             <div class="form-field switch-field">
                 <span class="switch-text">Livraison disponible ?</span>
                 <label class="switch-label" for="livraisonDisponibilite">
-                    {{ form_widget(form.livraisonDisponibilite, { 'id': 'livraisonDisponibilite' }) }}
+                    {{ form_widget(form.livraison.disponibilite, { 'id': 'livraisonDisponibilite' }) }}
                     <span class="switch-slider"></span>
                 </label>
             </div>
         </div>
     </div>
+
+
 
     {# SECTION : Photos du véhicule #}
     <div class="section">
@@ -176,49 +178,48 @@
     </div>
 
     <button type="submit" class="submit-btn">Soumettre l'Offre</button>
-    
+
     {{ form_end(form) }}
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const inputPhotos = document.getElementById('photos');
-    const previewContainer = document.getElementById('photoPreview');
-    const photoCount = document.getElementById('photoCount');
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputPhotos = document.getElementById('photos');
+        const previewContainer = document.getElementById('photoPreview');
+        const photoCount = document.getElementById('photoCount');
 
-    console.log("inputPhotos :", inputPhotos);
-    if (!inputPhotos) {
-        console.error("L'élément input pour les photos est introuvable !");
-        return;
-    }
-    
-    inputPhotos.addEventListener('change', () => {
-        console.log("Changement détecté sur l'input photos.");
-        previewContainer.innerHTML = '';
-        if (!inputPhotos.files || inputPhotos.files.length === 0) {
-            photoCount.textContent = 'Aucune photo sélectionnée';
+        console.log("inputPhotos :", inputPhotos);
+        if (!inputPhotos) {
+            console.error("L'élément input pour les photos est introuvable !");
             return;
         }
-        const nbPhotos = inputPhotos.files.length;
-        photoCount.textContent = nbPhotos + (nbPhotos > 1 ? ' photos sélectionnées' : ' photo sélectionnée');
-        Array.from(inputPhotos.files).forEach(file => {
-            console.log("Fichier sélectionné :", file);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                console.log("Image chargée :", e.target.result);
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                previewContainer.appendChild(img);
-            };
-            reader.onerror = (e) => {
-                console.error("Erreur lors de la lecture du fichier :", file.name, e);
-            };
-            reader.readAsDataURL(file);
+
+        inputPhotos.addEventListener('change', () => {
+            console.log("Changement détecté sur l'input photos.");
+            previewContainer.innerHTML = '';
+            if (!inputPhotos.files || inputPhotos.files.length === 0) {
+                photoCount.textContent = 'Aucune photo sélectionnée';
+                return;
+            }
+            const nbPhotos = inputPhotos.files.length;
+            photoCount.textContent = nbPhotos + (nbPhotos > 1 ? ' photos sélectionnées' : ' photo sélectionnée');
+            Array.from(inputPhotos.files).forEach(file => {
+                console.log("Fichier sélectionné :", file);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    console.log("Image chargée :", e.target.result);
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    previewContainer.appendChild(img);
+                };
+                reader.onerror = (e) => {
+                    console.error("Erreur lors de la lecture du fichier :", file.name, e);
+                };
+                reader.readAsDataURL(file);
+            });
         });
     });
-});
 </script>
 
 </body>
 </html>
-

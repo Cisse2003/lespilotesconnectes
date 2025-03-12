@@ -1,9 +1,10 @@
 <?php
-// src/Form/OffreType.php
+
 namespace App\Form;
 
 use App\Entity\Offre;
 use App\Form\VoitureType;
+use App\Form\LivraisonType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -12,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OffreType extends AbstractType
@@ -20,10 +20,12 @@ class OffreType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // Intégration du sous-formulaire pour la voiture
+            // ✅ Formulaire pour la voiture
             ->add('voiture', VoitureType::class, [
                 'label' => false,
             ])
+
+            // ✅ Date de disponibilité
             ->add('dateDebutDisponibilite', DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date de début'
@@ -32,6 +34,8 @@ class OffreType extends AbstractType
                 'widget' => 'single_text',
                 'label' => 'Date de fin'
             ])
+
+            // ✅ Lieu de garage et prix
             ->add('lieuGarage', TextType::class, [
                 'attr' => ['placeholder' => 'Ex: Paris 12ème']
             ])
@@ -40,6 +44,8 @@ class OffreType extends AbstractType
                 'label' => 'Prix (€/jour)',
                 'attr' => ['min' => '0', 'placeholder' => 'Ex: 50']
             ])
+
+            // ✅ Description de l'offre
             ->add('description', TextareaType::class, [
                 'attr' => [
                     'placeholder' => 'Décrivez brièvement le véhicule...',
@@ -47,25 +53,23 @@ class OffreType extends AbstractType
                 ],
                 'required' => false
             ])
-            // Champs non mappés pour la livraison
-            ->add('livraisonTarifs', IntegerType::class, [
-                'mapped'   => false,
-                'required' => false,
-                'attr'     => ['placeholder' => 'Ex: 20', 'min' => '0']
-            ])
-            ->add('livraisonDisponibilite', CheckboxType::class, [
-                'mapped'   => false,
-                'required' => false,
-                'label'    => 'Livraison disponible ?'
-            ])
-            // Champ non mappé pour les photos
+
+            // ✅ Photos du véhicule
             ->add('photos', FileType::class, [
-                'mapped'   => false,
-                'required' => false,
+                'label' => 'Photos du véhicule',
                 'multiple' => true,
-                'attr'     => ['accept' => 'image/*']
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'accept' => 'image/*'
+                ]
             ])
-        ;
+
+            // ✅ Formulaire de la livraison (inclusion du `LivraisonType`)
+            ->add('livraison', LivraisonType::class, [
+                'label' => false,
+                'required' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -75,4 +79,3 @@ class OffreType extends AbstractType
         ]);
     }
 }
-

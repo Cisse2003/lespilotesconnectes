@@ -5,21 +5,46 @@
     <meta charset="UTF-8">
     <title>Modifier une Offre</title>
     <link rel="stylesheet" href="{{ asset('assets/css/deposer.css') }}">
+    <style>
+        .btn-submit {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Centrage du bouton */
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    {# Affichage des messages flash #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
 
+<div class="container">
     {# Fil d’Ariane (breadcrumb) #}
     <nav class="breadcrumb">
-        <a href="{{ path('homepage') }}">Accueil</a> &gt; <a href="{{ path('app_offre_show', {'id': offre.id}) }}">Voir l'offre</a> &gt; Modifier l'Offre
+        <a href="{{ path('homepage') }}">Accueil</a> &gt;
+        <a href="{{ path('app_offre_show', {'id': offre.id}) }}">Voir l'offre</a> &gt;
+        Modifier l'Offre
     </nav>
 
     <h1>Modifier l'Offre de Location</h1>
@@ -31,162 +56,120 @@
         }
     }) }}
 
-    {# SECTION : Informations du véhicule #}
+    {#  SECTION : Informations du véhicule #}
     <div class="section">
         <h2>Informations du véhicule</h2>
         <div class="form-group">
             <div class="form-field">
-                <label for="marque">Marque</label>
-                {{ form_widget(form.voiture.marque, {
-                    'id': 'marque',
-                    'attr': {
-                        'placeholder': 'Sélectionnez ou saisissez une marque',
-                        'list': 'liste-marques'
-                    }
-                }) }}
-                <datalist id="liste-marques">
-                    <option value="Toyota">
-                    <option value="Honda">
-                    <option value="Ford">
-                    <option value="Peugeot">
-                    <option value="Renault">
-                    <option value="Citroën">
-                    <option value="Mercedes">
-                    <option value="BMW">
-                    <option value="Volkswagen">
-                </datalist>
+                {{ form_row(form.voiture.marque) }}
             </div>
             <div class="form-field">
-                {{ form_row(form.voiture.modele, {
-                    'attr': {'placeholder': 'Ex: Clio, Golf, Corolla...'}
-                }) }}
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-field">
-                {{ form_row(form.voiture.immatriculation, {
-                    'attr': {'placeholder': 'Ex: XX-123-XX'}
-                }) }}
+                {{ form_row(form.voiture.modele) }}
             </div>
             <div class="form-field">
-                {{ form_row(form.voiture.annee, {
-                    'attr': {
-                        'placeholder': '2023',
-                        'min': '1970',
-                        'max': '2050'
-                    }
-                }) }}
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-field">
-                {{ form_row(form.voiture.nombrePlaces, {
-                    'attr': {'placeholder': 'Ex: 5', 'min': '1', 'max': '9'}
-                }) }}
+                {{ form_row(form.voiture.immatriculation) }}
             </div>
             <div class="form-field">
-                {{ form_row(form.voiture.volumeCoffre, {
-                    'attr': {'placeholder': 'Ex: 300 (L)'}
-                }) }}
+                {{ form_row(form.voiture.annee) }}
             </div>
-        </div>
-        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.voiture.nombrePlaces) }}
+            </div>
+            <div class="form-field">
+                {{ form_row(form.voiture.volumeCoffre) }}
+            </div>
             <div class="form-field">
                 {{ form_row(form.voiture.typeEssence) }}
             </div>
         </div>
     </div>
 
-    {# SECTION : Informations de l'offre #}
+    {#  SECTION : Informations de l'offre #}
     <div class="section">
         <h2>Informations de l'offre</h2>
         <div class="form-group">
             <div class="form-field">
-                {{ form_row(form.dateDebutDisponibilite, { 'label': 'Date de début' }) }}
+                {{ form_row(form.dateDebutDisponibilite) }}
             </div>
             <div class="form-field">
-                {{ form_row(form.dateFinDisponibilite, { 'label': 'Date de fin' }) }}
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-field">
-                {{ form_row(form.lieuGarage, {
-                    'attr': {'placeholder': 'Ex: Paris 12ème'}
-                }) }}
+                {{ form_row(form.dateFinDisponibilite) }}
             </div>
             <div class="form-field">
-                {{ form_row(form.prix, {
-                    'label': 'Prix (€/jour)',
-                    'attr': {'min': '0', 'placeholder': 'Ex: 50'}
-                }) }}
+                {{ form_row(form.lieuGarage) }}
             </div>
-        </div>
-        <div class="form-group">
             <div class="form-field">
-                {{ form_row(form.description, {
-                    'attr': {
-                        'placeholder': 'Décrivez brièvement le véhicule...',
-                        'rows': 3
-                    }
-                }) }}
+                {{ form_row(form.prix) }}
+            </div>
+            <div class="form-field">
+                {{ form_row(form.description) }}
             </div>
         </div>
     </div>
 
-    {# SECTION : Photos du véhicule #}
+    {#  SECTION : Photos du véhicule #}
     <div class="section">
         <h2>Photos du véhicule</h2>
         <div class="form-group">
             <div class="form-field">
-                {{ form_label(form.photos, 'Sélectionnez vos photos') }}
-                {{ form_widget(form.photos, {
-                    'attr': {
-                        'id': 'photos',
-                        'multiple': true,
-                        'accept': 'image/*'
-                    }
-                }) }}
-                <div class="photo-info">
-                    <span id="photoCount" class="photo-count">Aucune photo sélectionnée</span>
-                </div>
-                <div class="photo-preview" id="photoPreview"></div>
+                {{ form_row(form.photos) }}
             </div>
         </div>
     </div>
 
-    <button type="submit" class="submit-btn">Enregistrer les Modifications</button>
-    
+    {#  SECTION : Informations sur la livraison #}
+    <div class="section">
+        <h2>Informations sur la livraison</h2>
+        <div class="form-group">
+            <div class="form-field">
+                {{ form_row(form.livraison.tarifs, {
+                    'attr': {'placeholder': 'Ex: 10 €'}
+                }) }}
+            </div>
+            <div class="form-field">
+                {{ form_row(form.livraison.disponibilite) }}
+            </div>
+        </div>
+    </div>
+
+    {#  Bouton d'enregistrement #}
+    <div class="form-actions">
+        <button type="submit" class="btn-submit">✅ Enregistrer les modifications</button>
+    </div>
+
     {{ form_end(form) }}
 </div>
 
 <script>
-// Le code JS de prévisualisation des photos reste inchangé
-document.addEventListener('DOMContentLoaded', function() {
-    const inputPhotos = document.getElementById('photos');
-    const previewContainer = document.getElementById('photoPreview');
-    const photoCount = document.getElementById('photoCount');
+    // ✅ Prévisualisation des photos sélectionnées
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputPhotos = document.getElementById('photos');
+        const previewContainer = document.getElementById('photoPreview');
+        const photoCount = document.getElementById('photoCount');
 
-    if (!inputPhotos) return;
+        if (!inputPhotos) return;
 
-    inputPhotos.addEventListener('change', () => {
-        previewContainer.innerHTML = '';
-        if (!inputPhotos.files || inputPhotos.files.length === 0) {
-            photoCount.textContent = 'Aucune photo sélectionnée';
-            return;
-        }
-        const nbPhotos = inputPhotos.files.length;
-        photoCount.textContent = nbPhotos + (nbPhotos > 1 ? ' photos sélectionnées' : ' photo sélectionnée');
-        Array.from(inputPhotos.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                previewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
+        inputPhotos.addEventListener('change', () => {
+            previewContainer.innerHTML = '';
+            if (!inputPhotos.files || inputPhotos.files.length === 0) {
+                photoCount.textContent = 'Aucune photo sélectionnée';
+                return;
+            }
+
+            const nbPhotos = inputPhotos.files.length;
+            photoCount.textContent = `${nbPhotos} photo(s) sélectionnée(s)`;
+            Array.from(inputPhotos.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxHeight = '100px';
+                    img.style.marginRight = '10px';
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
         });
     });
-});
 </script>
 
 </body>

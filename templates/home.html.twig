@@ -344,35 +344,37 @@
     </section>
 
     <script>
-        const list = document.getElementById('voitures-list');
-        const leftArrow = document.getElementById('left-arrow');
-        const rightArrow = document.getElementById('right-arrow');
+        document.addEventListener("DOMContentLoaded", function () {
+            const list = document.getElementById('voitures-list');
+            const leftArrow = document.getElementById('left-arrow');
+            const rightArrow = document.getElementById('right-arrow');
 
-        function updateArrows() {
-            const tolerance = 2;
-            leftArrow.classList.toggle('disabled', list.scrollLeft <= tolerance);
-            rightArrow.classList.toggle('disabled', list.scrollLeft >= list.scrollWidth - list.clientWidth - tolerance);
-        }
+            function updateArrows() {
+                const tolerance = 2;
+                leftArrow.classList.toggle('disabled', list.scrollLeft <= tolerance);
+                rightArrow.classList.toggle('disabled', list.scrollLeft >= list.scrollWidth - list.clientWidth - tolerance);
+            }
 
-        function scrollLeft() {
-            list.scrollBy({ left: -300, behavior: 'smooth' });
-            requestAnimationFrame(updateArrows);
-        }
+            function scrollLeft() {
+                list.scrollBy({ left: -300, behavior: 'smooth' });
+                setTimeout(updateArrows, 300);
+            }
 
-        function scrollRight() {
-            list.scrollBy({ left: 300, behavior: 'smooth' });
-            requestAnimationFrame(updateArrows);
-        }
+            function scrollRight() {
+                list.scrollBy({ left: 300, behavior: 'smooth' });
+                setTimeout(updateArrows, 300);
+            }
 
-        list.addEventListener('scroll', updateArrows);
+            list.addEventListener('scroll', updateArrows);
+            leftArrow.addEventListener('click', scrollLeft);
+            rightArrow.addEventListener('click', scrollRight);
 
-        window.addEventListener('load', () => {
-            list.scrollLeft = 0;
-            updateArrows();
+            window.addEventListener('load', () => {
+                list.scrollLeft = 0;
+                updateArrows();
+            });
         });
     </script>
-
-
 
     <!-- ==================== SERVICE SECTION ==================== -->
     <section id="service" class="service">

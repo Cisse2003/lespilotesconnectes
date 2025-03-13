@@ -1,13 +1,10 @@
-{# templates/home.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Prékar - Home{% endblock %}
 
-
 {% block body %}
     <!-- ==================== WELCOME-HERO (HOME) ==================== -->
     <section id="home" class="welcome-hero">
-        <!-- On ne remet pas la navbar, elle est déjà dans base.html.twig -->
         <div class="container">
             <div class="welcome-hero-txt">
                 <h2>Louez la voiture de vos rêves en toute simplicité !</h2>
@@ -19,92 +16,86 @@
             </div>
         </div>
 
-        <!-- Section du formulaire de recherche (select year, make, etc.) -->
+        <!-- ==================== FORMULAIRE DE RECHERCHE ==================== -->
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="model-search-content">
                         <div class="row">
+                            <!-- ✅ Année -->
                             <div class="col-md-offset-1 col-md-2 col-sm-12">
                                 <div class="single-model-search">
-                                    <h2>select year</h2>
+                                    <h2>Année</h2>
                                     <div class="model-select-icon">
-                                        <select class="form-control">
-                                            <option value="default">year</option>
-                                            <option value="2018">2018</option>
-                                            <option value="2017">2017</option>
-                                            <option value="2016">2016</option>
-                                        </select>
+                                        <input type="number" id="year" class="form-control" placeholder="Année" min="1900" max="2100">
                                     </div>
                                 </div>
+
+                                <!-- ✅ Nombre de places -->
                                 <div class="single-model-search">
-                                    <h2>body style</h2>
+                                    <h2>Nombre de places</h2>
                                     <div class="model-select-icon">
-                                        <select class="form-control">
-                                            <option value="default">style</option>
-                                            <option value="sedan">sedan</option>
-                                            <option value="van">van</option>
-                                            <option value="roadster">roadster</option>
+                                        <input type="number" id="places" class="form-control" placeholder="Nombre de places" min="1" max="9">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ✅ Marque + Livraison -->
+                            <div class="col-md-offset-1 col-md-2 col-sm-12">
+                                <div class="single-model-search">
+                                    <h2>Marque</h2>
+                                    <div class="model-select-icon">
+                                        <input list="marques" id="make" class="form-control" placeholder="Marque">
+                                        <datalist id="marques">
+                                            {% for value in distinctValues %}
+                                            {% if value.marque is not empty %}
+                                            <option value="{{ value.marque|capitalize }}">
+                                                {% endif %}
+                                                {% endfor %}
+                                        </datalist>
+                                    </div>
+                                </div>
+
+                                <div class="single-model-search">
+                                    <h2>Livraison</h2>
+                                    <div class="model-select-icon">
+                                        <select id="livraison" class="form-control">
+                                            <option value="">Livraison</option>
+                                            <option value="1">Oui</option>
+                                            <option value="0">Non</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
 
+                            <!-- ✅ Modèle + Prix -->
                             <div class="col-md-offset-1 col-md-2 col-sm-12">
                                 <div class="single-model-search">
-                                    <h2>select make</h2>
+                                    <h2>Modèle</h2>
                                     <div class="model-select-icon">
-                                        <select class="form-control">
-                                            <option value="default">make</option>
-                                            <option value="toyota">toyota</option>
-                                            <option value="holden">holden</option>
-                                            <option value="maecedes-benz">maecedes-benz.</option>
-                                        </select>
+                                        <input list="modeles" id="model" class="form-control" placeholder="Modèle">
+                                        <datalist id="modeles">
+                                            {% for value in distinctValues %}
+                                            {% if value.modele is not empty %}
+                                            <option value="{{ value.modele|capitalize }}">
+                                                {% endif %}
+                                                {% endfor %}
+                                        </datalist>
                                     </div>
                                 </div>
+
                                 <div class="single-model-search">
-                                    <h2>car condition</h2>
+                                    <h2>Prix (Max)</h2>
                                     <div class="model-select-icon">
-                                        <select class="form-control">
-                                            <option value="default">condition</option>
-                                            <option value="something">something</option>
-                                            <option value="something">something</option>
-                                            <option value="something">something</option>
-                                        </select>
+                                        <input type="number" id="price" class="form-control" placeholder="Prix max" min="0">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-offset-1 col-md-2 col-sm-12">
-                                <div class="single-model-search">
-                                    <h2>select model</h2>
-                                    <div class="model-select-icon">
-                                        <select class="form-control">
-                                            <option value="default">model</option>
-                                            <option value="kia-rio">kia-rio</option>
-                                            <option value="mitsubishi">mitsubishi</option>
-                                            <option value="ford">ford</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="single-model-search">
-                                    <h2>select price</h2>
-                                    <div class="model-select-icon">
-                                        <select class="form-control">
-                                            <option value="default">price</option>
-                                            <option value="$0.00">$0.00</option>
-                                            <option value="$0.00">$0.00</option>
-                                            <option value="$0.00">$0.00</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
+                            <!-- ✅ Bouton de recherche -->
                             <div class="col-md-2 col-sm-12">
                                 <div class="single-model-search text-center">
-                                    <button class="welcome-btn model-search-btn" onclick="window.location.href='#'">
-                                        search
-                                    </button>
+                                    <button class="welcome-btn model-search-btn" onclick="search()">🔎 Rechercher</button>
                                 </div>
                             </div>
                         </div><!--/.row-->
@@ -114,6 +105,31 @@
         </div><!--/.container-->
     </section>
     <!-- ==================== END WELCOME-HERO ==================== -->
+
+    <!-- ✅ SCRIPT JS -->
+    <script>
+        function search() {
+            const year = document.getElementById('year').value || '';
+            const make = document.getElementById('make').value || '';
+            const model = document.getElementById('model').value || '';
+            const price = document.getElementById('price').value || '';
+            const places = document.getElementById('places').value || '';
+            const livraison = document.getElementById('livraison').value || '';
+
+            const url = `{{ path('app_search') }}?year=${year}&make=${make}&model=${model}&price=${price}&places=${places}&livraison=${livraison}`;
+            window.location.href = url;
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+<!-- ==================== END WELCOME-HERO ==================== -->
 
     <!-- ==================== cars ==================== -->
 
@@ -125,15 +141,12 @@
                 background-color: #f8f9fa;
                 overflow-x: hidden;
                 position: relative;
-                margin-top: 180px; /* 🔥 Augmente la marge pour descendre la section */
+                margin-top: 180px;
                 z-index: 100;
                 border-radius: 20px;
                 box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             }
 
-
-
-            /* === Conteneur des voitures === */
             .voitures-content {
                 display: flex;
                 gap: 20px;
@@ -150,7 +163,6 @@
                 display: none;
             }
 
-            /* === Carte de voiture === */
             .single-voiture {
                 flex: 0 0 280px;
                 background-color: #ffffff;
@@ -166,7 +178,6 @@
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             }
 
-            /* === Image de la voiture === */
             .voiture-img-box {
                 width: 100%;
                 height: 180px;
@@ -185,7 +196,6 @@
                 transform: scale(1.05);
             }
 
-            /* === Contenu de la carte === */
             .voiture-info {
                 padding: 20px;
                 text-align: center;
@@ -207,7 +217,6 @@
                 margin-bottom: 15px;
             }
 
-            /* === Boutons === */
             .voiture-actions {
                 display: flex;
                 justify-content: center;
@@ -263,46 +272,15 @@
                 color: #fff;
             }
 
-            /* === Prix === */
             .prix {
                 font-size: 16px;
                 font-weight: bold;
                 color: #28a745;
                 margin-top: 10px;
             }
-
-            /* === Flèches de navigation === */
-            .navigation-arrows {
-                text-align: center;
-                margin-top: 20px;
-            }
-
-            .arrow-btn {
-                background-color: #6565FF;
-                color: #fff;
-                border: none;
-                padding: 10px 15px;
-                font-size: 18px;
-                margin: 0 10px;
-                cursor: pointer;
-                border-radius: 30px;
-                transition: background 0.3s ease;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-                opacity: 1;
-            }
-
-            .arrow-btn:hover {
-                background-color: #6565FF;
-            }
-
-            .arrow-btn.disabled {
-                opacity: 0.3;
-                cursor: not-allowed;
-            }
         </style>
     {% endblock %}
 
-    <!-- ✅ SECTION VOITURES -->
     <section id="voitures" class="voitures">
         <div class="container">
             <div class="section-header text-center">
@@ -311,34 +289,31 @@
             </div>
 
             <div class="voitures-content" id="voitures-list">
-                {% for offre in offres %}
-                    <div class="single-voiture">
-                        <div class="voiture-img-box">
-                            {% if offre.photos is not empty %}
-                                <img src="{{ asset('uploads/photos/' ~ offre.photos[0]) }}" alt="{{ offre.voiture.marque }} {{ offre.voiture.modele }}">
-                            {% else %}
-                                <img src="{{ asset('assets/images/default-car.png') }}" alt="Image non disponible">
-                            {% endif %}
-                        </div>
-                        <div class="voiture-info">
-                            <h3>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h3>
-                            <p>{{ offre.voiture.annee }} - {{ offre.voiture.typeEssence }} - {{ offre.voiture.nombrePlaces }} places</p>
-                            <div class="voiture-actions">
-                                <button class="btn btn-primary">Réserver</button>
-                                <!-- ✅ LIEN POUR LES DÉTAILS -->
-                                <a href="{{ path('app_offre_detail', {'id': offre.id}) }}" class="btn btn-secondary">Détails</a>
-                                <button class="btn btn-like">❤️</button>
+                {% if offres is not empty %}
+                    {% for offre in offres %}
+                        <div class="single-voiture">
+                            <div class="voiture-img-box">
+                                {% if offre.photos is not empty %}
+                                    <img src="{{ asset('uploads/photos/' ~ offre.photos[0]) }}" alt="{{ offre.voiture.marque }} {{ offre.voiture.modele }}">
+                                {% else %}
+                                    <img src="{{ asset('assets/images/default-car.png') }}" alt="Image non disponible">
+                                {% endif %}
                             </div>
-                            <p class="prix">{{ offre.prix|number_format(2, ',', ' ') }} € / jour</p>
+                            <div class="voiture-info">
+                                <h3>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h3>
+                                <p>{{ offre.voiture.annee }} - {{ offre.voiture.typeEssence }} - {{ offre.voiture.nombrePlaces }} places</p>
+                                <div class="voiture-actions">
+                                    <button class="btn btn-primary">Réserver</button>
+                                    <a href="{{ path('app_offre_detail', {'id': offre.id}) }}" class="btn btn-secondary">Détails</a>
+                                    <button class="btn btn-like">❤️</button>
+                                </div>
+                                <p class="prix">{{ offre.prix|number_format(2, ',', ' ') }} € / jour</p>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-
-            <!-- FLÈCHES -->
-            <div class="navigation-arrows">
-                <button class="arrow-btn" id="left-arrow" onclick="scrollLeft()">←</button>
-                <button class="arrow-btn" id="right-arrow" onclick="scrollRight()">→</button>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-muted">Aucune offre ne correspond à votre recherche.</p>
+                {% endif %}
             </div>
         </div>
     </section>

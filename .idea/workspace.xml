@@ -4,10 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="Système de confirmation de mail">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vendor/composer/installed.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/installed.php" afterDir="false" />
+=======
+    <list default="true" id="c5aa3ab2-accb-471f-92e8-c010aebedf3a" name="Changes" comment="laffichage des offre(voitures) et affichage de detail de chaque voiture offres">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/OffreController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/OffreController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html.twig" afterDir="false" />
+>>>>>>> a451ff2 (chercher offre)
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,12 +53,12 @@
     &quot;assignee&quot;: &quot;Cisse2003&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Cisse2003/lespilotesconnectes.git&quot;,
-    &quot;accountId&quot;: &quot;877ea9f0-46c3-46bf-8b84-8a1f31474c4a&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Cisse2003/lespilotesconnectes.git",
+    "accountId": "af1ea818-7705-4281-a452-eb95e4712e0f"
   }
-}</component>
+}]]></component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/psr/container" />
@@ -291,7 +299,7 @@
       <workItem from="1741727020475" duration="17169000" />
       <workItem from="1741778979899" duration="4726000" />
       <workItem from="1741792813469" duration="1658000" />
-      <workItem from="1741794855436" duration="3598000" />
+      <workItem from="1741794855436" duration="11978000" />
     </task>
     <task id="LOCAL-00001" summary="FormulaireFait">
       <option name="closed" value="true" />
@@ -405,7 +413,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740927324365</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="laffichage des offre(voitures) et affichage de detail de chaque voiture offres">
+      <option name="closed" value="true" />
+      <created>1741798619477</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1741798619477</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -436,6 +452,7 @@
     <MESSAGE value="Big fixer" />
     <MESSAGE value="Bug fixer" />
     <MESSAGE value="Système de confirmation de mail" />
-    <option name="LAST_COMMIT_MESSAGE" value="Système de confirmation de mail" />
+    <MESSAGE value="laffichage des offre(voitures) et affichage de detail de chaque voiture offres" />
+    <option name="LAST_COMMIT_MESSAGE" value="laffichage des offre(voitures) et affichage de detail de chaque voiture offres" />
   </component>
 </project>

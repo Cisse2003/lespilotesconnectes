@@ -1,0 +1,193 @@
+{% block title %} {% endblock %}
+
+{% block body %}
+<style>
+    .container {
+        text-align: center;
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .subscription-options {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .subscription-card {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 300px;
+        border: 2px solid transparent;
+        transition: 0.3s ease-in-out;
+    }
+
+    .subscription-card:hover {
+        border-color: #007bff;
+    }
+
+    .subscription-card input {
+        display: none;
+    }
+
+    .subscription-card .card-content {
+        text-align: center;
+        width: 100%;
+    }
+
+    .subscription-card input:checked + .card-content {
+        background: #007bff;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .payment-info {
+        margin-top: 20px;
+        text-align: left;
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .payment-info label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+
+    .payment-info input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .styled-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease-in-out;
+    }
+
+    .styled-button:hover {
+        background: #0056b3;
+    }
+
+    .btn-mes-abonnements {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease-in-out;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-mes-abonnements:hover {
+        background: #218838;
+    }
+</style>
+
+<div class="container">
+    <h2>Choisissez votre abonnement</h2>
+
+    <form id="subscriptionForm" action="{{ path('ajouter_abonnement') }}" method="POST">
+        <div class="subscription-options">
+            <label class="subscription-card">
+                <input type="radio" name="type" value="journalier" required>
+                <div class="card-content">
+                    <h3>Journalier</h3>
+                    <p>10€ / jour</p>
+                </div>
+            </label>
+
+            <label class="subscription-card">
+                <input type="radio" name="type" value="mensuel">
+                <div class="card-content">
+                    <h3>Mensuel</h3>
+                    <p>50€ / mois</p>
+                </div>
+            </label>
+
+            <label class="subscription-card">
+                <input type="radio" name="type" value="annuel">
+                <div class="card-content">
+                    <h3>Annuel</h3>
+                    <p>500€ / an</p>
+                </div>
+            </label>
+        </div>
+
+        <div class="payment-info">
+            <h3>Informations de paiement</h3>
+
+            <label>Numéro de carte :</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234567812345678" maxlength="16" required>
+
+            <label>Date d'expiration :</label>
+            <input type="month" id="expiryDate" name="expiryDate" required>
+
+            <label>Cryptogramme (CVV) :</label>
+            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3" required>
+        </div>
+
+        <button type="submit" class="styled-button">Valider et Payer</button>
+    </form>
+
+    <!-- Bouton "Mes abonnements" -->
+    <a href="{{ path('mes_abonnements') }}" class="btn-mes-abonnements">Mes abonnements</a>
+</div>
+
+<script>
+    document.getElementById("subscriptionForm").addEventListener("submit", function(event) {
+        let valid = true;
+
+        // Vérification du numéro de carte (exactement 16 chiffres, sans espaces)
+        let cardNumber = document.getElementById("cardNumber").value;
+        if (!/^[0-9]{16}$/.test(cardNumber)) {
+            alert("Le numéro de carte doit contenir exactement 16 chiffres.");
+            valid = false;
+        }
+
+        // Vérification du CVV (exactement 3 chiffres)
+        let cvv = document.getElementById("cvv").value;
+        if (!/^[0-9]{3}$/.test(cvv)) {
+            alert("Le cryptogramme doit contenir exactement 3 chiffres.");
+            valid = false;
+        }
+
+        if (!valid) {
+            event.preventDefault(); // Empêcher la soumission si erreur
+        } else {
+            // Afficher une boîte de dialogue de confirmation après la soumission
+            setTimeout(() => {
+                alert("✅ Votre abonnement a bien été pris en compte !");
+                window.location.href = "{{ path('mes_abonnements') }}";
+            }, 500);
+        }
+    });
+</script>
+
+{% endblock %}

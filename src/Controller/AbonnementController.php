@@ -26,9 +26,13 @@ public function ajouterAbonnement(Request $request, EntityManagerInterface $enti
     $utilisateur = $this->getUser();
     $type = $request->request->get('type');
 
+    if (!$type) {
+        return $this->json(['success' => false, 'error' => 'Aucun type d’abonnement sélectionné.'], 400);
+    }
+
     $dateDebut = new \DateTime();
     $dateFin = clone $dateDebut;
-    
+
     switch ($type) {
         case 'journalier':
             $prix = 10.00;
@@ -43,7 +47,7 @@ public function ajouterAbonnement(Request $request, EntityManagerInterface $enti
             $dateFin->modify('+1 year');
             break;
         default:
-            return $this->redirectToRoute('choisir_abonnement');
+            return $this->json(['success' => false, 'error' => 'Type d’abonnement invalide.'], 400);
     }
 
     $abonnement = new Abonnement();
@@ -52,15 +56,22 @@ public function ajouterAbonnement(Request $request, EntityManagerInterface $enti
     $abonnement->setPrix($prix);
     $abonnement->setDateDebut($dateDebut);
     $abonnement->setDateFin($dateFin);
-    
+
     $entityManager->persist($abonnement);
     $entityManager->flush();
 
-    // Ajout d'un message flash
-    $this->addFlash('success', 'Votre abonnement a bien été pris en compte.');
-
-    return $this->redirectToRoute('mes_abonnements');
+    return $this->json([
+        'success' => true,
+        'abonnement' => [
+            'type' => $abonnement->getType(),
+            'prix' => $abonnement->getPrix(),
+            'dateDebut' => $abonnement->getDateDebut()->format('d/m/Y'),
+            'dateFin' => $abonnement->getDateFin()->format('d/m/Y')
+        ]
+    ]);
 }
+
+
 
 
     #[Route('/abonnement/mes-abonnements', name: 'mes_abonnements')]

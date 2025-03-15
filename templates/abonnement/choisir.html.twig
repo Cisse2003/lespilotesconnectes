@@ -26,11 +26,12 @@
         width: 100%;
         max-width: 300px;
         border: 2px solid transparent;
-        transition: 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
     }
 
     .subscription-card:hover {
         border-color: #007bff;
+        transform: scale(1.05);
     }
 
     .subscription-card input {
@@ -73,10 +74,78 @@
         border-radius: 5px;
         border: 1px solid #ccc;
         font-size: 16px;
+        text-align: center;
+    }
+
+    /* Boutons stylisés */
+    .styled-button, .btn-mes-abonnements {
+        margin-top: 20px;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        display: inline-block;
+        text-decoration: none;
+        border: none;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
 
     .styled-button {
-        margin-top: 20px;
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .styled-button:hover {
+        background: linear-gradient(45deg, #0056b3, #003f7f);
+        transform: translateY(-2px);
+    }
+
+    .btn-mes-abonnements {
+        background: linear-gradient(45deg, #28a745, #1e7e34);
+        color: white;
+        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-mes-abonnements:hover {
+        background: linear-gradient(45deg, #1e7e34, #145c26);
+        transform: translateY(-2px);
+    }
+
+    /* Boîte d'alerte */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .modal-content h3 {
+        margin: 0;
+        font-size: 20px;
+        color: #28a745;
+    }
+
+    .modal-content button {
+        margin-top: 15px;
         padding: 10px 20px;
         background: #007bff;
         color: white;
@@ -87,33 +156,39 @@
         transition: background 0.3s ease-in-out;
     }
 
-    .styled-button:hover {
+    .modal-content button:hover {
         background: #0056b3;
     }
 
-    .btn-mes-abonnements {
-        margin-top: 10px;
-        padding: 10px 20px;
-        background: #28a745;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background 0.3s ease-in-out;
-        display: inline-block;
-        text-decoration: none;
-    }
+    .btn-home {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #ff5722, #e64a19);
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+}
 
-    .btn-mes-abonnements:hover {
-        background: #218838;
-    }
+.btn-home:hover {
+    background: linear-gradient(45deg, #e64a19, #bf360c);
+    transform: translateY(-2px);
+}
+
 </style>
 
 <div class="container">
     <h2>Choisissez votre abonnement</h2>
 
-    <form id="subscriptionForm" action="{{ path('ajouter_abonnement') }}" method="POST">
+    <form id="subscriptionForm">
         <div class="subscription-options">
             <label class="subscription-card">
                 <input type="radio" name="type" value="journalier" required>
@@ -144,50 +219,81 @@
             <h3>Informations de paiement</h3>
 
             <label>Numéro de carte :</label>
-            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234567812345678" maxlength="16" required>
+            <input type="text" id="cardNumber" maxlength="16" required>
 
             <label>Date d'expiration :</label>
-            <input type="month" id="expiryDate" name="expiryDate" required>
+            <input type="text" id="expiryDate" placeholder="MM/YYYY" maxlength="7" required>
 
             <label>Cryptogramme (CVV) :</label>
-            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3" required>
+            <input type="text" id="cvv" maxlength="3" required>
         </div>
 
         <button type="submit" class="styled-button">Valider et Payer</button>
     </form>
 
-    <!-- Bouton "Mes abonnements" -->
     <a href="{{ path('mes_abonnements') }}" class="btn-mes-abonnements">Mes abonnements</a>
+    <a href="{{ path('homepage') }}" class="btn-home">Retour à l'accueil</a>
+
 </div>
 
+<!-- Boîte d'alerte -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <h3>✅ Votre abonnement a bien été pris en compte !</h3>
+        <button onclick="closeModal()">OK</button>
+    </div>
+</div>
 <script>
-    document.getElementById("subscriptionForm").addEventListener("submit", function(event) {
-        let valid = true;
+document.getElementById("expiryDate").addEventListener("input", function(event) {
+    let value = event.target.value.replace(/\D/g, ""); // Supprimer tout sauf les chiffres
 
-        // Vérification du numéro de carte (exactement 16 chiffres, sans espaces)
-        let cardNumber = document.getElementById("cardNumber").value;
-        if (!/^[0-9]{16}$/.test(cardNumber)) {
-            alert("Le numéro de carte doit contenir exactement 16 chiffres.");
-            valid = false;
-        }
+    if (value.length >= 2) {
+        value = value.substring(0, 2) + "/" + value.substring(2, 6); // Ajouter automatiquement "/"
+    }
 
-        // Vérification du CVV (exactement 3 chiffres)
-        let cvv = document.getElementById("cvv").value;
-        if (!/^[0-9]{3}$/.test(cvv)) {
-            alert("Le cryptogramme doit contenir exactement 3 chiffres.");
-            valid = false;
-        }
+    event.target.value = value;
+});
 
-        if (!valid) {
-            event.preventDefault(); // Empêcher la soumission si erreur
-        } else {
-            // Afficher une boîte de dialogue de confirmation après la soumission
+document.getElementById("subscriptionForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Empêcher la soumission classique
+
+    let expiryDate = document.getElementById("expiryDate").value;
+    let today = new Date();
+    let [month, year] = expiryDate.split("/");
+
+    let expiry = new Date(parseInt(year), parseInt(month) - 1); // Date du mois/année sélectionné
+
+    if (expiryDate.length !== 7 || parseInt(month) < 1 || parseInt(month) > 12 || expiry <= today) {
+        alert("❌ La date d'expiration doit être au format MM/YYYY et ultérieure à aujourd'hui.");
+        return;
+    }
+
+    let formData = new FormData(document.getElementById("subscriptionForm"));
+
+    fetch("{{ path('ajouter_abonnement') }}", {
+        method: "POST",
+        body: formData,
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById("successModal").style.display = "flex";
+
+            // Rafraîchir la page après validation
             setTimeout(() => {
-                alert("✅ Votre abonnement a bien été pris en compte !");
-                window.location.href = "{{ path('mes_abonnements') }}";
-            }, 500);
+                window.location.reload();
+            }, 2000);
+        } else {
+            alert("❌ Une erreur est survenue. " + (data.error || "Veuillez réessayer."));
         }
+    })
+    .catch(error => {
+        console.error("Erreur:", error);
+        alert("❌ Une erreur est survenue. Impossible de confirmer l'abonnement.");
     });
+});
 </script>
+
 
 {% endblock %}

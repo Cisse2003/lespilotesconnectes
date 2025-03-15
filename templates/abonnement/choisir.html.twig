@@ -2,185 +2,194 @@
 
 {% block body %}
 <style>
-    .container {
-        text-align: center;
-        max-width: 600px;
-        margin: auto;
-        padding: 20px;
-    }
+body {
+    font-family: 'Arial', sans-serif;
+    background: #4b1bf8;;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
 
-    .subscription-options {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
-    }
+.container {
+    text-align: center;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
 
-    .subscription-card {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        background: #f9f9f9;
-        padding: 15px;
-        border-radius: 8px;
-        width: 100%;
-        max-width: 300px;
-        border: 2px solid transparent;
-        transition: all 0.3s ease-in-out;
-    }
+h2 {
+    color: #4b1bf8;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
 
-    .subscription-card:hover {
-        border-color: #007bff;
-        transform: scale(1.05);
-    }
+/* Style des abonnements */
+.subscription-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
 
-    .subscription-card input {
-        display: none;
-    }
+.subscription-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 350px;
+    border: 2px solid #ddd;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-    .subscription-card .card-content {
-        text-align: center;
-        width: 100%;
-    }
+.subscription-card:hover {
+    border-color: #4b1bf8;
+    transform: scale(1.05);
+}
 
-    .subscription-card input:checked + .card-content {
-        background: #007bff;
-        color: white;
-        padding: 10px;
-        border-radius: 8px;
-    }
+.subscription-card input {
+    display: none;
+}
 
-    .payment-info {
-        margin-top: 20px;
-        text-align: left;
-        background: #f9f9f9;
-        padding: 15px;
-        border-radius: 8px;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+.subscription-card .card-content {
+    text-align: center;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+}
 
-    .payment-info label {
-        font-weight: bold;
-        display: block;
-        margin-top: 10px;
-    }
+.subscription-card input:checked + .card-content {
+    background: linear-gradient(45deg, #4b1bf8, #180366);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+}
 
-    .payment-info input {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        font-size: 16px;
-        text-align: center;
-    }
-
-    /* Boutons stylisés */
-    .styled-button, .btn-mes-abonnements {
-        margin-top: 20px;
-        padding: 12px 24px;
-        font-size: 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
-        display: inline-block;
-        text-decoration: none;
-        border: none;
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-    }
-
-    .styled-button {
-        background: linear-gradient(45deg, #007bff, #0056b3);
-        color: white;
-        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-    }
-
-    .styled-button:hover {
-        background: linear-gradient(45deg, #0056b3, #003f7f);
-        transform: translateY(-2px);
-    }
-
-    .btn-mes-abonnements {
-        background: linear-gradient(45deg, #28a745, #1e7e34);
-        color: white;
-        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
-    }
-
-    .btn-mes-abonnements:hover {
-        background: linear-gradient(45deg, #1e7e34, #145c26);
-        transform: translateY(-2px);
-    }
-
-    /* Boîte d'alerte */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-content {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        animation: fadeIn 0.5s ease-in-out;
-    }
-
-    .modal-content h3 {
-        margin: 0;
-        font-size: 20px;
-        color: #28a745;
-    }
-
-    .modal-content button {
-        margin-top: 15px;
-        padding: 10px 20px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background 0.3s ease-in-out;
-    }
-
-    .modal-content button:hover {
-        background: #0056b3;
-    }
-
-    .btn-home {
+/* Formulaire de paiement */
+.payment-info {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
     margin-top: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.payment-info label {
+    font-weight: bold;
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.payment-info input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Boutons */
+.button-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
     padding: 12px 24px;
     font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    display: inline-block;
-    text-decoration: none;
-    border: none;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: linear-gradient(45deg, #ff5722, #e64a19);
+    font-weight: 600;
     color: white;
-    box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #4b1bf8;
+}
+
+.btn-primary:hover {
+    background-color: #180366;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #28a745;
+}
+
+.btn-secondary:hover {
+    background-color: #1e7e34;
+    transform: translateY(-2px);
+}
+
+.btn-home {
+    background-color: #ff5722;
 }
 
 .btn-home:hover {
-    background: linear-gradient(45deg, #e64a19, #bf360c);
+    background-color: #bf360c;
     transform: translateY(-2px);
+}
+
+/* Boîte d'alerte */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+/* Style amélioré pour le bouton Valider et Payer */
+.styled-button {
+    background: linear-gradient(45deg, #4b1bf8, #180366);
+    color: white;
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(75, 27, 248, 0.3);
+}
+
+.styled-button:hover {
+    background: linear-gradient(45deg, #180366, #0f023b);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(75, 27, 248, 0.5);
+}
+
+.styled-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 6px rgba(75, 27, 248, 0.5);
 }
 
 </style>
@@ -231,8 +240,8 @@
         <button type="submit" class="styled-button">Valider et Payer</button>
     </form>
 
-    <a href="{{ path('mes_abonnements') }}" class="btn-mes-abonnements">Mes abonnements</a>
-    <a href="{{ path('homepage') }}" class="btn-home">Retour à l'accueil</a>
+    <a href="{{ path('mes_abonnements') }}" class="btn btn-secondary">Mes abonnements</a>
+    <a href="{{ path('homepage') }}" class="btn btn-home">Retour à l'accueil</a>
 
 </div>
 

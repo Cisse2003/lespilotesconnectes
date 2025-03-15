@@ -1,4 +1,4 @@
-{% block title %} {% endblock %}
+{% block title %}Mes abonnements{% endblock %}
 
 {% block body %}
 <style>
@@ -45,8 +45,14 @@
         background: #c82333;
     }
 
-    .back-button {
+    .button-group {
         margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .button {
         padding: 10px 20px;
         background: #007bff;
         color: white;
@@ -59,8 +65,16 @@
         text-decoration: none;
     }
 
-    .back-button:hover {
+    .button:hover {
         background: #0056b3;
+    }
+
+    .home-button {
+        background: #28a745;
+    }
+
+    .home-button:hover {
+        background: #218838;
     }
 </style>
 
@@ -84,7 +98,10 @@
         </ul>
     {% endif %}
 
-    <a href="{{ path('choisir_abonnement') }}" class="back-button">Souscrire un autre abonnement</a>
+    <div class="button-group">
+        <a href="{{ path('choisir_abonnement') }}" class="button">Souscrire un autre abonnement</a>
+        <a href="{{ path('homepage') }}" class="button home-button">Retour à l'accueil</a>
+    </div>
 </div>
 
 {% endblock %}

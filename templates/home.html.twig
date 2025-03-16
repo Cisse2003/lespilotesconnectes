@@ -291,25 +291,27 @@
             <div class="voitures-content" id="voitures-list">
                 {% if offres is not empty %}
                     {% for offre in offres %}
-                        <div class="single-voiture">
-                            <div class="voiture-img-box">
-                                {% if offre.photos is not empty %}
-                                    <img src="{{ asset('uploads/photos/' ~ offre.photos[0]) }}" alt="{{ offre.voiture.marque }} {{ offre.voiture.modele }}">
-                                {% else %}
-                                    <img src="{{ asset('assets/images/default-car.png') }}" alt="Image non disponible">
-                                {% endif %}
-                            </div>
-                            <div class="voiture-info">
-                                <h3>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h3>
-                                <p>{{ offre.voiture.annee }} - {{ offre.voiture.typeEssence }} - {{ offre.voiture.nombrePlaces }} places</p>
-                                <div class="voiture-actions">
-                                    <button class="btn btn-primary">Réserver</button>
-                                    <a href="{{ path('app_offre_detail', {'id': offre.id}) }}" class="btn btn-secondary">Détails</a>
-                                    <button class="btn btn-like">❤️</button>
+                        {% if offre.disponibilite %}
+                            <div class="single-voiture">
+                                <div class="voiture-img-box">
+                                    {% if offre.photos is not empty %}
+                                        <img src="{{ asset('uploads/photos/' ~ offre.photos[0]) }}" alt="{{ offre.voiture.marque }} {{ offre.voiture.modele }}">
+                                    {% else %}
+                                        <img src="{{ asset('assets/images/default-car.png') }}" alt="Image non disponible">
+                                    {% endif %}
                                 </div>
-                                <p class="prix">{{ offre.prix|number_format(2, ',', ' ') }} € / jour</p>
+                                <div class="voiture-info">
+                                    <h3>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h3>
+                                    <p>{{ offre.voiture.annee }} - {{ offre.voiture.typeEssence }} - {{ offre.voiture.nombrePlaces }} places</p>
+                                    <div class="voiture-actions">
+                                        <button class="btn btn-primary">Réserver</button>
+                                        <a href="{{ path('app_offre_detail', {'id': offre.id}) }}" class="btn btn-secondary">Détails</a>
+                                        <button class="btn btn-like">❤️</button>
+                                    </div>
+                                    <p class="prix">{{ offre.prix|number_format(2, ',', ' ') }} € / jour</p>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <p class="text-center text-muted">Aucune offre ne correspond à votre recherche.</p>

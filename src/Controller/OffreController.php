@@ -208,4 +208,23 @@ class OffreController extends AbstractController
             'offre' => $offre,
         ]);
     }
+
+    #[Route('/offres/{id}/toggle-disponibilite', name: 'app_offre_toggle_disponibilite', methods: ['POST'])]
+    public function toggleDisponibilite(Offre $offre, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user || $offre->getProprietaire() !== $user->getProprietaire()) {
+            throw $this->createAccessDeniedException("🚫 Vous n'avez pas le droit de modifier cette offre !");
+        }
+
+        // Basculer la disponibilité
+        $offre->setDisponibilite(!$offre->getDisponibilite());
+        $em->flush();
+
+        return $this->json([
+            'success' => true,
+            'disponibilite' => $offre->getDisponibilite()
+        ]);
+    }
+
 }

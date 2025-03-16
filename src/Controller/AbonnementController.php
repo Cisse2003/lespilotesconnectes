@@ -24,7 +24,9 @@ class AbonnementController extends AbstractController
 public function ajouterAbonnement(Request $request, EntityManagerInterface $entityManager): Response
 {
     $utilisateur = $this->getUser();
-    $type = $request->request->get('type');
+    
+    $data = json_decode($request->getContent(), true);
+    $type = $data['type'] ?? null;
 
     if (!$type) {
         return $this->json(['success' => false, 'error' => 'Aucun type d’abonnement sélectionné.'], 400);
@@ -60,14 +62,23 @@ public function ajouterAbonnement(Request $request, EntityManagerInterface $enti
     $entityManager->persist($abonnement);
     $entityManager->flush();
 
-    return $this->json([
-        'success' => true,
-        'abonnement' => [
-            'type' => $abonnement->getType(),
-            'prix' => $abonnement->getPrix(),
-            'dateDebut' => $abonnement->getDateDebut()->format('d/m/Y'),
-            'dateFin' => $abonnement->getDateFin()->format('d/m/Y')
-        ]
+    return $this->json(['success' => true]);
+}
+
+
+#[Route('/abonnement/payer', name: 'payer_abonnement')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
+public function payerAbonnement(Request $request): Response
+{
+    $type = $request->request->get('type');
+
+    if (!$type) {
+        $this->addFlash('error', 'Veuillez sélectionner un abonnement.');
+        return $this->redirectToRoute('choisir_abonnement');
+    }
+
+    return $this->render('abonnement/payer.html.twig', [
+        'type' => $type
     ]);
 }
 

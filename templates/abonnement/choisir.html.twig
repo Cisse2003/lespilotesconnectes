@@ -4,7 +4,7 @@
 <style>
 body {
     font-family: 'Arial', sans-serif;
-    background: #4b1bf8;;
+    background: #4b1bf8;
     color: #333;
     margin: 0;
     padding: 0;
@@ -27,7 +27,6 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* Style des abonnements */
 .subscription-options {
     display: flex;
     flex-direction: column;
@@ -72,100 +71,7 @@ h2 {
     border-radius: 8px;
 }
 
-/* Formulaire de paiement */
-.payment-info {
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 12px;
-    margin-top: 20px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.payment-info label {
-    font-weight: bold;
-    display: block;
-    margin: 10px 0 5px;
-}
-
-.payment-info input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-}
-
-/* Boutons */
-.button-container {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn {
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: 600;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-}
-
-.btn-primary {
-    background-color: #4b1bf8;
-}
-
-.btn-primary:hover {
-    background-color: #180366;
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background-color: #28a745;
-}
-
-.btn-secondary:hover {
-    background-color: #1e7e34;
-    transform: translateY(-2px);
-}
-
-.btn-home {
-    background-color: #ff5722;
-}
-
-.btn-home:hover {
-    background-color: #bf360c;
-    transform: translateY(-2px);
-}
-
-/* Boîte d'alerte */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-}
-/* Style amélioré pour le bouton Valider et Payer */
+/* Bouton Valider et Continuer */
 .styled-button {
     background: linear-gradient(45deg, #4b1bf8, #180366);
     color: white;
@@ -187,120 +93,97 @@ h2 {
     box-shadow: 0 6px 12px rgba(75, 27, 248, 0.5);
 }
 
-.styled-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 6px rgba(75, 27, 248, 0.5);
+/* Boutons supplémentaires */
+.button-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
+.btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #28a745;
+}
+
+.btn-secondary:hover {
+    background-color: #1e7e34;
+    transform: translateY(-2px);
+}
+
+.btn-home {
+    background-color: #ff5722;
+}
+
+.btn-home:hover {
+    background-color: #bf360c;
+    transform: translateY(-2px);
+}
 </style>
 
 <div class="container">
     <h2>Choisissez votre abonnement</h2>
 
-    <form id="subscriptionForm">
-        <div class="subscription-options">
-            <label class="subscription-card">
-                <input type="radio" name="type" value="journalier" required>
-                <div class="card-content">
-                    <h3>Journalier</h3>
-                    <p>10€ / jour</p>
-                </div>
-            </label>
+    <form id="subscriptionForm" action="{{ path('payer_abonnement') }}" method="POST">
+    <div class="subscription-options">
+        <label class="subscription-card">
+            <input type="radio" name="type" value="journalier" required>
+            <div class="card-content">
+                <h3>Journalier</h3>
+                <p>10€ / jour</p>
+            </div>
+        </label>
 
-            <label class="subscription-card">
-                <input type="radio" name="type" value="mensuel">
-                <div class="card-content">
-                    <h3>Mensuel</h3>
-                    <p>50€ / mois</p>
-                </div>
-            </label>
+        <label class="subscription-card">
+            <input type="radio" name="type" value="mensuel">
+            <div class="card-content">
+                <h3>Mensuel</h3>
+                <p>50€ / mois</p>
+            </div>
+        </label>
 
-            <label class="subscription-card">
-                <input type="radio" name="type" value="annuel">
-                <div class="card-content">
-                    <h3>Annuel</h3>
-                    <p>500€ / an</p>
-                </div>
-            </label>
-        </div>
+        <label class="subscription-card">
+            <input type="radio" name="type" value="annuel">
+            <div class="card-content">
+                <h3>Annuel</h3>
+                <p>500€ / an</p>
+            </div>
+        </label>
+    </div>
 
-        <div class="payment-info">
-            <h3>Informations de paiement</h3>
+    <!-- Champ caché pour stocker l'abonnement sélectionné -->
+    <input type="hidden" id="selectedType" name="type">
 
-            <label>Numéro de carte :</label>
-            <input type="text" id="cardNumber" maxlength="16" required>
-
-            <label>Date d'expiration :</label>
-            <input type="text" id="expiryDate" placeholder="MM/YYYY" maxlength="7" required>
-
-            <label>Cryptogramme (CVV) :</label>
-            <input type="text" id="cvv" maxlength="3" required>
-        </div>
-
-        <button type="submit" class="styled-button">Valider et Payer</button>
-    </form>
-
-    <a href="{{ path('mes_abonnements') }}" class="btn btn-secondary">Mes abonnements</a>
-    <a href="{{ path('homepage') }}" class="btn btn-home">Retour à l'accueil</a>
-
-</div>
-
-<!-- Boîte d'alerte -->
-<div id="successModal" class="modal">
-    <div class="modal-content">
-        <h3>✅ Votre abonnement a bien été pris en compte !</h3>
-        <button onclick="closeModal()">OK</button>
+    <button type="submit" class="styled-button">Valider et Continuer</button>
+</form>
+    <div class="button-container">
+        <a href="{{ path('mes_abonnements') }}" class="btn btn-secondary">Mes abonnements</a>
+        <a href="{{ path('homepage') }}" class="btn btn-home">Retour à l'accueil</a>
     </div>
 </div>
+
 <script>
-document.getElementById("expiryDate").addEventListener("input", function(event) {
-    let value = event.target.value.replace(/\D/g, ""); // Supprimer tout sauf les chiffres
-
-    if (value.length >= 2) {
-        value = value.substring(0, 2) + "/" + value.substring(2, 6); // Ajouter automatiquement "/"
-    }
-
-    event.target.value = value;
-});
-
 document.getElementById("subscriptionForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Empêcher la soumission classique
-
-    let expiryDate = document.getElementById("expiryDate").value;
-    let today = new Date();
-    let [month, year] = expiryDate.split("/");
-
-    let expiry = new Date(parseInt(year), parseInt(month) - 1); // Date du mois/année sélectionné
-
-    if (expiryDate.length !== 7 || parseInt(month) < 1 || parseInt(month) > 12 || expiry <= today) {
-        alert("❌ La date d'expiration doit être au format MM/YYYY et ultérieure à aujourd'hui.");
-        return;
+    let selected = document.querySelector('input[name="type"]:checked');
+    if (!selected) {
+        alert("❌ Veuillez sélectionner un abonnement.");
+        event.preventDefault();
+    } else {
+        document.getElementById("selectedType").value = selected.value;
     }
-
-    let formData = new FormData(document.getElementById("subscriptionForm"));
-
-    fetch("{{ path('ajouter_abonnement') }}", {
-        method: "POST",
-        body: formData,
-        headers: { "X-Requested-With": "XMLHttpRequest" }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById("successModal").style.display = "flex";
-
-            // Rafraîchir la page après validation
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        } else {
-            alert("❌ Une erreur est survenue. " + (data.error || "Veuillez réessayer."));
-        }
-    })
-    .catch(error => {
-        console.error("Erreur:", error);
-        alert("❌ Une erreur est survenue. Impossible de confirmer l'abonnement.");
-    });
 });
 </script>
 

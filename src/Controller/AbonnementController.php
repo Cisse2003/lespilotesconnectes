@@ -14,17 +14,36 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AbonnementController extends AbstractController
 {
     #[Route('/abonnement', name: 'choisir_abonnement')]
-    public function choisirAbonnement(): Response
-    {
-        return $this->render('abonnement/choisir.html.twig');
+public function choisirAbonnement(AbonnementRepository $abonnementRepository): Response
+{
+    // Récupérer l'utilisateur connecté
+    $utilisateur = $this->getUser();
+
+    // Vérifier si l'utilisateur est authentifié
+    if (!$utilisateur) {
+        throw $this->createAccessDeniedException("Vous devez être connecté pour voir vos abonnements.");
     }
+
+    // Récupérer les abonnements existants de l'utilisateur
+    $abonnements = $abonnementRepository->findBy(['utilisateur' => $utilisateur]);
+
+    // Extraire uniquement les types d'abonnements déjà souscrits (ex: ['journalier', 'mensuel'])
+    $typesAbonnementsExistants = array_map(fn($abonnement) => $abonnement->getType(), $abonnements);
+
+    return $this->render('abonnement/choisir.html.twig', [
+        'abonnements_existants' => $typesAbonnementsExistants,
+    ]);
+}
+
 
     #[Route('/abonnement/ajouter', name: 'ajouter_abonnement', methods: ['POST'])]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 public function ajouterAbonnement(Request $request, EntityManagerInterface $entityManager): Response
 {
     $utilisateur = $this->getUser();
-    $type = $request->request->get('type');
+    
+    $data = json_decode($request->getContent(), true);
+    $type = $data['type'] ?? null;
 
     if (!$type) {
         return $this->json(['success' => false, 'error' => 'Aucun type d’abonnement sélectionné.'], 400);
@@ -60,14 +79,23 @@ public function ajouterAbonnement(Request $request, EntityManagerInterface $enti
     $entityManager->persist($abonnement);
     $entityManager->flush();
 
-    return $this->json([
-        'success' => true,
-        'abonnement' => [
-            'type' => $abonnement->getType(),
-            'prix' => $abonnement->getPrix(),
-            'dateDebut' => $abonnement->getDateDebut()->format('d/m/Y'),
-            'dateFin' => $abonnement->getDateFin()->format('d/m/Y')
-        ]
+    return $this->json(['success' => true]);
+}
+
+
+#[Route('/abonnement/payer', name: 'payer_abonnement')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
+public function payerAbonnement(Request $request): Response
+{
+    $type = $request->request->get('type');
+
+    if (!$type) {
+        $this->addFlash('error', 'Veuillez sélectionner un abonnement.');
+        return $this->redirectToRoute('choisir_abonnement');
+    }
+
+    return $this->render('abonnement/payer.html.twig', [
+        'type' => $type
     ]);
 }
 

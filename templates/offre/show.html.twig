@@ -139,7 +139,8 @@
 
         {#  Bouton de suspension de l'offre #}
         <button id="toggle-dispo-btn" class="toggle-dispo-btn"
-                data-id="{{ offre.id }}">
+                data-id="{{ offre.id }}"
+                onclick="toggleDisponibilite(this)">
             {{ offre.disponibilite ? '❌ Suspendre l\'offre' : '✅ Activer l\'offre' }}
         </button>
 
@@ -157,5 +158,26 @@
     </div>
 </div>
 
+<script>
+    function toggleDisponibilite(button) {
+        const offreId = button.getAttribute("data-id");
+
+        fetch(`/offres/${offreId}/toggle-disponibilite`, {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerText = data.disponibilite ? "❌ Suspendre l'offre" : "✅ Activer l'offre";
+                    button.style.backgroundColor = data.disponibilite ? "#ff4b4b" : "#4caf50";
+                }
+            })
+            .catch(error => console.error("Erreur:", error));
+    }
+</script>
 </body>
 </html>

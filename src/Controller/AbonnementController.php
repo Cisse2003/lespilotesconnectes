@@ -14,10 +14,27 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AbonnementController extends AbstractController
 {
     #[Route('/abonnement', name: 'choisir_abonnement')]
-    public function choisirAbonnement(): Response
-    {
-        return $this->render('abonnement/choisir.html.twig');
+public function choisirAbonnement(AbonnementRepository $abonnementRepository): Response
+{
+    // Récupérer l'utilisateur connecté
+    $utilisateur = $this->getUser();
+
+    // Vérifier si l'utilisateur est authentifié
+    if (!$utilisateur) {
+        throw $this->createAccessDeniedException("Vous devez être connecté pour voir vos abonnements.");
     }
+
+    // Récupérer les abonnements existants de l'utilisateur
+    $abonnements = $abonnementRepository->findBy(['utilisateur' => $utilisateur]);
+
+    // Extraire uniquement les types d'abonnements déjà souscrits (ex: ['journalier', 'mensuel'])
+    $typesAbonnementsExistants = array_map(fn($abonnement) => $abonnement->getType(), $abonnements);
+
+    return $this->render('abonnement/choisir.html.twig', [
+        'abonnements_existants' => $typesAbonnementsExistants,
+    ]);
+}
+
 
     #[Route('/abonnement/ajouter', name: 'ajouter_abonnement', methods: ['POST'])]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]

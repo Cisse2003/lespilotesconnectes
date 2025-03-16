@@ -176,16 +176,34 @@ h2 {
 </div>
 
 <script>
-document.getElementById("subscriptionForm").addEventListener("submit", function(event) {
-    let selected = document.querySelector('input[name="type"]:checked');
-    if (!selected) {
-        alert("❌ Veuillez sélectionner un abonnement.");
-        event.preventDefault();
-    } else {
-        document.getElementById("selectedType").value = selected.value;
-    }
-});
+    let abonnementsExistants = {{ abonnements_existants is defined ? abonnements_existants|json_encode|raw : '[]' }};
+
+    document.getElementById("subscriptionForm").addEventListener("submit", function(event) {
+        let selected = document.querySelector('input[name="type"]:checked');
+        
+        if (!selected) {
+            alert("❌ Veuillez sélectionner un abonnement.");
+            event.preventDefault();
+            return;
+        }
+
+        let selectedType = selected.value;
+
+        // Vérifier si le type d'abonnement sélectionné existe déjà
+        if (abonnementsExistants.includes(selectedType)) {
+            let confirmation = confirm(`⚠️ L'abonnement ${selectedType} existe déjà.\nVoulez-vous ajouter un autre abonnement du même type ?`);
+            
+            if (!confirmation) {
+                event.preventDefault(); // Annuler la soumission si l'utilisateur refuse
+                return;
+            }
+        }
+
+        document.getElementById("selectedType").value = selectedType;
+    });
 </script>
+
+
 
 
 {% endblock %}

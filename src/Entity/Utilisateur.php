@@ -34,6 +34,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255)]
     private ?string $password = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
@@ -47,6 +50,25 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     // *************************************************************************
     #[ORM\OneToOne(targetEntity: Proprietaire::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
     private ?Proprietaire $proprietaire = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTime $suspendedUntil = null;
+
+    public function getSuspendedUntil(): ?\DateTime
+    {
+        return $this->suspendedUntil;
+    }
+
+    public function setSuspendedUntil(?\DateTime $suspendedUntil): self
+    {
+        $this->suspendedUntil = $suspendedUntil;
+        return $this;
+    }
+
+    public function isSuspended(): bool
+    {
+        return $this->suspendedUntil !== null && $this->suspendedUntil > new \DateTime();
+    }
 
     public function getProprietaire(): ?Proprietaire
     {
@@ -179,6 +201,19 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        return $this->roles ?: ['ROLE_USER'];
     }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function __construct()
+    {
+        $this->roles = [];
+    }
+
+
 }

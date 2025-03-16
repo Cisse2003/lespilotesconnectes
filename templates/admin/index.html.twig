@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Dashboard{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue, {{ admin.nom }} {{ admin.prenom }}</h1>
+    <p>Ceci est votre tableau de bord d'administration.</p>
+
+    <ul>
+        <li><a href="{{ path('admin_utilisateurs') }}">Gérer les utilisateurs</a></li>
+        <li><a href="{{ path('admin_offres') }}">Gérer les offres</a></li>
+    </ul>
+{% endblock %}

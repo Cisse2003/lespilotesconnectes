@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Dashboard</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .dashboard-container h1 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .dashboard-container p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .dashboard-container ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .dashboard-container ul li {
+            margin: 10px 0;
+        }
+
+        .dashboard-container ul li a {
+            display: block;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .dashboard-container ul li a:hover {
+            background: linear-gradient(135deg, #556cd6, #5a3d91);
+        }
+
+        .logout-btn {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 15px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <h1>Bienvenue, {{ admin.nom }} {{ admin.prenom }}</h1>
+    <p>Ceci est votre tableau de bord d'administration.</p>
+
+    <ul>
+        <li><a href="{{ path('admin_utilisateurs') }}">Gérer les utilisateurs</a></li>
+        <li><a href="{{ path('admin_offres') }}">Gérer les offres</a></li>
+    </ul>
+
+    <!-- Bouton de déconnexion -->
+    <a href="{{ path('admin_logout') }}" class="logout-btn">Déconnexion</a>
+</div>
+</body>
+</html>

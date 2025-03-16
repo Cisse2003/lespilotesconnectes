@@ -1,27 +1,48 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-        App\Entity\Utilisateur: 'auto' 
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+        App\Entity\Utilisateur: 'auto'
+        App\Entity\Administrateur: 'auto'  # Ajout du hash pour l'admin
+
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\Utilisateur
                 property: email
+        app_admin_provider:
+            entity:
+                class: App\Entity\Administrateur
+                property: email
+
     firewalls:
+        admin:
+            pattern: ^/admin
+            provider: app_admin_provider
+            form_login:
+                login_path: admin_login
+                check_path: admin_login
+                default_target_path: admin_dashboard  # Redirige après login réussi
+            logout:
+                path: admin_logout
+                target: app_login
+            access_denied_url: admin_login  # Si accès refusé, aller au login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                always_remember_me: true
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\UserAuthenticator
             logout:
                 path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
+                target: app_login  # Redirige vers login user
 
             remember_me:
                 secret: '%kernel.secret%'
@@ -29,17 +50,9 @@ security:
                 path: /
                 always_remember_me: true
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:
     security:

@@ -56,7 +56,7 @@ final class SecurityControllerBuilder
         $manipulator->addMethodBody($loginMethodBuilder, <<<'CODE'
             <?php
             return $this->render(
-                'security/login.html.twig',
+                'security/log.html.twig',
                 [
                     'last_username' => $lastUsername,
                     'error' => $error,

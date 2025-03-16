@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'offre - {{ offre.voiture.marque }} {{ offre.voiture.modele }}</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #b19cd9;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+            text-align: center;
+            margin-top: 30px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #4b0082;
+            text-align: left;
+        }
+
+        .breadcrumb a {
+            color: #4b0082;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4b0082;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .photo-preview {
+            width: 100%;
+            height: 250px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-section {
+            background-color: #d8c3f3;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+
+        .info-section h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #4b0082;
+            text-transform: uppercase;
+        }
+
+        .info-section p {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .owner-info {
+            display: flex;
+            align-items: center;
+            background-color: #e6d1fa;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .owner-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #4b0082;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #4b0082;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a0061;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="breadcrumb">
+        <a href="{{ path('admin_utilisateurs') }}">Gestion des utilisateurs</a> >
+        <a href="{{ path('admin_offres_utilisateur', {id: offre.proprietaire.utilisateur.id}) }}">Offres de {{ offre.proprietaire.utilisateur.nom }}</a> > Détails
+    </nav>
+
+    <h1>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h1>
+
+    <div class="photo-preview">
+        {% if offre.photos is not empty %}
+            <img src="{{ asset('uploads/photos/' ~ offre.photos[0]) }}" alt="{{ offre.voiture.marque }} {{ offre.voiture.modele }}">
+        {% else %}
+            <p>Aucune image disponible</p>
+        {% endif %}
+    </div>
+
+    <div class="info-section">
+        <h3>Informations du véhicule</h3>
+        <p><strong>Marque :</strong> {{ offre.voiture.marque }}</p>
+        <p><strong>Modèle :</strong> {{ offre.voiture.modele }}</p>
+        <p><strong>Année :</strong> {{ offre.voiture.annee }}</p>
+        <p><strong>Nombre de places :</strong> {{ offre.voiture.nombrePlaces }}</p>
+        <p><strong>Type d'essence :</strong> {{ offre.voiture.typeEssence }}</p>
+    </div>
+
+    <div class="info-section">
+        <h3>Informations sur le propriétaire</h3>
+        <div class="owner-info">
+            {% if offre.proprietaire.utilisateur.profileImage %}
+                <img src="{{ asset('uploads/profiles/' ~ offre.proprietaire.utilisateur.profileImage) }}" alt="Photo du propriétaire" class="owner-photo">
+            {% else %}
+                <img src="{{ asset('uploads/profile_images/default-photo.png') }}" alt="Photo par défaut" class="owner-photo">
+            {% endif %}
+            <div>
+                <p><strong>Nom :</strong> {{ offre.proprietaire.utilisateur.nom }} {{ offre.proprietaire.utilisateur.prenom }}</p>
+                <p><strong>Email :</strong> {{ offre.proprietaire.utilisateur.email }}</p>
+                <p><strong>Téléphone :</strong> {{ offre.proprietaire.utilisateur.telephone ?: 'Non disponible' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h3>Informations de livraison</h3>
+        {% if livraison %}
+            <p><strong>Tarifs :</strong> {{ livraison.tarifs|number_format(2, ',', ' ') }} €</p>
+            <p><strong>Disponibilité :</strong> {{ livraison.disponibilite ? '✅ Disponible' : '❌ Non disponible' }}</p>
+        {% else %}
+            <p>❌ Cette offre ne propose pas de livraison.</p>
+        {% endif %}
+    </div>
+
+    <a href="{{ path('admin_offres_utilisateur', {id: offre.proprietaire.utilisateur.id}) }}" class="btn btn-primary">Retour aux offres</a>
+</div>
+</body>
+</html>

@@ -46,14 +46,15 @@ class Offre
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
 
-    // ✅ Nouveau champ pour les photos (tableau JSON)
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $photos = [];
 
-    // ✅ Nouvelle relation OneToOne vers Livraison
     #[ORM\OneToOne(targetEntity: Livraison::class, mappedBy: 'offre', cascade: ['persist', 'remove'])]
     private ?Livraison $livraison = null;
 
+    // Nouveau champ pour la suspension
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeInterface $suspendedUntil = null;
 
     public function getId(): ?int
     {
@@ -170,7 +171,6 @@ class Offre
         return $this;
     }
 
-    // ✅ Getter et setter pour la Livraison
     public function getLivraison(): ?Livraison
     {
         return $this->livraison;
@@ -182,6 +182,18 @@ class Offre
         if ($livraison !== null) {
             $livraison->setOffre($this);
         }
+        return $this;
+    }
+
+    // Getter et Setter pour suspendedUntil
+    public function getSuspendedUntil(): ?\DateTimeInterface
+    {
+        return $this->suspendedUntil;
+    }
+
+    public function setSuspendedUntil(?\DateTimeInterface $suspendedUntil): self
+    {
+        $this->suspendedUntil = $suspendedUntil;
         return $this;
     }
 }

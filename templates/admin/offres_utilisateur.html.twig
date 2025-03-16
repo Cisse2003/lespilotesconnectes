@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offres de {{ utilisateur.nom }} {{ utilisateur.prenom }}</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #b19cd9;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+            text-align: center;
+            margin-top: 30px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4b0082;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .user-card {
+            background-color: #d8c3f3;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+
+        .user-card h2 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4b0082;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .user-card p {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .user-card img {
+            width: 100%;
+            max-width: 100px;
+            height: auto;
+            border-radius: 8px;
+            margin: 5px;
+            object-fit: cover;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #3a0061;
+        }
+
+        .suspend-btn {
+            background-color: #f39c12;
+        }
+
+        .suspend-btn:hover {
+            background-color: #e67e22;
+        }
+
+        .activate-btn {
+            background-color: #27ae60;
+        }
+
+        .activate-btn:hover {
+            background-color: #219653;
+        }
+
+        .return-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .return-btn:hover {
+            background-color: #3a0061;
+        }
+
+        .no-offers {
+            font-size: 16px;
+            color: #4b0082;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Offres publiées par {{ utilisateur.nom }} {{ utilisateur.prenom }}</h1>
+
+    {% if offres|length > 0 %}
+        {% for offre in offres %}
+            <div class="user-card">
+                <h2>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h2>
+                <p><strong>Lieu :</strong> {{ offre.lieuGarage }}</p>
+                <p><strong>Prix :</strong> {{ offre.prix }} €</p>
+                <p><strong>Date de création :</strong> {{ offre.dateCreation|date('d/m/Y') }}</p>
+                <p><strong>Disponibilité :</strong> {{ offre.disponibilite ? '✅ Disponible' : '❌ Non disponible' }}</p>
+                <p><strong>Description :</strong> {{ offre.description|default('Aucune') }}</p>
+                {% if offre.photos|length > 0 %}
+                    <p><strong>Photos :</strong></p>
+                    <div class="photo-gallery">
+                        {% for photo in offre.photos %}
+                            <img src="{{ asset('uploads/photos/' ~ photo) }}" alt="Photo de l'offre">
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="actions">
+                    <a href="{{ path('admin_offre_detail', {id: offre.id}) }}" class="btn">Détails</a>
+                    <form action="{{ path('admin_toggle_offre_suspension', {id: offre.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous {{ offre.suspendedUntil ? 'activer' : 'suspendre' }} cette offre ?')">
+                        {% if offre.suspendedUntil and offre.suspendedUntil > 'now'|date %}
+                            <button class="btn activate-btn" type="submit">Activer</button>
+                        {% else %}
+                            <button class="btn suspend-btn" type="submit">Suspendre</button>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-offers">Aucune offre publiée par cet utilisateur.</p>
+    {% endif %}
+
+    <a href="{{ path('admin_utilisateurs') }}" class="return-btn">Retour à la gestion des utilisateurs</a>
+</div>
+</body>
+</html>

@@ -43,42 +43,21 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true, unique: true)]
     private ?string $confirmationToken = null;
 
-    // ***************** Nouveau champ pour la photo de profil *****************
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profileImage = null;
 
-    // *************************************************************************
     #[ORM\OneToOne(targetEntity: Proprietaire::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
     private ?Proprietaire $proprietaire = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTime $suspendedUntil = null;
 
-    public function getSuspendedUntil(): ?\DateTime
-    {
-        return $this->suspendedUntil;
-    }
+    #[ORM\OneToOne(targetEntity: Emprunteur::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
+    private ?Emprunteur $emprunteur = null;
 
-    public function setSuspendedUntil(?\DateTime $suspendedUntil): self
+    public function __construct()
     {
-        $this->suspendedUntil = $suspendedUntil;
-        return $this;
-    }
-
-    public function isSuspended(): bool
-    {
-        return $this->suspendedUntil !== null && $this->suspendedUntil > new \DateTime();
-    }
-
-    public function getProprietaire(): ?Proprietaire
-    {
-        return $this->proprietaire;
-    }
-
-    public function setProprietaire(?Proprietaire $proprietaire): self
-    {
-        $this->proprietaire = $proprietaire;
-        return $this;
+        $this->roles = [];
     }
 
     public function getId(): ?int
@@ -152,8 +131,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // ***************** Getters et setters pour profileImage *****************
-
     public function getProfileImage(): ?string
     {
         return $this->profileImage;
@@ -187,8 +164,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // *************************************************************************
-
     public function eraseCredentials(): void
     {
         // Méthode requise par UserInterface mais non utilisée
@@ -210,10 +185,37 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function __construct()
+    public function getProprietaire(): ?Proprietaire
     {
-        $this->roles = [];
+        return $this->proprietaire;
     }
 
+    public function setProprietaire(?Proprietaire $proprietaire): self
+    {
+        $this->proprietaire = $proprietaire;
+        return $this;
+    }
 
+    public function getSuspendedUntil(): ?\DateTime
+    {
+        return $this->suspendedUntil;
+    }
+
+    public function setSuspendedUntil(?\DateTime $suspendedUntil): self
+    {
+        $this->suspendedUntil = $suspendedUntil;
+        return $this;
+    }
+
+    // ✅ Gestion de l'Emprunteur
+    public function getEmprunteur(): ?Emprunteur
+    {
+        return $this->emprunteur;
+    }
+
+    public function setEmprunteur(?Emprunteur $emprunteur): self
+    {
+        $this->emprunteur = $emprunteur;
+        return $this;
+    }
 }

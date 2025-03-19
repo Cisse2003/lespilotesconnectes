@@ -1,0 +1,156 @@
+{% block title %}{% endblock %}
+
+{% block body %}
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 900px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #333;
+}
+
+h2 {
+    font-size: 26px;
+    color: #4b0082;
+    margin-bottom: 15px;
+}
+
+.no-reservations {
+    background: #ffefc1;
+    color: #8a5700;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background: #4b0082;
+    color: white;
+    font-weight: bold;
+}
+
+th, td {
+    padding: 14px;
+    text-align: center;
+    color: #333; 
+}
+
+tr:nth-child(even) {
+    background: #f0f0f0;
+}
+
+tr:nth-child(odd) {
+    background: #ffffff;
+}
+
+.status-confirmed {
+    color: green;
+    font-weight: bold;
+}
+
+.status-expired {
+    color: gray;
+    font-weight: bold;
+}
+
+.status-cancelled {
+    color: red;
+    font-weight: bold;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #4b0082;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.btn-back:hover {
+    background: #3a0061;
+}
+
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+    th, td {
+        padding: 10px;
+    }
+}
+</style>
+
+<div class="container">
+    <h2>Mes Réservations</h2>
+
+    {% if reservations is empty %}
+        <p class="no-reservations">📌 Vous n'avez effectué aucune réservation.</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Véhicule</th>
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.offre.voiture.marque }} {{ reservation.offre.voiture.modele }}</td>
+                        <td>{{ reservation.dateDebut|date('d/m/Y') }}</td>
+                        <td>{{ reservation.dateFin|date('d/m/Y') }}</td>
+                        <td>
+                            {% if reservation.statut == 'Annulé' %}
+                                <span class="status-cancelled">❌ Annulé</span>
+                            {% elseif reservation.dateFin < "now"|date("Y-m-d") %}
+                                <span class="status-expired">⌛ Expiré</span>
+                            {% else %}
+                                <span class="status-confirmed">✅ Payé</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <!-- 🔙 Bouton Retour à l'accueil -->
+    <a href="{{ path('homepage') }}" class="btn-back">🏠 Retour à l'accueil</a>
+</div>
+{% endblock %}

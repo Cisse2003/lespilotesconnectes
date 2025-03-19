@@ -12,7 +12,7 @@
                     Envie de liberté sur la route ? Découvrez notre large gamme de véhicules modernes et confortables à des prix imbattables.
                     Que ce soit pour un week-end, un voyage d’affaires ou des vacances inoubliables, trouvez la voiture parfaite et partez l’esprit léger !
                 </p>
-                <button class="welcome-btn" onclick="window.location.href='#'">Réservez dès maintenant</button>
+                    <button class="welcome-btn" onclick="window.location.href='{{ path('mes_reservations') }}'">Mes Réservations</button>
             </div>
         </div>
 
@@ -304,7 +304,7 @@
                                     <h3>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h3>
                                     <p>{{ offre.voiture.annee }} - {{ offre.voiture.typeEssence }} - {{ offre.voiture.nombrePlaces }} places</p>
                                     <div class="voiture-actions">
-                                        <button class="btn btn-primary">Réserver</button>
+                                        <a href="{{ path('reserver_voiture', { 'id': offre.id }) }}" class="btn btn-primary">Réserver</a>
                                         <a href="{{ path('app_offre_detail', {'id': offre.id}) }}" class="btn btn-secondary">Détails</a>
                                         <button class="btn btn-like">❤️</button>
                                     </div>

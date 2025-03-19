@@ -110,7 +110,7 @@ final class MakeController extends AbstractMaker
         ;
 
         // Convert the twig template name into a file path where it will be generated.
-        $this->twigTemplatePath = \sprintf('%s%s', Str::asFilePath($templateName), $this->isInvokable ? '.html.twig' : '/log.html.twig');
+        $this->twigTemplatePath = \sprintf('%s%s', Str::asFilePath($templateName), $this->isInvokable ? '.html.twig' : '/index.html.twig');
 
         $this->interactSetGenerateTests($input, $io);
     }

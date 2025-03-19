@@ -14,7 +14,7 @@ class Emprunteur
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+    #[ORM\OneToOne(targetEntity: Utilisateur::class, inversedBy: "emprunteur", cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
@@ -22,16 +22,14 @@ class Emprunteur
     #[Assert\NotBlank(message: "Le nom est obligatoire.")]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 50)]
-    #[Assert\NotBlank(message: "Le numéro de permis est obligatoire.")]
+    #[ORM\Column(length: 50, nullable: true)] // ✅ Permettre NULL en base de données
     #[Assert\Regex(
-        pattern: "/^[A-Z0-9]{2}-[A-Z0-9]{2}-[A-Z0-9]{2}-[A-Z0-9]{2}-[A-Z0-9]{4}$/",
-        message: "Le numéro de permis doit respecter le format français (ex: AB-12-34-56-7890)."
+        pattern: "/^([A-Z0-9]{2}-[A-Z0-9]{2}-[A-Z0-9]{2}-[A-Z0-9]{2}-[A-Z0-9]{4}|[A-Z0-9]{12})$/",
+        message: "Le numéro de permis doit respecter le format français (ex: AB-12-34-56-7890 ou 123456789012)."
     )]
     private ?string $numeroPermis = null;
 
-    #[ORM\Column(type: "date")]
-    #[Assert\NotBlank(message: "La date d'expiration est obligatoire.")]
+    #[ORM\Column(type: "date", nullable: true)] // ✅ Permettre NULL en base de données
     #[Assert\GreaterThanOrEqual("today", message: "La date d'expiration ne peut pas être passée.")]
     private ?\DateTimeInterface $dateExpiration = null;
 
@@ -67,7 +65,7 @@ class Emprunteur
         return $this->numeroPermis;
     }
 
-    public function setNumeroPermis(string $numeroPermis): static
+    public function setNumeroPermis(?string $numeroPermis): static // ✅ Accepte NULL
     {
         $this->numeroPermis = $numeroPermis;
         return $this;
@@ -78,7 +76,7 @@ class Emprunteur
         return $this->dateExpiration;
     }
 
-    public function setDateExpiration(\DateTimeInterface $dateExpiration): static
+    public function setDateExpiration(?\DateTimeInterface $dateExpiration): static // ✅ Accepte NULL
     {
         $this->dateExpiration = $dateExpiration;
         return $this;

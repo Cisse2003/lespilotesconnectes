@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Emprunteur;
+use App\Entity\Location;
 use App\Form\EmprunteurFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,7 +49,7 @@ class EmprunteurController extends AbstractController
             $entityManager->persist($emprunteur);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Permis ajouté avec succès !');
+            $this->addFlash('success', '✅ Permis ajouté avec succès !');
             return $this->redirectToRoute('ajouter_permis');
         }
 
@@ -61,6 +62,7 @@ class EmprunteurController extends AbstractController
     public function supprimerPermis(int $id, EntityManagerInterface $entityManager): Response
     {
         $utilisateur = $this->getUser();
+
         if (!$utilisateur) {
             $this->addFlash('error', 'Vous devez être connecté pour supprimer un permis.');
             return $this->redirectToRoute('app_login');
@@ -68,14 +70,23 @@ class EmprunteurController extends AbstractController
 
         $emprunteur = $entityManager->getRepository(Emprunteur::class)->find($id);
 
-        if ($emprunteur && $emprunteur->getUtilisateur() === $utilisateur) {
-            $entityManager->remove($emprunteur);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Permis supprimé avec succès.');
-        } else {
-            $this->addFlash('error', 'Permis introuvable ou non associé à votre compte.');
+        if (!$emprunteur || $emprunteur->getUtilisateur() !== $utilisateur) {
+            $this->addFlash('error', '⚠ Permis introuvable ou non associé à votre compte.');
+            return $this->redirectToRoute('ajouter_permis');
         }
+
+        // 🚀 **Suppression des réservations liées à l'emprunteur**
+        $locations = $entityManager->getRepository(Location::class)->findBy(['emprunteur' => $emprunteur]);
+        foreach ($locations as $location) {
+            $entityManager->remove($location);
+        }
+
+        // ✅ **Suppression uniquement du permis, sans supprimer l'emprunteur**
+        $emprunteur->setNumeroPermis(null);
+        $emprunteur->setDateExpiration(null);
+        $entityManager->flush();
+
+        $this->addFlash('success', '✅ Permis supprimé avec succès. Vous pouvez le recharger à tout moment.');
 
         return $this->redirectToRoute('ajouter_permis');
     }

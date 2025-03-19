@@ -166,7 +166,7 @@ final class MakeFormLogin extends AbstractMaker
         }
 
         $generator->generateTemplate(
-            \sprintf('%s/log.html.twig', $templatePath),
+            \sprintf('%s/login.html.twig', $templatePath),
             'security/formLogin/login_form.tpl.php',
             [
                 'logout_setup' => $this->willLogout,
@@ -222,7 +222,7 @@ final class MakeFormLogin extends AbstractMaker
         $this->writeSuccessMessage($io);
 
         $io->text([
-            \sprintf('Next: Review and adapt the login template: <info>%s/log.html.twig</info> to suit your needs.', $templatePath),
+            \sprintf('Next: Review and adapt the login template: <info>%s/login.html.twig</info> to suit your needs.', $templatePath),
         ]);
     }
 }

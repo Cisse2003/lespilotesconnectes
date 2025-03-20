@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Locations</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #b19cd9;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 900px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+            text-align: center;
+            margin-top: 30px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4b0082;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4b0082;
+            color: white;
+        }
+
+        td {
+            background-color: #d8c3f3;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #3a0061;
+        }
+
+        .return-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .return-btn:hover {
+            background-color: #3a0061;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Gestion des Locations</h1>
+    {% if locations|length > 0 %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Offre</th>
+                <th>Emprunteur</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+                <th>Commission</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for location in locations %}
+                <tr>
+                    <td>{{ location.id }}</td>
+                    <td>{{ location.offre.voiture.marque ~ ' ' ~ location.offre.voiture.modele }}</td>
+                    <td>{{ location.emprunteur.utilisateur.nom }} {{ location.emprunteur.utilisateur.prenom }}</td>
+                    <td>{{ location.dateDebut|date('d/m/Y') }}</td>
+                    <td>{{ location.dateFin|date('d/m/Y') }}</td>
+                    <td>
+                        <form action="{{ path('admin_set_commission', {'id': location.id}) }}" method="post">
+                            <input type="number" name="commission" value="{{ location.commission ?: 0 }}" step="0.01" min="0">
+                            <button type="submit" class="btn">Mettre à jour</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-offers">Aucune location enregistrée.</p>
+    {% endif %}
+
+    <a href="{{ path('admin_dashboard') }}" class="return-btn">Retour au tableau de bord</a>
+</div>
+</body>
+</html>

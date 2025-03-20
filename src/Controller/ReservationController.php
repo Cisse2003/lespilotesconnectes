@@ -141,6 +141,37 @@ public function mesReservations(EntityManagerInterface $entityManager, Security 
     ]);
 }
 
+#[Route('/reservation/annuler/{id}', name: 'annuler_reservation', methods: ['POST'])]
+public function annulerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
+{
+    $reservation = $entityManager->getRepository(Location::class)->find($id);
+
+    if (!$reservation) {
+        return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
+    }
+
+    $reservation->setStatut('Annulé');
+    $entityManager->persist($reservation); // ✅ Ajout du persist() pour enregistrer la modification
+    $entityManager->flush(); // ✅ Appliquer les changements
+
+    return new JsonResponse(['success' => true]);
+}
+
+#[Route('/reservation/supprimer/{id}', name: 'supprimer_reservation', methods: ['POST'])]
+public function supprimerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
+{
+    $reservation = $entityManager->getRepository(Location::class)->find($id);
+
+    if (!$reservation) {
+        return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
+    }
+
+    $entityManager->remove($reservation);
+    $entityManager->flush(); // ✅ Ajout de flush()
+
+    return new JsonResponse(['success' => true]);
+}
+
 
 
 

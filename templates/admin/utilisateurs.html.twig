@@ -22,7 +22,7 @@
             border-radius: 20px;
             padding: 20px;
             width: 90%;
-            max-width: 800px;
+            max-width: 1000px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             color: #333;
             text-align: center;
@@ -40,22 +40,36 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
+        .tables-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .table {
+            width: 50%;
+            background: #d8c3f3;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
         h2.section-title {
             font-size: 22px;
             font-weight: bold;
             color: #4b0082;
-            margin: 20px 0 10px;
+            margin-bottom: 10px;
             text-transform: uppercase;
             border-bottom: 2px solid #4b0082;
             padding-bottom: 5px;
         }
 
         .user-card {
-            background-color: #d8c3f3;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-align: left;
         }
 
@@ -63,38 +77,36 @@
             font-size: 18px;
             font-weight: bold;
             color: #4b0082;
-            margin-bottom: 10px;
-            text-transform: uppercase;
+            margin-bottom: 8px;
         }
 
         .user-card p {
-            font-size: 16px;
-            margin-bottom: 8px;
+            font-size: 14px;
+            margin-bottom: 6px;
             color: #333;
         }
 
-        .user-card .actions {
-            margin-top: 10px;
+        .actions {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+            justify-content: space-between;
+            margin-top: 10px;
         }
 
-        .user-card .btn {
+        .btn {
             display: inline-block;
-            padding: 8px 16px;
-            font-size: 14px;
+            padding: 6px 12px;
+            font-size: 12px;
             font-weight: bold;
             color: #fff;
             background-color: #4b0082;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             text-decoration: none;
         }
 
-        .user-card .btn:hover {
+        .btn:hover {
             background-color: #3a0061;
         }
 
@@ -114,16 +126,10 @@
             background-color: #e67e22;
         }
 
-        .no-users {
-            font-size: 16px;
-            color: #4b0082;
-            margin-top: 20px;
-        }
-
         .return-btn {
             display: inline-block;
             padding: 12px 24px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             color: #fff;
             background-color: #4b0082;
@@ -145,52 +151,59 @@
 <div class="container">
     <h1>Gestion des utilisateurs</h1>
 
-    <!-- Bloc des Propriétaires -->
-    <h2 class="section-title">Propriétaires</h2>
-    {% if proprietaires|length > 0 %}
-        {% for utilisateur in proprietaires %}
-            <div class="user-card">
-                <h3>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h3>
-                <p><strong>Email :</strong> {{ utilisateur.email }}</p>
-                <p><strong>Rôle :</strong> {{ utilisateur.roles|join(', ') }}</p>
+    <div class="tables-container">
+        <!-- Tableau des Propriétaires -->
+        <div class="table">
+            <h2 class="section-title">Propriétaires</h2>
 
-                <div class="actions">
-                    <a href="{{ path('admin_offres_utilisateur', {id: utilisateur.id}) }}" class="btn">Voir les offres</a>
-                    <form action="{{ path('admin_suspendre_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cet utilisateur ?')">
-                        <button class="btn suspend-btn" type="submit">Suspendre</button>
-                    </form>
-                    <form action="{{ path('admin_supprimer_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.')">
-                        <button class="btn delete-btn" type="submit">Supprimer</button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p class="no-users">Aucun propriétaire trouvé.</p>
-    {% endif %}
+            {% if proprietaires|length > 0 %}
+                {% for proprietaire in proprietaires %}
+                    <div class="user-card">
+                        <h3>{{ proprietaire.utilisateur.nom }} {{ proprietaire.utilisateur.prenom }}</h3>
+                        <p><strong>Email :</strong> {{ proprietaire.utilisateur.email }}</p>
+                        <p><strong>Rôle :</strong> {{ proprietaire.utilisateur.roles|join(', ') }}</p>
+                        <div class="actions">
+                            <a href="{{ path('admin_offres_utilisateur', {id: proprietaire.utilisateur.id}) }}" class="btn">Voir offres</a>
+                            <form action="{{ path('admin_suspendre_utilisateur', {id: proprietaire.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cet utilisateur ?')">
+                                <button class="btn suspend-btn" type="submit">Suspendre</button>
+                            </form>
+                            <form action="{{ path('admin_supprimer_utilisateur', {id: proprietaire.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous supprimer cet utilisateur ?')">
+                                <button class="btn delete-btn" type="submit">Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Aucun propriétaire trouvé.</p>
+            {% endif %}
+        </div>
 
-    <!-- Bloc des Emprunteurs -->
-    <h2 class="section-title">Emprunteurs</h2>
-    {% if emprunteurs|length > 0 %}
-        {% for utilisateur in emprunteurs %}
-            <div class="user-card">
-                <h3>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h3>
-                <p><strong>Email :</strong> {{ utilisateur.email }}</p>
-                <p><strong>Rôle :</strong> {{ utilisateur.roles|join(', ') }}</p>
+        <!-- Tableau des Emprunteurs -->
+        <div class="table">
+            <h2 class="section-title">Emprunteurs</h2>
 
-                <div class="actions">
-                    <form action="{{ path('admin_suspendre_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cet utilisateur ?')">
-                        <button class="btn suspend-btn" type="submit">Suspendre</button>
-                    </form>
-                    <form action="{{ path('admin_supprimer_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.')">
-                        <button class="btn delete-btn" type="submit">Supprimer</button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p class="no-users">Aucun emprunteur trouvé.</p>
-    {% endif %}
+            {% if emprunteurs|length > 0 %}
+                {% for utilisateur in emprunteurs %}
+                    <div class="user-card">
+                        <h3>{{ utilisateur.utilisateur.nom }} {{ utilisateur.utilisateur.prenom }}</h3>
+                        <p><strong>Email :</strong> {{ utilisateur.utilisateur.email }}</p>
+                        <p><strong>Rôle :</strong> {{ utilisateur.utilisateur.roles|join(', ') }}</p>
+                        <div class="actions">
+                            <a href="{{ path('admin_locations_emprunteur', {id: utilisateur.id}) }}" class="btn">Voir locations</a>
+                            <form action="{{ path('admin_suspendre_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cet utilisateur ?')">
+                                <button class="btn suspend-btn" type="submit">Suspendre</button>
+                            </form>
+                            <form action="{{ path('admin_supprimer_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous supprimer cet utilisateur ?')">
+                                <button class="btn delete-btn" type="submit">Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Aucun emprunteur trouvé.</p>
+            {% endif %}
+        </div>
+    </div>
 
     <!-- Bouton Retour -->
     <a href="{{ path('admin_dashboard') }}" class="return-btn">Retour au tableau de bord</a>

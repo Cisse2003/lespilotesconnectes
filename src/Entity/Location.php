@@ -30,6 +30,20 @@ class Location
     #[ORM\Column(type: "string", length: 20, options: ["default" => "en attente"])]
     private ?string $statut = "en attente";
 
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2, nullable: true)]
+    private ?float $commission = null;
+
+    public function getCommission(): ?float
+    {
+        return $this->commission;
+    }
+
+    public function setCommission(?float $commission): self
+    {
+        $this->commission = $commission;
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -80,24 +94,15 @@ class Location
     }
 
     public function getStatut(): string
+    {
+        return $this->statut; 
+    }    
+
+
+public function setStatut(string $statut): self
 {
-    $today = new \DateTime(); // Date actuelle
-
-    if ($this->statut === 'annulé') {
-        return 'Annulé';
-    }
-
-    if ($today > $this->getDateFin()) {
-        return 'Expiré';
-    }
-
-    return 'Payé';
+    $this->statut = $statut;
+    return $this;
 }
 
-
-    public function setStatut(string $statut): self
-    {
-        $this->statut = $statut;
-        return $this;
-    }
 }

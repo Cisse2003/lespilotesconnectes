@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Emprunteur;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,6 +11,11 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Offre;
 use App\Repository\OffreRepository;
+use App\Entity\Location;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Proprietaire;
+use App\Entity\Utilisateur;
+
 
 #[Route('/admin', name: 'admin_')]
 class AdminController extends AbstractController
@@ -30,20 +36,10 @@ class AdminController extends AbstractController
     }
 
     #[Route('/utilisateur', name: 'utilisateurs')]
-    public function manageUsers(UtilisateurRepository $repo): Response
+    public function manageUsers(EntityManagerInterface $entityManager): Response
     {
-        $utilisateurs = $repo->findAll();
-
-        $proprietaires = [];
-        $emprunteurs = [];
-
-        foreach ($utilisateurs as $utilisateur) {
-            if ($utilisateur->getProprietaire()) {
-                $proprietaires[] = $utilisateur;
-            } else {
-                $emprunteurs[] = $utilisateur;
-            }
-        }
+        $proprietaires = $entityManager->getRepository(Proprietaire::class)->findAll();
+        $emprunteurs = $entityManager->getRepository(Emprunteur::class)->findAll();
 
         return $this->render('admin/utilisateurs.html.twig', [
             'proprietaires' => $proprietaires,
@@ -162,5 +158,68 @@ class AdminController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('admin_offres_utilisateur', ['id' => $offre->getProprietaire()->getUtilisateur()->getId()]);
+    }
+
+    #[Route('/locations', name: 'locations')]
+    public function manageLocations(EntityManagerInterface $entityManager): Response
+    {
+        $locations = $entityManager->getRepository(Location::class)->findAll();
+
+        return $this->render('admin/locations.html.twig', [
+            'locations' => $locations,
+        ]);
+    }
+
+    #[Route('/location/{id}/set-commission', name: 'set_commission', methods: ['POST'])]
+    public function setCommission(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $location = $entityManager->getRepository(Location::class)->find($id);
+        if (!$location) {
+            throw $this->createNotFoundException("Location introuvable.");
+        }
+
+        $commission = $request->request->get('commission');
+        if (!is_numeric($commission) || $commission < 0) {
+            $this->addFlash('danger', "La commission doit être un nombre positif.");
+            return $this->redirectToRoute('admin_locations');
+        }
+
+        $location->setCommission(floatval($commission));
+        $entityManager->persist($location);
+        $entityManager->flush();
+
+        $this->addFlash('success', "Commission mise à jour avec succès !");
+        return $this->redirectToRoute('admin_locations');
+    }
+
+    #[Route('/admin/utilisateurs', name: 'admin_utilisateurs')]
+    public function gestionUtilisateurs(
+        ProprietaireRepository $proprietaireRepository,
+        EmprunteurRepository $emprunteurRepository
+    ): Response {
+        $proprietaires = $proprietaireRepository->findAll();
+        $emprunteurs = $emprunteurRepository->findAll();
+
+        return $this->render('admin/utilisateurs.html.twig', [
+            'proprietaires' => $proprietaires,
+            'emprunteurs' => $emprunteurs,
+        ]);
+    }
+
+    #[Route('/emprunteur/{id}/locations', name: 'locations_emprunteur')]
+    public function locationsEmprunteur(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $emprunteur = $entityManager->getRepository(Emprunteur::class)->find($id);
+
+        if (!$emprunteur) {
+            throw $this->createNotFoundException("Emprunteur introuvable.");
+        }
+
+        $locations = $entityManager->getRepository(Location::class)->findBy(['emprunteur' => $emprunteur]);
+
+        return $this->render('admin/locations_emprunteur.html.twig', [
+            'emprunteur' => $emprunteur,
+            'locations' => $locations,
+        ]);
     }
 }

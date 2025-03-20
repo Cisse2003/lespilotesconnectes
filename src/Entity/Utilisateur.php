@@ -34,7 +34,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: 'json', nullable: false)]
     private array $roles = [];
 
     #[ORM\Column(type: 'boolean')]
@@ -55,9 +55,10 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(targetEntity: Emprunteur::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
     private ?Emprunteur $emprunteur = null;
 
+    // ✅ Initialisation correcte dans le constructeur
     public function __construct()
     {
-        $this->roles = [];
+        $this->roles = $this->roles ?? [];
     }
 
     public function getId(): ?int
@@ -103,7 +104,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->telephone;
     }
 
-    public function setTelephone(string $telephone): static
+    public function setTelephone(?string $telephone): static
     {
         $this->telephone = $telephone;
         return $this;
@@ -174,9 +175,10 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
+    // ✅ Ajout de la gestion des rôles sécurisée
     public function getRoles(): array
     {
-        return $this->roles ?: ['ROLE_USER'];
+        return $this->roles ?? ['ROLE_USER'];
     }
 
     public function setRoles(array $roles): self

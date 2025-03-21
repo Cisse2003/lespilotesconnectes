@@ -9,152 +9,80 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
-        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
+        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '89efb1254ef2d1c5d80096acd12c4098' => __DIR__ . '/..' . '/twig/twig/src/Resources/core.php',
         'ffecb95d45175fd40f75be8a23b34f90' => __DIR__ . '/..' . '/twig/twig/src/Resources/debug.php',
         'c7baa00073ee9c61edf148c51917cfb4' => __DIR__ . '/..' . '/twig/twig/src/Resources/escaper.php',
         'f844ccf1d25df8663951193c3fc307c8' => __DIR__ . '/..' . '/twig/twig/src/Resources/string_loader.php',
-        '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
-        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
-        'ac295ee8be42f266c7e20d14b8cf500a' => __DIR__ . '/..' . '/api-platform/jsonld/HydraContext.php',
-        '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
-        '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
-        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        't' => 
-        array (
-            'thiagoalessio\\TesseractOCR\\' => 27,
-        ),
-        'p' => 
-        array (
-            'phpDocumentor\\Reflection\\' => 25,
-        ),
-        'W' => 
-        array (
-            'Webmozart\\Assert\\' => 17,
-        ),
         'T' => 
         array (
-            'Twig\\Extra\\TwigExtraBundle\\' => 27,
             'Twig\\' => 5,
         ),
         'S' => 
         array (
-            'Symfony\\UX\\Turbo\\' => 17,
-            'Symfony\\UX\\StimulusBundle\\' => 26,
-            'Symfony\\Runtime\\Symfony\\Component\\' => 34,
-            'Symfony\\Polyfill\\Uuid\\' => 22,
             'Symfony\\Polyfill\\Php83\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
-            'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
-            'Symfony\\Polyfill\\Intl\\Icu\\' => 26,
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
-            'Symfony\\Flex\\' => 13,
             'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Contracts\\Service\\' => 26,
-            'Symfony\\Contracts\\HttpClient\\' => 29,
             'Symfony\\Contracts\\EventDispatcher\\' => 34,
             'Symfony\\Contracts\\Cache\\' => 24,
-            'Symfony\\Component\\Yaml\\' => 23,
-            'Symfony\\Component\\WebLink\\' => 26,
             'Symfony\\Component\\VarExporter\\' => 30,
             'Symfony\\Component\\VarDumper\\' => 28,
-            'Symfony\\Component\\Validator\\' => 28,
-            'Symfony\\Component\\Uid\\' => 22,
-            'Symfony\\Component\\TypeInfo\\' => 27,
-            'Symfony\\Component\\Translation\\' => 30,
             'Symfony\\Component\\String\\' => 25,
             'Symfony\\Component\\Stopwatch\\' => 28,
-            'Symfony\\Component\\Serializer\\' => 29,
-            'Symfony\\Component\\Security\\Http\\' => 32,
-            'Symfony\\Component\\Security\\Csrf\\' => 32,
-            'Symfony\\Component\\Security\\Core\\' => 32,
-            'Symfony\\Component\\Runtime\\' => 26,
             'Symfony\\Component\\Routing\\' => 26,
-            'Symfony\\Component\\PropertyInfo\\' => 31,
-            'Symfony\\Component\\PropertyAccess\\' => 33,
             'Symfony\\Component\\Process\\' => 26,
-            'Symfony\\Component\\PasswordHasher\\' => 33,
-            'Symfony\\Component\\OptionsResolver\\' => 34,
-            'Symfony\\Component\\Notifier\\' => 27,
-            'Symfony\\Component\\Mime\\' => 23,
-            'Symfony\\Component\\Messenger\\Bridge\\Doctrine\\' => 44,
-            'Symfony\\Component\\Messenger\\' => 28,
-            'Symfony\\Component\\Mailer\\' => 25,
-            'Symfony\\Component\\Intl\\' => 23,
             'Symfony\\Component\\HttpKernel\\' => 29,
             'Symfony\\Component\\HttpFoundation\\' => 33,
-            'Symfony\\Component\\HttpClient\\' => 29,
-            'Symfony\\Component\\Form\\' => 23,
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\Filesystem\\' => 29,
-            'Symfony\\Component\\ExpressionLanguage\\' => 37,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\ErrorHandler\\' => 31,
-            'Symfony\\Component\\Dotenv\\' => 25,
             'Symfony\\Component\\DomCrawler\\' => 29,
             'Symfony\\Component\\DependencyInjection\\' => 38,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Config\\' => 25,
-            'Symfony\\Component\\Clock\\' => 24,
             'Symfony\\Component\\Cache\\' => 24,
             'Symfony\\Component\\BrowserKit\\' => 29,
-            'Symfony\\Component\\Asset\\' => 24,
-            'Symfony\\Component\\AssetMapper\\' => 30,
             'Symfony\\Bundle\\WebProfilerBundle\\' => 33,
             'Symfony\\Bundle\\TwigBundle\\' => 26,
-            'Symfony\\Bundle\\SecurityBundle\\' => 30,
-            'Symfony\\Bundle\\MonologBundle\\' => 29,
             'Symfony\\Bundle\\MakerBundle\\' => 27,
             'Symfony\\Bundle\\FrameworkBundle\\' => 31,
             'Symfony\\Bundle\\DebugBundle\\' => 27,
             'Symfony\\Bridge\\Twig\\' => 20,
             'Symfony\\Bridge\\PhpUnit\\' => 23,
-            'Symfony\\Bridge\\Monolog\\' => 23,
             'Symfony\\Bridge\\Doctrine\\' => 24,
         ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
-            'Psr\\Link\\' => 9,
             'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
-            'Psr\\Clock\\' => 10,
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
-            'PHPStan\\PhpDocParser\\' => 21,
-        ),
-        'N' => 
-        array (
-            'Nelmio\\CorsBundle\\' => 18,
-            'Negotiation\\' => 12,
         ),
         'M' => 
         array (
-            'Monolog\\' => 8,
             'Masterminds\\' => 12,
-        ),
-        'E' => 
-        array (
-            'Egulias\\EmailValidator\\' => 23,
         ),
         'D' => 
         array (
             'Doctrine\\SqlFormatter\\' => 22,
             'Doctrine\\Persistence\\' => 21,
             'Doctrine\\ORM\\' => 13,
-            'Doctrine\\Migrations\\' => 20,
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Inflector\\' => 19,
             'Doctrine\\Deprecations\\' => 22,
@@ -164,73 +92,21 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
             'Doctrine\\Common\\Collections\\' => 28,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\' => 16,
-            'Doctrine\\Bundle\\MigrationsBundle\\' => 33,
             'Doctrine\\Bundle\\FixturesBundle\\' => 31,
             'Doctrine\\Bundle\\DoctrineBundle\\' => 31,
             'DeepCopy\\' => 9,
-        ),
-        'C' => 
-        array (
-            'Composer\\Semver\\' => 16,
         ),
         'A' => 
         array (
             'App\\Tests\\' => 10,
             'App\\' => 4,
-            'ApiPlatform\\Validator\\' => 22,
-            'ApiPlatform\\Symfony\\' => 20,
-            'ApiPlatform\\State\\' => 18,
-            'ApiPlatform\\Serializer\\' => 23,
-            'ApiPlatform\\OpenApi\\' => 20,
-            'ApiPlatform\\Metadata\\' => 21,
-            'ApiPlatform\\JsonSchema\\' => 23,
-            'ApiPlatform\\JsonLd\\' => 19,
-            'ApiPlatform\\Hydra\\' => 18,
-            'ApiPlatform\\HttpCache\\' => 22,
-            'ApiPlatform\\Documentation\\' => 26,
-            'ApiPlatform\\Doctrine\\Orm\\' => 25,
-            'ApiPlatform\\Doctrine\\Common\\' => 28,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'thiagoalessio\\TesseractOCR\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/thiagoalessio/tesseract_ocr/src',
-        ),
-        'phpDocumentor\\Reflection\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-        ),
-        'Webmozart\\Assert\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/webmozart/assert/src',
-        ),
-        'Twig\\Extra\\TwigExtraBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/twig/extra-bundle',
-        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
-        ),
-        'Symfony\\UX\\Turbo\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/ux-turbo/src',
-        ),
-        'Symfony\\UX\\StimulusBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/stimulus-bundle/src',
-        ),
-        'Symfony\\Runtime\\Symfony\\Component\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/runtime/Internal',
-        ),
-        'Symfony\\Polyfill\\Uuid\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-uuid',
         ),
         'Symfony\\Polyfill\\Php83\\' => 
         array (
@@ -244,21 +120,9 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
         ),
-        'Symfony\\Polyfill\\Intl\\Idn\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-idn',
-        ),
-        'Symfony\\Polyfill\\Intl\\Icu\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-icu',
-        ),
         'Symfony\\Polyfill\\Intl\\Grapheme\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
-        ),
-        'Symfony\\Flex\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/flex/src',
         ),
         'Symfony\\Contracts\\Translation\\' => 
         array (
@@ -268,10 +132,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
         ),
-        'Symfony\\Contracts\\HttpClient\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/http-client-contracts',
-        ),
         'Symfony\\Contracts\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
@@ -279,14 +139,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         'Symfony\\Contracts\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/cache-contracts',
-        ),
-        'Symfony\\Component\\Yaml\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/yaml',
-        ),
-        'Symfony\\Component\\WebLink\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/web-link',
         ),
         'Symfony\\Component\\VarExporter\\' => 
         array (
@@ -296,22 +148,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
-        'Symfony\\Component\\Validator\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/validator',
-        ),
-        'Symfony\\Component\\Uid\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/uid',
-        ),
-        'Symfony\\Component\\TypeInfo\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/type-info',
-        ),
-        'Symfony\\Component\\Translation\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/translation',
-        ),
         'Symfony\\Component\\String\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/string',
@@ -320,73 +156,13 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/stopwatch',
         ),
-        'Symfony\\Component\\Serializer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/serializer',
-        ),
-        'Symfony\\Component\\Security\\Http\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/security-http',
-        ),
-        'Symfony\\Component\\Security\\Csrf\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/security-csrf',
-        ),
-        'Symfony\\Component\\Security\\Core\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/security-core',
-        ),
-        'Symfony\\Component\\Runtime\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/runtime',
-        ),
         'Symfony\\Component\\Routing\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/routing',
         ),
-        'Symfony\\Component\\PropertyInfo\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/property-info',
-        ),
-        'Symfony\\Component\\PropertyAccess\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/property-access',
-        ),
         'Symfony\\Component\\Process\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/process',
-        ),
-        'Symfony\\Component\\PasswordHasher\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/password-hasher',
-        ),
-        'Symfony\\Component\\OptionsResolver\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/options-resolver',
-        ),
-        'Symfony\\Component\\Notifier\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/notifier',
-        ),
-        'Symfony\\Component\\Mime\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/mime',
-        ),
-        'Symfony\\Component\\Messenger\\Bridge\\Doctrine\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/doctrine-messenger',
-        ),
-        'Symfony\\Component\\Messenger\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/messenger',
-        ),
-        'Symfony\\Component\\Mailer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/mailer',
-        ),
-        'Symfony\\Component\\Intl\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/intl',
         ),
         'Symfony\\Component\\HttpKernel\\' => 
         array (
@@ -396,14 +172,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
         ),
-        'Symfony\\Component\\HttpClient\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/http-client',
-        ),
-        'Symfony\\Component\\Form\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/form',
-        ),
         'Symfony\\Component\\Finder\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
@@ -412,10 +180,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/filesystem',
         ),
-        'Symfony\\Component\\ExpressionLanguage\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/expression-language',
-        ),
         'Symfony\\Component\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
@@ -423,10 +187,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         'Symfony\\Component\\ErrorHandler\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/error-handler',
-        ),
-        'Symfony\\Component\\Dotenv\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/dotenv',
         ),
         'Symfony\\Component\\DomCrawler\\' => 
         array (
@@ -448,10 +208,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/config',
         ),
-        'Symfony\\Component\\Clock\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/clock',
-        ),
         'Symfony\\Component\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/cache',
@@ -460,14 +216,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/browser-kit',
         ),
-        'Symfony\\Component\\Asset\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/asset',
-        ),
-        'Symfony\\Component\\AssetMapper\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/asset-mapper',
-        ),
         'Symfony\\Bundle\\WebProfilerBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/web-profiler-bundle',
@@ -475,14 +223,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         'Symfony\\Bundle\\TwigBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/twig-bundle',
-        ),
-        'Symfony\\Bundle\\SecurityBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/security-bundle',
-        ),
-        'Symfony\\Bundle\\MonologBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/monolog-bundle',
         ),
         'Symfony\\Bundle\\MakerBundle\\' => 
         array (
@@ -504,10 +244,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/symfony/phpunit-bridge',
         ),
-        'Symfony\\Bridge\\Monolog\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/monolog-bridge',
-        ),
         'Symfony\\Bridge\\Doctrine\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/doctrine-bridge',
@@ -515,10 +251,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
-        ),
-        'Psr\\Link\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/link/src',
         ),
         'Psr\\EventDispatcher\\' => 
         array (
@@ -528,10 +260,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Psr\\Clock\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/clock/src',
-        ),
         'Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
@@ -540,29 +268,9 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
-        'PHPStan\\PhpDocParser\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
-        ),
-        'Nelmio\\CorsBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nelmio/cors-bundle',
-        ),
-        'Negotiation\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/willdurand/negotiation/src/Negotiation',
-        ),
-        'Monolog\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
-        ),
         'Masterminds\\' => 
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
-        ),
-        'Egulias\\EmailValidator\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/egulias/email-validator/src',
         ),
         'Doctrine\\SqlFormatter\\' => 
         array (
@@ -575,10 +283,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         'Doctrine\\ORM\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/orm/src',
-        ),
-        'Doctrine\\Migrations\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/migrations/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -614,12 +318,7 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         ),
         'Doctrine\\Common\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/common/src',
-            1 => __DIR__ . '/..' . '/doctrine/event-manager/src',
-        ),
-        'Doctrine\\Bundle\\MigrationsBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/doctrine-migrations-bundle/src',
+            0 => __DIR__ . '/..' . '/doctrine/event-manager/src',
         ),
         'Doctrine\\Bundle\\FixturesBundle\\' => 
         array (
@@ -633,10 +332,6 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
-        'Composer\\Semver\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/composer/semver/src',
-        ),
         'App\\Tests\\' => 
         array (
             0 => __DIR__ . '/../..' . '/tests',
@@ -645,62 +340,9 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'ApiPlatform\\Validator\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/validator',
-        ),
-        'ApiPlatform\\Symfony\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/symfony',
-        ),
-        'ApiPlatform\\State\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/state',
-        ),
-        'ApiPlatform\\Serializer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/serializer',
-        ),
-        'ApiPlatform\\OpenApi\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/openapi',
-        ),
-        'ApiPlatform\\Metadata\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/metadata',
-        ),
-        'ApiPlatform\\JsonSchema\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/json-schema',
-        ),
-        'ApiPlatform\\JsonLd\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/jsonld',
-        ),
-        'ApiPlatform\\Hydra\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/hydra',
-        ),
-        'ApiPlatform\\HttpCache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/http-cache',
-        ),
-        'ApiPlatform\\Documentation\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/documentation',
-        ),
-        'ApiPlatform\\Doctrine\\Orm\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/doctrine-orm',
-        ),
-        'ApiPlatform\\Doctrine\\Common\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/api-platform/doctrine-common',
-        ),
     );
 
     public static $classMap = array (
-        'Collator' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/Collator.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
         'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
@@ -711,10 +353,7 @@ class ComposerStaticInitb0137dd6ad2534b84686e77ae7e49da2
         'DateMalformedStringException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateMalformedStringException.php',
         'DateObjectError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateObjectError.php',
         'DateRangeError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
-        'IntlDateFormatter' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/IntlDateFormatter.php',
-        'Locale' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/Locale.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
-        'NumberFormatter' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/NumberFormatter.php',
         'Override' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/Override.php',
         'PHPUnit\\Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit\\Framework\\ActualValueIsNotAnObjectException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Exception/ActualValueIsNotAnObjectException.php',

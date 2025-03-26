@@ -23,15 +23,15 @@ class Location
     #[ORM\JoinColumn(nullable: false)]
     private ?Offre $offre = null;
 
-    #[ORM\ManyToOne(targetEntity: Emprunteur::class, inversedBy: "locations")]
+    #[ORM\ManyToOne(targetEntity: Emprunteur::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")] 
     private ?Emprunteur $emprunteur = null;
 
     #[ORM\Column(type: "string", length: 20, options: ["default" => "en attente"])]
     private ?string $statut = "en attente";
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2, nullable: true)]
-    private ?float $commission = null;
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    private float $commission;
 
     public function getCommission(): ?float
     {

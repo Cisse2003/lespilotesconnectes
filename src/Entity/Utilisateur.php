@@ -55,6 +55,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(targetEntity: Emprunteur::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
     private ?Emprunteur $emprunteur = null;
 
+
+    #[ORM\OneToOne(mappedBy: "utilisateur", cascade: ["persist", "remove"])]
+    private ?Administrateur $administrateur = null;
+
+
     // ✅ Initialisation correcte dans le constructeur
     public function __construct()
     {
@@ -218,6 +223,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmprunteur(?Emprunteur $emprunteur): self
     {
         $this->emprunteur = $emprunteur;
+        return $this;
+    }
+    
+    public function getAdministrateur(): ?Administrateur
+    {
+        return $this->administrateur;
+    }
+
+    public function setAdministrateur(?Administrateur $administrateur): self
+    {
+        $this->administrateur = $administrateur;
         return $this;
     }
 }

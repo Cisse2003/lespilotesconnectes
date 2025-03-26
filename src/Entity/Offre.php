@@ -27,7 +27,7 @@ class Offre
     #[Assert\NotBlank]
     private ?string $lieuGarage = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    #[ORM\Column(type: "float")]
     #[Assert\NotBlank]
     #[Assert\Positive]
     private ?float $prix = null;
@@ -39,7 +39,7 @@ class Offre
     #[ORM\JoinColumn(nullable: false)]
     private ?Voiture $voiture = null;
 
-    #[ORM\ManyToOne(targetEntity: Proprietaire::class)]
+    #[ORM\ManyToOne(targetEntity: Proprietaire::class, inversedBy: "offres")]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Proprietaire $proprietaire = null;
 

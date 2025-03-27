@@ -15,7 +15,8 @@ use App\Entity\Location;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Proprietaire;
 use App\Entity\Utilisateur;
-
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[Route('/admin', name: 'admin_')]
 class AdminController extends AbstractController
@@ -66,7 +67,12 @@ class AdminController extends AbstractController
             throw $this->createNotFoundException("Utilisateur introuvable.");
         }
 
+        dump($utilisateur); // Vérifiez si l'utilisateur est trouvé
+
         $proprietaire = $utilisateur->getProprietaire();
+
+        dump($proprietaire); // Vérifiez si le propriétaire est bien récupéré
+
         if (!$proprietaire) {
             throw $this->createNotFoundException("Cet utilisateur n'est pas un propriétaire et n'a pas d'offres.");
         }
@@ -78,6 +84,7 @@ class AdminController extends AbstractController
             'offres' => $offres,
         ]);
     }
+
 
     #[Route('/utilisateur/{id}/suspendre', name: 'suspendre_utilisateur', methods: ['POST'])]
     public function suspendUser(int $id, UtilisateurRepository $utilisateurRepository, EntityManagerInterface $entityManager): Response
@@ -97,27 +104,63 @@ class AdminController extends AbstractController
     }
 
     #[Route('/utilisateur/{id}/supprimer', name: 'supprimer_utilisateur', methods: ['POST'])]
-    public function deleteUser(int $id, UtilisateurRepository $utilisateurRepository, EntityManagerInterface $entityManager): Response
-    {
+    public function deleteUser(
+        int $id,
+        UtilisateurRepository $utilisateurRepository,
+        EntityManagerInterface $entityManager,
+        MailerInterface $mailer,
+        Request $request
+    ): Response {
         $utilisateur = $utilisateurRepository->find($id);
-
         if (!$utilisateur) {
             throw $this->createNotFoundException("Utilisateur introuvable.");
         }
 
+        // Récupérer la cause du bannissement depuis la requête (par exemple, un champ caché dans le formulaire)
+        $causeBannissement = $request->request->get('cause_bannissement', 'Non respect des conditions d\'utilisation');
+
+        // Préparer et envoyer l'email avant la suppression
+        $email = (new Email())
+            ->from('lespilotes@lespilotesconnectes.com')
+            ->to($utilisateur->getEmail())
+            ->subject('Votre compte a été banni')
+            ->html("
+                <p>Bonjour {$utilisateur->getPrenom()} {$utilisateur->getNom()},</p>
+                <p>Nous vous informons que votre compte sur PRÉKAR a été banni.</p>
+                <p><strong>Cause du bannissement :</strong> {$causeBannissement}</p>
+                <p>Si vous pensez qu'il s'agit d'une erreur, veuillez contacter notre support à lespilotes@lespilotesconnectes.com.</p>
+                <p>Cordialement,<br>L'équipe PRÉKAR</p>
+            ");
+
+        $mailer->send($email);
+
+        // Suppression des données associées
+        $proprietaire = $entityManager->getRepository(Proprietaire::class)->findOneBy(['utilisateur' => $utilisateur]);
+        if ($proprietaire) {
+            $offres = $proprietaire->getOffres();
+            foreach ($offres as $offre) {
+                $entityManager->remove($offre);
+            }
+            $entityManager->remove($proprietaire);
+        }
+
+        $emprunteur = $entityManager->getRepository(Emprunteur::class)->findOneBy(['utilisateur' => $utilisateur]);
+        if ($emprunteur) {
+            $locations = $entityManager->getRepository(Location::class)->findBy(['emprunteur' => $emprunteur]);
+            foreach ($locations as $location) {
+                $entityManager->remove($location);
+            }
+            $entityManager->remove($emprunteur);
+        }
+
+        // Supprimer l'utilisateur
         $entityManager->remove($utilisateur);
         $entityManager->flush();
 
-        $this->addFlash('success', "L'utilisateur a été supprimé.");
+        $this->addFlash('success', "L'utilisateur a été banni et un email lui a été envoyé.");
         return $this->redirectToRoute('admin_utilisateurs');
     }
 
-
-    #[Route('/admin/logout', name: 'admin_logout')]
-    public function logout(): void
-    {
-        throw new \Exception('Ne pas oublier d\'activer le gestionnaire de déconnexion dans security.yaml');
-    }
 
     #[Route('/offre/{id}/details', name: 'offre_detail', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
@@ -222,4 +265,39 @@ class AdminController extends AbstractController
             'locations' => $locations,
         ]);
     }
+
+    #[Route('/admin/verser-montant/{id}', name: 'admin_verser_montant')]
+    public function verserMontant(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $utilisateur = $entityManager->getRepository(Utilisateur::class)->find($id);
+        dump($utilisateur);
+
+        if (!$utilisateur) {
+            throw $this->createNotFoundException("Utilisateur introuvable.");
+        }
+
+        $proprietaire = $entityManager->getRepository(Proprietaire::class)->findOneBy(['utilisateur' => $utilisateur]);
+        dump($proprietaire);
+
+        // Simuler le paiement en réinitialisant le montant à zéro
+        $proprietaire->setRevenuTotal(0.0);
+        $entityManager->persist($proprietaire);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le montant a été versé au propriétaire.');
+        return $this->redirectToRoute('admin_utilisateurs');
+    }
+
+    #[Route('/litiges', name: 'litiges')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function manageLitiges(EntityManagerInterface $entityManager): Response
+    {
+        // Supposons qu'il existe une entité Litige
+        $litiges = $entityManager->getRepository('App\Entity\Litige')->findAll();
+
+        return $this->render('admin/litiges.html.twig', [
+            'litiges' => $litiges,
+        ]);
+    }
+
 }

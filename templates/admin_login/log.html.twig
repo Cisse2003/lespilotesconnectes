@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Admin</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/style1.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style2.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <style>
         /* === Style général du body === */
         body {
@@ -80,11 +83,34 @@
             font-size: 18px;
             margin-top: 15px;
             transition: 0.3s ease;
+            font-weight: bold;
         }
 
         /* === Effet hover bouton === */
         .login-container button:hover {
             background: linear-gradient(135deg, #556cd6, #5a3d91);
+        }
+
+        /* === Bouton de retour === */
+        .back-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border: none;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+            font-weight: bold;
+        }
+
+        /* === Effet hover bouton de retour === */
+        .back-button:hover {
+            background: linear-gradient(135deg, #556cd6, #5a3d91);
+            color: white;
+            text-decoration: none;
         }
 
         /* === Messages d'erreur === */
@@ -121,6 +147,11 @@
                 font-size: 16px;
                 padding: 10px;
             }
+
+            .back-button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
         }
 
         @media screen and (max-width: 768px) {
@@ -147,10 +178,17 @@
     {% endif %}
 
     <form method="post">
-        <input type="email" name="_username" placeholder="Email" value="{{ last_username }}" required>
-        <input type="password" name="_password" placeholder="Mot de passe" required>
+        <label for="inputEmail">Email</label>
+        <input type="email" name="_username" value="{{ last_username }}" required>
+
+        <label for="inputPassword">Mot de passe</label>
+        <input type="password" name="_password" required>
+
         <button type="submit">Se connecter</button>
     </form>
+
+    <!-- Bouton de retour vers la homepage -->
+    <a href="{{ path('homepage') }}" class="back-button">Retour</a>
 </div>
 </body>
 </html>

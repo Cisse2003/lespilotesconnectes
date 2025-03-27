@@ -22,7 +22,7 @@
             border-radius: 20px;
             padding: 20px;
             width: 90%;
-            max-width: 800px;
+            max-width: 900px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             color: #333;
             text-align: center;
@@ -40,27 +40,27 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .litige-card {
-            background-color: #d8c3f3;
-            padding: 15px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
             border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            text-align: left;
+            overflow: hidden;
         }
 
-        .litige-card h2 {
-            font-size: 18px;
-            font-weight: bold;
-            color: #4b0082;
-            margin-bottom: 10px;
-            text-transform: uppercase;
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
         }
 
-        .litige-card p {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #333;
+        th {
+            background-color: #4b0082;
+            color: white;
+        }
+
+        td {
+            background-color: #d8c3f3;
         }
 
         .no-litiges {
@@ -93,14 +93,24 @@
 <div class="container">
     <h1>Gestion des litiges</h1>
     {% if litiges|length > 0 %}
-        {% for litige in litiges %}
-            <div class="litige-card">
-                <h2>Litige #{{ litige.id }}</h2>
-                <p><strong>Description :</strong> {{ litige.description }}</p>
-                <p><strong>Statut :</strong> {{ litige.statut }}</p>
-                <!-- Ajoutez d'autres champs selon votre entité Litige -->
-            </div>
-        {% endfor %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>Statut</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for litige in litiges %}
+                <tr>
+                    <td>{{ litige.id }}</td>
+                    <td>{{ litige.description }}</td>
+                    <td>{{ litige.statut }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <p class="no-litiges">Aucun litige en cours.</p>
     {% endif %}

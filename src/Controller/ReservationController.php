@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Location;
 use App\Entity\Offre;
 use App\Entity\Emprunteur;
+use App\Entity\Administrateur;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,7 +25,6 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        // Vérifier les locations existantes pour cette voiture
         $locations = $entityManager->getRepository(Location::class)->findBy(['offre' => $offre]);
 
         $datesIndisponibles = [];
@@ -42,137 +42,143 @@ class ReservationController extends AbstractController
     }
 
     #[Route('/valider', name: 'valider_reservation', methods: ['POST'])]
-public function validerReservation(Request $request, EntityManagerInterface $entityManager, Security $security): JsonResponse
-{
-    $utilisateur = $security->getUser();
-    if (!$utilisateur) {
-        return new JsonResponse(['success' => false, 'error' => 'Vous devez être connecté pour réserver.']);
-    }
+    public function validerReservation(Request $request, EntityManagerInterface $entityManager, Security $security): JsonResponse
+    {
+        $utilisateur = $security->getUser();
+        if (!$utilisateur) {
+            return new JsonResponse(['success' => false, 'error' => 'Vous devez être connecté pour réserver.']);
+        }
 
-    // 🔥 Récupérer l'emprunteur associé à l'utilisateur
-    $emprunteur = $entityManager->getRepository(Emprunteur::class)->findOneBy(['utilisateur' => $utilisateur]);
-
-    // ✅ Si l'emprunteur n'existe pas
-    if (!$emprunteur) {
-        return new JsonResponse([
-            'success' => false,
-            'error' => '⚠️ Vous devez valider votre permis avant de réserver.'
-        ]);
-    }
-
-    // 🔍 Vérifier si le permis est bien renseigné et valide
-    if (!$emprunteur->getNumeroPermis() || !$emprunteur->getDateExpiration() || $emprunteur->getDateExpiration() < new \DateTime()) {
-        return new JsonResponse([
-            'success' => false,
-            'error' => '⚠️ Votre permis est invalide ou expiré. Veuillez mettre à jour vos informations.'
-        ]);
-    }
-
-    // Récupération des données de la requête
-    $data = json_decode($request->getContent(), true);
-    $idOffre = $data['id_offre'] ?? null;
-    $dateDebut = new \DateTime($data['date_debut'] ?? null);
-    $dateFin = new \DateTime($data['date_fin'] ?? null);
-
-    if (!$idOffre || !$dateDebut || !$dateFin) {
-        return new JsonResponse(['success' => false, 'error' => 'Données invalides.']);
-    }
-
-    $offre = $entityManager->getRepository(Offre::class)->find($idOffre);
-    if (!$offre) {
-        return new JsonResponse(['success' => false, 'error' => 'Offre introuvable.']);
-    }
-
-    // Vérification des disponibilités
-    $locations = $entityManager->getRepository(Location::class)->findBy(['offre' => $offre]);
-    foreach ($locations as $location) {
-        if (($dateDebut >= $location->getDateDebut() && $dateDebut <= $location->getDateFin()) ||
-            ($dateFin >= $location->getDateDebut() && $dateFin <= $location->getDateFin()) ||
-            ($dateDebut <= $location->getDateDebut() && $dateFin >= $location->getDateFin())) {
+        $emprunteur = $entityManager->getRepository(Emprunteur::class)->findOneBy(['utilisateur' => $utilisateur]);
+        if (!$emprunteur) {
             return new JsonResponse([
                 'success' => false,
-                'error' => 'Ces dates ne sont pas disponibles.',
-                'datesIndisponibles' => array_map(function ($l) {
-                    return [
-                        'debut' => $l->getDateDebut()->format('Y-m-d'),
-                        'fin' => $l->getDateFin()->format('Y-m-d')
-                    ];
-                }, $locations)
+                'error' => '⚠️ Vous devez valider votre permis avant de réserver.'
             ]);
         }
+
+        if (!$emprunteur->getNumeroPermis() || !$emprunteur->getDateExpiration() || $emprunteur->getDateExpiration() < new \DateTime()) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => '⚠️ Votre permis est invalide ou expiré. Veuillez mettre à jour vos informations.'
+            ]);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $idOffre = $data['id_offre'] ?? null;
+        $dateDebut = new \DateTime($data['date_debut'] ?? null);
+        $dateFin = new \DateTime($data['date_fin'] ?? null);
+
+        if (!$idOffre || !$dateDebut || !$dateFin) {
+            return new JsonResponse(['success' => false, 'error' => 'Données invalides.']);
+        }
+
+        $offre = $entityManager->getRepository(Offre::class)->find($idOffre);
+        if (!$offre) {
+            return new JsonResponse(['success' => false, 'error' => 'Offre introuvable.']);
+        }
+
+        $locations = $entityManager->getRepository(Location::class)->findBy(['offre' => $offre]);
+        foreach ($locations as $location) {
+            if (($dateDebut >= $location->getDateDebut() && $dateDebut <= $location->getDateFin()) ||
+                ($dateFin >= $location->getDateDebut() && $dateFin <= $location->getDateFin()) ||
+                ($dateDebut <= $location->getDateDebut() && $dateFin >= $location->getDateFin())) {
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => 'Ces dates ne sont pas disponibles.',
+                    'datesIndisponibles' => array_map(function ($l) {
+                        return [
+                            'debut' => $l->getDateDebut()->format('Y-m-d'),
+                            'fin' => $l->getDateFin()->format('Y-m-d')
+                        ];
+                    }, $locations)
+                ]);
+            }
+        }
+
+        // Calcul de la commission pour les administrateurs
+        $admins = $entityManager->getRepository(Administrateur::class)->findAll();
+        $commission = $offre->getCommission();
+
+        if (!empty($admins) && $commission > 0) {
+            $partParAdmin = $commission / count($admins);
+            foreach ($admins as $admin) {
+                $admin->ajouterCommission($partParAdmin);
+                $entityManager->persist($admin);
+            }
+        }
+
+        // Création de la réservation
+        $location = new Location();
+        $location->setDateDebut($dateDebut);
+        $location->setDateFin($dateFin);
+        $location->setOffre($offre);
+        $location->setEmprunteur($emprunteur);
+
+        // Mise à jour du revenuTotal du propriétaire
+        $proprietaire = $offre->getProprietaire();
+        $prixOffre = $offre->getPrix();
+        $revenuActuel = $proprietaire->getRevenuTotal() ?? 0.0;
+        $nouveauRevenu = $revenuActuel + $prixOffre;
+        $nouveauRevenu = $nouveauRevenu * 0.90;
+        $proprietaire->setRevenuTotal($nouveauRevenu);
+
+        $entityManager->persist($location);
+        $entityManager->persist($proprietaire);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'message' => 'Réservation effectuée avec succès.']);
     }
 
-    // Création de la réservation
-    $location = new Location();
-    $location->setDateDebut($dateDebut);
-    $location->setDateFin($dateFin);
-    $location->setOffre($offre);
-    $location->setEmprunteur($emprunteur);
+    #[Route('/mes-reservations', name: 'mes_reservations')]
+    public function mesReservations(EntityManagerInterface $entityManager, Security $security): Response
+    {
+        $utilisateur = $security->getUser();
 
-    $entityManager->persist($location);
-    $entityManager->flush();
+        if (!$utilisateur) {
+            return $this->redirectToRoute('app_login');
+        }
 
-    return new JsonResponse(['success' => true, 'message' => 'Réservation effectuée avec succès.']);
-}
+        $emprunteur = $entityManager->getRepository(Emprunteur::class)->findOneBy(['utilisateur' => $utilisateur]);
+        if (!$emprunteur) {
+            return $this->render('reservation/mes_reservations.html.twig', ['reservations' => []]);
+        }
 
+        $reservations = $entityManager->getRepository(Location::class)->findBy(['emprunteur' => $emprunteur]);
 
-
-#[Route('/mes-reservations', name: 'mes_reservations')]
-public function mesReservations(EntityManagerInterface $entityManager, Security $security): Response
-{
-    $utilisateur = $security->getUser();
-    
-    if (!$utilisateur) {
-        return $this->redirectToRoute('app_login'); // Redirige vers la connexion si l'utilisateur n'est pas connecté
+        return $this->render('reservation/mes_reservations.html.twig', [
+            'reservations' => $reservations
+        ]);
     }
 
-    // Récupérer l'emprunteur lié à l'utilisateur
-    $emprunteur = $entityManager->getRepository(Emprunteur::class)->findOneBy(['utilisateur' => $utilisateur]);
+    #[Route('/reservation/annuler/{id}', name: 'annuler_reservation', methods: ['POST'])]
+    public function annulerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $reservation = $entityManager->getRepository(Location::class)->find($id);
 
-    if (!$emprunteur) {
-        return $this->render('reservation/mes_reservations.html.twig', ['reservations' => []]); // Affiche la page même si vide
+        if (!$reservation) {
+            return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
+        }
+
+        $reservation->setStatut('Annulé');
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true]);
     }
 
-    // Récupérer les réservations de cet emprunteur
-    $reservations = $entityManager->getRepository(Location::class)->findBy(['emprunteur' => $emprunteur]);
+    #[Route('/reservation/supprimer/{id}', name: 'supprimer_reservation', methods: ['POST'])]
+    public function supprimerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $reservation = $entityManager->getRepository(Location::class)->find($id);
 
-    return $this->render('reservation/mes_reservations.html.twig', [
-        'reservations' => $reservations
-    ]);
-}
+        if (!$reservation) {
+            return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
+        }
 
-#[Route('/reservation/annuler/{id}', name: 'annuler_reservation', methods: ['POST'])]
-public function annulerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
-{
-    $reservation = $entityManager->getRepository(Location::class)->find($id);
+        $entityManager->remove($reservation);
+        $entityManager->flush();
 
-    if (!$reservation) {
-        return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
+        return new JsonResponse(['success' => true]);
     }
-
-    $reservation->setStatut('Annulé');
-    $entityManager->persist($reservation); // ✅ Ajout du persist() pour enregistrer la modification
-    $entityManager->flush(); // ✅ Appliquer les changements
-
-    return new JsonResponse(['success' => true]);
-}
-
-#[Route('/reservation/supprimer/{id}', name: 'supprimer_reservation', methods: ['POST'])]
-public function supprimerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
-{
-    $reservation = $entityManager->getRepository(Location::class)->find($id);
-
-    if (!$reservation) {
-        return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
-    }
-
-    $entityManager->remove($reservation);
-    $entityManager->flush(); // ✅ Ajout de flush()
-
-    return new JsonResponse(['success' => true]);
-}
-
-
-
-
 }

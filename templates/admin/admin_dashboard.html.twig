@@ -17,64 +17,104 @@
             box-sizing: border-box;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .dashboard-container {
             width: 100%;
-            max-width: 600px;
-            padding: 30px;
+            max-width: 900px;
+            padding: 25px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            animation: fadeIn 0.5s ease-in-out;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.6s ease-in-out;
         }
 
-        .dashboard-container h1 {
-            font-size: 26px;
-            color: #333;
-            margin-bottom: 15px;
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #d8c3f3;
+            padding-bottom: 15px;
+        }
+
+        .welcome h1 {
+            font-size: 24px;
+            color: #4b0082;
             font-weight: 600;
+            margin: 0;
         }
 
-        .dashboard-container p {
+        .welcome p {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0 0;
+        }
+
+        .commission-box {
+            background: #d8c3f3;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .commission-box h2 {
             font-size: 16px;
-            color: #555;
+            color: #4b0082;
+            margin: 0 0 5px;
+            font-weight: 500;
         }
 
-        .dashboard-container ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 20px;
+        .commission-box .commission-value {
+            font-size: 22px;
+            font-weight: bold;
+            color: #4b0082;
         }
 
-        .dashboard-container ul li {
-            margin: 10px 0;
+        .actions-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
         }
 
-        .dashboard-container ul li a {
-            display: block;
-            padding: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .action-btn {
+            flex: 1 1 200px;
+            padding: 15px;
+            background: #4b0082;
             color: white;
             border-radius: 8px;
             text-decoration: none;
-            font-size: 18px;
-            transition: 0.3s;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            transition: background 0.3s ease, box-shadow 0.2s ease;
         }
 
-        .dashboard-container ul li a:hover {
-            background: linear-gradient(135deg, #556cd6, #5a3d91);
+        .action-btn:hover {
+            background: #3a0061;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-section {
+            text-align: center;
         }
 
         .logout-btn {
-            margin-top: 20px;
             display: inline-block;
-            padding: 10px 15px;
+            padding: 10px 25px;
             background: #e74c3c;
             color: white;
             border-radius: 8px;
             text-decoration: none;
-            font-size: 18px;
-            transition: 0.3s;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
         }
 
         .logout-btn:hover {
@@ -84,17 +124,55 @@
 </head>
 <body>
 <div class="dashboard-container">
-    <h1>Bienvenue, {{ admin.nom }} {{ admin.prenom }}</h1>
-    <p>Ceci est votre tableau de bord d'administration.</p>
+    <div class="top-section">
+        <div class="welcome">
+            <h1>Bienvenue, {{ admin.nom }} {{ admin.prenom }}</h1>
+            <p>Votre tableau de bord d'administration</p>
+        </div>
+        <div class="commission-box">
+            <h2>Total des commissions</h2>
+            <div class="commission-value">
+                <span id="commission-value" data-value="{{ admin.commissionTotale }}">0 €</span>
+            </div>
+        </div>
+    </div>
 
-    <ul>
-        <li><a href="{{ path('admin_utilisateurs') }}">Gérer les utilisateurs</a></li>
-        <li><a href="{{ path('admin_offres') }}">Gérer les offres</a></li>
-        <li><a href="{{ path('admin_locations') }}">Gérer les locations</a></li>  <!-- Bouton ajouté -->
-    </ul>
+    <div class="actions-section">
+        <a href="{{ path('admin_utilisateurs') }}" class="action-btn">Gérer les utilisateurs</a>
+        <a href="{{ path('admin_offres') }}" class="action-btn">Gérer les offres</a>
+        <a href="{{ path('admin_locations') }}" class="action-btn">Gérer les locations</a>
+        <a href="{{ path('admin_litiges') }}" class="action-btn">Consulter les litiges</a>
+    </div>
 
-    <!-- Bouton de déconnexion -->
-    <a href="{{ path('admin_logout') }}" class="logout-btn">Déconnexion</a>
+    <div class="logout-section">
+        <a href="{{ path('admin_logout') }}" class="logout-btn">Déconnexion</a>
+    </div>
 </div>
+
+<script>
+    function animateNumbers(target, start, end, duration) {
+        let range = end - start;
+        let current = start;
+        let increment = range / (duration / 16);
+        let stepTime = 16;
+
+        function updateNumber() {
+            current += increment;
+            if (current >= end) {
+                current = end;
+                clearInterval(timer);
+            }
+            target.innerText = current.toLocaleString("fr-FR", { minimumFractionDigits: 2 }) + " €";
+        }
+
+        let timer = setInterval(updateNumber, stepTime);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let commissionElement = document.getElementById("commission-value");
+        let commissionTotale = parseFloat(commissionElement.dataset.value);
+        animateNumbers(commissionElement, 0, commissionTotale, 2000);
+    });
+</script>
 </body>
 </html>

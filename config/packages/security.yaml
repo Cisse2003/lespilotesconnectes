@@ -24,7 +24,7 @@ security:
                 default_target_path: admin_dashboard  # Redirige après login réussi
             logout:
                 path: admin_logout
-                target: app_login
+                target: homepage
             access_denied_url: admin_login  # Si accès refusé, aller au login
             remember_me:
                 secret: '%kernel.secret%'

@@ -196,4 +196,15 @@ class Offre
         $this->suspendedUntil = $suspendedUntil;
         return $this;
     }
+
+    public function getCommission(): float
+    {
+        return $this->prix * 0.10;
+    }
+
+    public function getRevenuProprietaire(): float
+    {
+        return $this->prix * 0.90; // Déduit 10% de commission
+    }
+
 }

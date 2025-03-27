@@ -162,13 +162,18 @@
                         <h3>{{ proprietaire.utilisateur.nom }} {{ proprietaire.utilisateur.prenom }}</h3>
                         <p><strong>Email :</strong> {{ proprietaire.utilisateur.email }}</p>
                         <p><strong>Rôle :</strong> {{ proprietaire.utilisateur.roles|join(', ') }}</p>
+                        <p><strong>Montant Total des Locations :</strong> {{ proprietaire.revenuTotal|number_format(2, ',', ' ') }} €</p>
                         <div class="actions">
                             <a href="{{ path('admin_offres_utilisateur', {id: proprietaire.utilisateur.id}) }}" class="btn">Voir offres</a>
-                            <form action="{{ path('admin_suspendre_utilisateur', {id: proprietaire.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cet utilisateur ?')">
-                                <button class="btn suspend-btn" type="submit">Suspendre</button>
+                            <form action="{{ path('admin_admin_verser_montant', {id: proprietaire.utilisateur.id}) }}" method="POST" onsubmit="return effectuerVersement(event, this)">
+                             <button class="btn" type="submit">Virement</button>
                             </form>
-                            <form action="{{ path('admin_supprimer_utilisateur', {id: proprietaire.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous supprimer cet utilisateur ?')">
-                                <button class="btn delete-btn" type="submit">Supprimer</button>
+                           <!-- <form action="{{ path('admin_suspendre_utilisateur', {id: proprietaire.utilisateur.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cet utilisateur ?')">
+                                <button class="btn suspend-btn" type="submit">Suspendre</button>
+                            </form> -->
+                            <form action="{{ path('admin_supprimer_utilisateur', {id: proprietaire.utilisateur.id}) }}" method="POST" onsubmit="return confirmBannissement(this)">
+                                <input type="hidden" name="cause_bannissement" id="cause_bannissement_{{ proprietaire.utilisateur.id }}">
+                                <button class="btn delete-btn" type="submit">Bannir</button>
                             </form>
                         </div>
                     </div>
@@ -190,11 +195,12 @@
                         <p><strong>Rôle :</strong> {{ utilisateur.utilisateur.roles|join(', ') }}</p>
                         <div class="actions">
                             <a href="{{ path('admin_locations_emprunteur', {id: utilisateur.id}) }}" class="btn">Voir locations</a>
-                            <form action="{{ path('admin_suspendre_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cet utilisateur ?')">
+                           <!-- <form action="{{ path('admin_suspendre_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cet utilisateur ?')">
                                 <button class="btn suspend-btn" type="submit">Suspendre</button>
-                            </form>
-                            <form action="{{ path('admin_supprimer_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous supprimer cet utilisateur ?')">
-                                <button class="btn delete-btn" type="submit">Supprimer</button>
+                            </form> -->
+                            <form action="{{ path('admin_supprimer_utilisateur', {id: utilisateur.id}) }}" method="POST" onsubmit="return confirmBannissement(this)">
+                                <input type="hidden" name="cause_bannissement" id="cause_bannissement_{{ utilisateur.id }}">
+                                <button class="btn delete-btn" type="submit">Bannir</button>
                             </form>
                         </div>
                     </div>
@@ -208,6 +214,46 @@
     <!-- Bouton Retour -->
     <a href="{{ path('admin_dashboard') }}" class="return-btn">Retour au tableau de bord</a>
 </div>
+
+<script>
+    function effectuerVersement(event, form) {
+        event.preventDefault();  // Empêcher l'envoi immédiat du formulaire
+
+        if (confirm('Confirmer le virement à cet utilisateur ?')) {
+            // Afficher un pop-up temporaire
+            let popup = document.createElement("div");
+            popup.innerText = "✅ Versement effectué avec succès !";
+            popup.style.position = "fixed";
+            popup.style.top = "20px";
+            popup.style.left = "50%";
+            popup.style.transform = "translateX(-50%)";
+            popup.style.background = "#4b0082";
+            popup.style.color = "white";
+            popup.style.padding = "10px 20px";
+            popup.style.borderRadius = "8px";
+            popup.style.fontSize = "16px";
+            popup.style.boxShadow = "0 4px 6px rgba(0,0,0,0.2)";
+            document.body.appendChild(popup);
+
+            // Masquer le pop-up après 3 secondes
+            setTimeout(() => {
+                popup.remove();
+                form.submit();
+            }, 3000);
+        }
+    }
+
+    function confirmBannissement(form) {
+        const cause = prompt("Veuillez indiquer la cause du bannissement :");
+        if (cause === null || cause.trim() === "") {
+            alert("Vous devez fournir une cause pour le bannissement.");
+            return false; // Annule la soumission
+        }
+        form.querySelector('input[name="cause_bannissement"]').value = cause;
+        return confirm("Voulez-vous vraiment bannir cet utilisateur ?");
+    }
+</script>
+
 
 </body>
 </html>

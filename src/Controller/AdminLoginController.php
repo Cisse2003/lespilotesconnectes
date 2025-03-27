@@ -30,6 +30,6 @@ class AdminLoginController extends AbstractController
     #[Route('/admin/logout', name: 'admin_logout')]
     public function logout()
     {
-        throw new \Exception('This should never be reached!');
+        // Symfony s'en charge !
     }
 }

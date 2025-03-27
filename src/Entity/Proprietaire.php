@@ -22,6 +22,30 @@ class Proprietaire
     #[ORM\OneToMany(mappedBy: "proprietaire", targetEntity: Offre::class, cascade: ["persist", "remove"])]
     private Collection $offres;
 
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2, options: ["default" => 0])]
+    private ?float $revenuTotal = 0.0;
+
+    public function getRevenuTotal(): ?float
+    {
+        return $this->revenuTotal;
+    }
+
+    public function setRevenuTotal(float $revenuTotal): static
+    {
+        $this->revenuTotal = $revenuTotal;
+        return $this;
+    }
+
+    public function calculerTotalRevenu(): float
+    {
+        $total = 0;
+        foreach ($this->offres as $offre) {
+            $total += $offre->getPrix() * 0.90; // Déduction de 10%
+        }
+        $this->setRevenuTotal($total);
+        return $total;
+    }
+
     public function __construct()
     {
         $this->offres = new ArrayCollection();

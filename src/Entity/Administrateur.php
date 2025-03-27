@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 
+
 #[ORM\Entity(repositoryClass: AdministrateurRepository::class)]
 class Administrateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -34,6 +35,26 @@ class Administrateur implements UserInterface, PasswordAuthenticatedUserInterfac
     #[ORM\OneToOne(inversedBy: "administrateur", cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(nullable: true)] // Permettre un Administrateur sans Utilisateur
     private ?Utilisateur $utilisateur = null;
+
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2, options: ["default" => 0])]
+    private ?float $commissionTotale = 0;
+
+    public function getCommissionTotale(): ?float
+    {
+        return $this->commissionTotale;
+    }
+
+    public function setCommissionTotale(float $commission): self
+    {
+        $this->commissionTotale = $commission;
+        return $this;
+    }
+
+    public function ajouterCommission(float $montant): self
+    {
+        $this->commissionTotale += $montant;
+        return $this;
+    }
 
     public function getId(): ?int
     {

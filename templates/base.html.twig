@@ -60,14 +60,14 @@
                                 <li class="scroll"><a href="#brand">Brands</a></li>
                                 <li class="scroll"><a href="#contact">Contact</a></li>
 
-                              {# Boutons Connexion / Inscription / Déconnexion #}
-				{% if app.user %}
-				    <li class="nav-item">
-					<a class="nav-link profile-link" href="{{ path('app_profile') }}">
-					    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <img src="{{ asset(app.user.profileImage ? 'uploads/profile_images/' ~ app.user.profileImage : 'uploads/profile_images/default-photo.png') }}"
-						     alt="Profil"
-						     style="
+                                {# Boutons Connexion / Inscription / Déconnexion #}
+                                {% if app.user %}
+                                    <li class="nav-item">
+                                        <a class="nav-link profile-link" href="{{ path('app_profile') }}">
+                                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                                <img src="{{ asset(app.user.profileImage ? 'uploads/profile_images/' ~ app.user.profileImage : 'uploads/profile_images/default-photo.png') }}"
+                                                     alt="Profil"
+                                                     style="
 						       width:50px !important;
 						       height:50px !important;
 						       max-width:none !important;
@@ -76,16 +76,16 @@
 						       object-fit:cover !important;
 						       margin-top: -15px !important;
 						     ">
-					    </div>
-					</a>
-				    </li>
-				    <li class="nav-item">
-					<a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
-				    </li>
-				{% else %}
-				    <li><a href="{{ path('app_login') }}">Connexion</a></li>
-				    <li><a href="{{ path('app_register') }}">Inscription</a></li>
-				{% endif %}
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                                    </li>
+                                {% else %}
+                                    <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                                    <li><a href="{{ path('app_register') }}">Inscription</a></li>
+                                {% endif %}
 
                                 <li><a href="{{ path('admin_login') }}">Admin</a></li>
                             </ul>

@@ -13,17 +13,14 @@ class Litige
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    // Référence à l’entité Location (et non Reservation)
     #[ORM\ManyToOne(targetEntity: Location::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Location $location = null;
 
-    // Propriétaire concerné par le litige
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $proprietaire = null;
 
-    // Emprunteur concerné par le litige
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $emprunteur = null;
@@ -36,6 +33,9 @@ class Litige
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $dateSignalement = null;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $fichiers = []; // Déjà présent pour stocker les chemins des fichiers
 
     public function __construct()
     {
@@ -111,6 +111,17 @@ class Litige
     public function setDateSignalement(\DateTimeInterface $dateSignalement): self
     {
         $this->dateSignalement = $dateSignalement;
+        return $this;
+    }
+
+    public function getFichiers(): ?array
+    {
+        return $this->fichiers;
+    }
+
+    public function setFichiers(?array $fichiers): self
+    {
+        $this->fichiers = $fichiers;
         return $this;
     }
 }

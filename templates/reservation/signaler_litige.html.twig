@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signaler un litige</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #4b0082;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #4b0082;
+            font-size: 16px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #4b0082;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 5px rgba(37, 117, 252, 0.5);
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        input[type="file"] {
+            padding: 5px;
+            font-size: 14px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-back {
+            background: #4b0082;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #3a0061;
+        }
+
+        .btn-submit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #218838;
+        }
+
+        .btn-add {
+            background: #4b0082;
+            color: white;
+            padding: 8px 16px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .btn-add:hover {
+            background: #3a0061;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .preview-container {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Media Queries pour la responsivité */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            label {
+                font-size: 14px;
+            }
+
+            input[type="text"], textarea {
+                font-size: 14px;
+                padding: 8px;
+                border-width: 2px;
+            }
+
+            textarea {
+                height: 120px;
+            }
+
+            input[type="file"] {
+                font-size: 12px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .btn-add {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .preview-image {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            label {
+                font-size: 13px;
+            }
+
+            input[type="text"], textarea {
+                font-size: 13px;
+                padding: 6px;
+                border-width: 2px;
+            }
+
+            textarea {
+                height: 100px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .btn-add {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+
+            .preview-image {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Signaler un litige</h2>
+
+    <form action="{{ path('soumettre_litige', {'id': location.id}) }}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="nature">Nature du litige</label>
+            <input type="text" id="nature" name="nature" required placeholder="Exemple : Problème avec le véhicule">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" required placeholder="Expliquez le problème en détail..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Ajouter des images</label>
+            <div id="images-container">
+                <input type="file" name="images[]" multiple accept="image/*" onchange="previewImages(this)">
+            </div>
+            <button type="button" class="btn btn-add" onclick="addImageInput()">Ajouter une autre image</button>
+            <div id="image-preview" class="preview-container"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Ajouter des documents</label>
+            <div id="documents-container">
+                <input type="file" name="documents[]" multiple accept=".pdf,.doc,.docx">
+            </div>
+            <button type="button" class="btn btn-add" onclick="addDocumentInput()">Ajouter un autre document</button>
+        </div>
+
+        <div class="button-group">
+            <a href="{{ path('mes_reservations') }}" class="btn btn-back">Retour</a>
+            <button type="submit" class="btn btn-submit">Soumettre</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function addImageInput() {
+        const container = document.getElementById('images-container');
+        const newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.name = 'images[]';
+        newInput.multiple = true;
+        newInput.accept = 'image/*';
+        newInput.onchange = function() { previewImages(this); };
+        container.appendChild(newInput);
+    }
+
+    function addDocumentInput() {
+        const container = document.getElementById('documents-container');
+        const newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.name = 'documents[]';
+        newInput.multiple = true;
+        newInput.accept = '.pdf,.doc,.docx';
+        container.appendChild(newInput);
+    }
+
+    function previewImages(input) {
+        const preview = document.getElementById('image-preview');
+        preview.innerHTML = ''; // Réinitialise l'aperçu
+        const files = input.files;
+
+        if (files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.classList.add('preview-image');
+                    img.src = URL.createObjectURL(file);
+                    preview.appendChild(img);
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>

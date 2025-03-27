@@ -2,59 +2,40 @@
 
 namespace App\Entity;
 
+use App\Repository\LitigeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\LitigeRepository")
- */
+#[ORM\Entity(repositoryClass: LitigeRepository::class)]
 class Litige
 {
-    // Identifiant unique
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    // Référence à la réservation concernée
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Reservation")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $reservation;
+    // Référence à l’entité Location (et non Reservation)
+    #[ORM\ManyToOne(targetEntity: Location::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Location $location = null;
 
     // Propriétaire concerné par le litige
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $proprietaire;
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $proprietaire = null;
 
     // Emprunteur concerné par le litige
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $emprunteur;
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $emprunteur = null;
 
-    // Description du litige
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $description;
+    #[ORM\Column(type: 'text')]
+    private ?string $description = null;
 
-    // Statut du litige (en cours, résolu, fermé)
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $statut;
+    #[ORM\Column(type: 'string', length: 20)]
+    private ?string $statut = null;
 
-    // Date du signalement du litige
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateSignalement;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $dateSignalement = null;
 
     public function __construct()
     {
@@ -62,22 +43,19 @@ class Litige
         $this->statut = 'en cours';
     }
 
-    // Getters et setters pour chaque propriété...
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getReservation(): ?Reservation
+    public function getLocation(): ?Location
     {
-        return $this->reservation;
+        return $this->location;
     }
 
-    public function setReservation(?Reservation $reservation): self
+    public function setLocation(?Location $location): self
     {
-        $this->reservation = $reservation;
-
+        $this->location = $location;
         return $this;
     }
 
@@ -89,7 +67,6 @@ class Litige
     public function setProprietaire(?Utilisateur $proprietaire): self
     {
         $this->proprietaire = $proprietaire;
-
         return $this;
     }
 
@@ -101,7 +78,6 @@ class Litige
     public function setEmprunteur(?Utilisateur $emprunteur): self
     {
         $this->emprunteur = $emprunteur;
-
         return $this;
     }
 
@@ -113,7 +89,6 @@ class Litige
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -125,7 +100,6 @@ class Litige
     public function setStatut(string $statut): self
     {
         $this->statut = $statut;
-
         return $this;
     }
 
@@ -137,8 +111,6 @@ class Litige
     public function setDateSignalement(\DateTimeInterface $dateSignalement): self
     {
         $this->dateSignalement = $dateSignalement;
-
         return $this;
     }
 }
-

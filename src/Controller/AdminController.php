@@ -17,6 +17,7 @@ use App\Entity\Proprietaire;
 use App\Entity\Utilisateur;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use App\Entity\Litige;
 
 #[Route('/admin', name: 'admin_')]
 class AdminController extends AbstractController
@@ -292,9 +293,7 @@ class AdminController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function manageLitiges(EntityManagerInterface $entityManager): Response
     {
-        // Supposons qu'il existe une entité Litige
-        $litiges = $entityManager->getRepository('App\Entity\Litige')->findAll();
-
+        $litiges = $entityManager->getRepository(Litige::class)->findAll();
         return $this->render('admin/litiges.html.twig', [
             'litiges' => $litiges,
         ]);

@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '937ba322abd95f9366ad65d25628cf0bf53d14d9',
+        'reference' => '19443e370529df392ccb95ab10b90dbb78ae53d6',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '937ba322abd95f9366ad65d25628cf0bf53d14d9',
+            'reference' => '19443e370529df392ccb95ab10b90dbb78ae53d6',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -565,8 +565,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '3.0.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache-implementation' => array(
@@ -1248,9 +1248,9 @@
             'dev_requirement' => false,
         ),
         'symfony/runtime' => array(
-            'pretty_version' => 'v6.4.14',
-            'version' => '6.4.14.0',
-            'reference' => '4facd4174f45cd37c65860403412b67c7381136a',
+            'pretty_version' => 'v7.2.3',
+            'version' => '7.2.3.0',
+            'reference' => '8e8d09bd69b7f6c0260dd3d58f37bd4fbdeab5ad',
             'type' => 'composer-plugin',
             'install_path' => __DIR__ . '/../symfony/runtime',
             'aliases' => array(),

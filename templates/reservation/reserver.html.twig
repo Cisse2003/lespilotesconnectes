@@ -143,7 +143,9 @@ input[type="text"] {
     </div>
 
     {# Formulaire de Réservation #}
-    <form id="reservationForm">
+    <form id="reservationForm"
+      data-dispo-debut="{{ offre.dateDebutDisponibilite|date('Y-m-d') }}"
+      data-dispo-fin="{{ offre.dateFinDisponibilite|date('Y-m-d') }}">
         <input type="hidden" name="id_offre" value="{{ offre.id }}">
 
         <label for="date_debut">Date de début :</label>
@@ -183,6 +185,14 @@ document.getElementById("reservationForm").addEventListener("submit", function(e
     let idOffre = document.querySelector('input[name="id_offre"]').value;
     let dateDebut = document.getElementById("date_debut").value;
     let dateFin = document.getElementById("date_fin").value;
+    let form = event.target;
+    let dispoDebut = new Date(form.dataset.dispoDebut);
+    let dispoFin = new Date(form.dataset.dispoFin);
+
+    if (dateDebut < dispoDebut || dateFin > dispoFin) {
+        alert("❌ Les dates choisies ne respectent pas la période de disponibilité de la voiture.");
+        return;
+    }
 
     if (!/^[0-9]{16}$/.test(cardNumber)) {
         alert("❌ Le numéro de carte doit contenir exactement 16 chiffres.");

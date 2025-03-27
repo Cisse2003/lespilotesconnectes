@@ -16,8 +16,8 @@ class Abonnement
     #[ORM\Column(length: 50)]
     private ?string $type = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
-    private ?float $prix = null;
+    #[ORM\Column(type: "float")]
+    private float $prix;
 
     #[ORM\Column(type: "date")]
     private ?\DateTimeInterface $dateDebut = null;

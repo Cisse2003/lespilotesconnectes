@@ -44,6 +44,10 @@
                 <b>Invalid entities</b>
                 <span class="sf-toolbar-status {{ collector.invalidEntityCount > 0 ? 'sf-toolbar-status-red' : '' }}">{{ collector.invalidEntityCount }}</span>
             </div>
+            <div class="sf-toolbar-info-piece">
+                <b>Managed entities</b>
+                <span class="sf-toolbar-status">{{ collector.managedEntityCount }}</span>
+            </div>
             {% if collector.cacheEnabled %}
                 <div class="sf-toolbar-info-piece">
                     <b>Cache hits</b>
@@ -136,6 +140,11 @@
             <div class="metric">
                 <span class="value">{{ collector.invalidEntityCount }}</span>
                 <span class="label">Invalid entities</span>
+            </div>
+
+            <div class="metric">
+                <span class="value">{{ collector.managedEntityCount }}</span>
+                <span class="label">Managed entities</span>
             </div>
         </div>
 
@@ -384,6 +393,22 @@
             </div>
         </div>
 
+        <div class="tab">
+            <h3 class="tab-title">Managed Entities</h3>
+            <div class="tab-content">
+                {% if not collector.managedEntityCountByClass %}
+                    <div class="empty">
+                        <p>No managed entities.</p>
+                    </div>
+                {% else %}
+                    {% for manager, entityCounts in collector.managedEntityCountByClass %}
+                        <h4>{{ manager }} <small>entity manager</small></h4>
+                        {{ helper.render_simple_table('Class', 'Amount of managed objects', entityCounts) }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
         <div class="tab {{ not collector.entities ? 'disabled' }}">
             <h3 class="tab-title">Entities Mapping</h3>
             <div class="tab-content">
@@ -395,7 +420,7 @@
                 {% else %}
                     {% for manager, classes in collector.entities %}
                         {% if collector.managers|length > 1 %}
-                            <h3>{{ manager }} <small>entity manager</small></h3>
+                            <h4>{{ manager }} <small>entity manager</small></h4>
                         {% endif %}
 
                         {% if classes is empty %}

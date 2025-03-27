@@ -13,8 +13,8 @@ class Livraison
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2, nullable: true)]
-    private ?float $tarifs = null;
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    private float $tarifs;
 
 
     #[ORM\Column]

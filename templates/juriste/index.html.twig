@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des juristes{% endblock %}
+
+{% block body %}
+    <h1>Liste des juristes</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for juriste in juristes %}
+                <tr>
+                    <td>{{ juriste.nom }}</td>
+                    <td>{{ juriste.email }}</td>
+                    <td>{{ juriste.statut }}</td>
+                    <td>
+                        <a href="{{ path('juriste_show', {'id': juriste.id}) }}">Voir</a> |
+                        <a href="{{ path('juriste_edit', {'id': juriste.id}) }}">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('juriste_new') }}">Ajouter un juriste</a>
+{% endblock %}

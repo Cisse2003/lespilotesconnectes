@@ -53,12 +53,9 @@ use function trigger_deprecation;
  */
 class Configuration implements ConfigurationInterface
 {
-    private bool $debug;
-
     /** @param bool $debug Whether to use the debug mode */
-    public function __construct(bool $debug)
+    public function __construct(private bool $debug)
     {
-        $this->debug = $debug;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -66,7 +63,9 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('doctrine');
         $rootNode    = $treeBuilder->getRootNode();
 
+        /* @phpstan-ignore argument.type (symfony plugin needed) */
         $this->addDbalSection($rootNode);
+        /* @phpstan-ignore argument.type (symfony plugin needed) */
         $this->addOrmSection($rootNode);
 
         return $treeBuilder;
@@ -122,9 +121,7 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(static function ($v) {
-                                    return ['class' => $v];
-                                })
+                                ->then(static fn ($v) => ['class' => $v])
                             ->end()
                             ->children()
                                 ->scalarNode('class')->isRequired()->end()
@@ -267,6 +264,7 @@ class Configuration implements ConfigurationInterface
                     )
                     ->useAttributeAsKey('name')
                     ->prototype('array');
+        /* @phpstan-ignore argument.type (symfony plugin needed) */
         $this->configureDbalDriverNode($slaveNode);
 
         // dbal >= 2.11
@@ -275,6 +273,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('replicas')
                     ->useAttributeAsKey('name')
                     ->prototype('array');
+        /* @phpstan-ignore argument.type (symfony plugin needed) */
         $this->configureDbalDriverNode($replicaNode);
 
         assert($node instanceof ArrayNodeDefinition);
@@ -400,9 +399,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
             ->beforeNormalization()
-                ->ifTrue(static function ($v) {
-                    return ! isset($v['sessionMode']) && isset($v['session_mode']);
-                })
+                ->ifTrue(static fn ($v) => ! isset($v['sessionMode']) && isset($v['session_mode']))
                 ->then(static function ($v) {
                     $v['sessionMode'] = $v['session_mode'];
                     unset($v['session_mode']);
@@ -411,9 +408,7 @@ class Configuration implements ConfigurationInterface
                 })
             ->end()
             ->beforeNormalization()
-                ->ifTrue(static function ($v) {
-                    return ! isset($v['MultipleActiveResultSets']) && isset($v['multiple_active_result_sets']);
-                })
+                ->ifTrue(static fn ($v) => ! isset($v['MultipleActiveResultSets']) && isset($v['multiple_active_result_sets']))
                 ->then(static function ($v) {
                     $v['MultipleActiveResultSets'] = $v['multiple_active_result_sets'];
                     unset($v['multiple_active_result_sets']);
@@ -504,16 +499,14 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->validate()
                                 ->ifString()
-                                ->then(static function ($v) {
-                                    return constant('Doctrine\ORM\Proxy\ProxyFactory::AUTOGENERATE_' . strtoupper($v));
-                                })
+                                ->then(static fn (string $v) => constant('Doctrine\ORM\Proxy\ProxyFactory::AUTOGENERATE_' . strtoupper($v)))
                             ->end()
                         ->end()
                         ->booleanNode('enable_lazy_ghost_objects')
                             ->defaultValue(! method_exists(ProxyFactory::class, 'resetUninitializedProxy'))
                             ->info('Enables the new implementation of proxies based on lazy ghosts instead of using the legacy implementation')
                         ->end()
-                        ->scalarNode('proxy_dir')->defaultValue('%kernel.cache_dir%/doctrine/orm/Proxies')->end()
+                        ->scalarNode('proxy_dir')->defaultValue('%kernel.build_dir%/doctrine/orm/Proxies')->end()
                         ->scalarNode('proxy_namespace')->defaultValue('Proxies')->end()
                         ->arrayNode('controller_resolver')
                             ->canBeDisabled()
@@ -602,9 +595,7 @@ class Configuration implements ConfigurationInterface
         $node
             ->beforeNormalization()
                 // Yaml normalization
-                ->ifTrue(static function ($v) {
-                    return is_array(reset($v)) && is_string(key(reset($v)));
-                })
+                ->ifTrue(static fn ($v) => is_array(reset($v)) && is_string(key(reset($v))))
                 ->then($normalizer)
             ->end()
             ->fixXmlConfig('entity', 'entities')
@@ -665,6 +656,7 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('quote_strategy')->defaultValue('doctrine.orm.quote_strategy.default')->end()
                     ->scalarNode('typed_field_mapper')->defaultValue('doctrine.orm.typed_field_mapper.default')->end()
                     ->scalarNode('entity_listener_resolver')->defaultNull()->end()
+                    ->scalarNode('fetch_mode_subselect_batch_size')->end()
                     ->scalarNode('repository_factory')->defaultValue('doctrine.orm.container_repository_factory')->end()
                     ->arrayNode('schema_ignore_classes')
                         ->prototype('scalar')->end()
@@ -734,9 +726,7 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(static function ($v) {
-                                    return ['type' => $v];
-                                })
+                                ->then(static fn ($v) => ['type' => $v])
                             ->end()
                             ->treatNullLike([])
                             ->treatFalseLike(['mapping' => false])
@@ -779,15 +769,11 @@ class Configuration implements ConfigurationInterface
                         ->prototype('array')
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(static function ($v) {
-                                    return ['class' => $v];
-                                })
+                                ->then(static fn ($v) => ['class' => $v])
                             ->end()
                             ->beforeNormalization()
                                 // The content of the XML node is returned as the "value" key so we need to rename it
-                                ->ifTrue(static function ($v) {
-                                    return is_array($v) && isset($v['value']);
-                                })
+                                ->ifTrue(static fn ($v) => is_array($v) && isset($v['value']))
                                 ->then(static function ($v) {
                                     $v['class'] = $v['value'];
                                     unset($v['value']);
@@ -815,9 +801,7 @@ class Configuration implements ConfigurationInterface
                         ->prototype('scalar')
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(static function ($v) {
-                                    return constant(ClassMetadata::class . '::GENERATOR_TYPE_' . strtoupper($v));
-                                })
+                                ->then(static fn (string $v) => constant(ClassMetadata::class . '::GENERATOR_TYPE_' . strtoupper($v)))
                             ->end()
                         ->end()
                     ->end()
@@ -840,9 +824,7 @@ class Configuration implements ConfigurationInterface
         $node
             ->beforeNormalization()
                 ->ifString()
-                ->then(static function ($v): array {
-                    return ['type' => $v];
-                })
+                ->then(static fn ($v): array => ['type' => $v])
             ->end()
             ->children()
                 ->scalarNode('type')->defaultNull()->end()

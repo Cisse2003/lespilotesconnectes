@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Offre;
+use App\Entity\Avis;
 use App\Entity\Voiture;
 use App\Entity\Proprietaire;
 use App\Entity\Livraison;
@@ -226,6 +227,41 @@ class OffreController extends AbstractController
             'disponibilite' => $offre->getDisponibilite()
         ]);
     }
+
+    // #[Route('/offre/{id}/avis', name: 'offre_avis', methods: ['GET', 'POST'])]
+    // public function ajouterAvis(Request $request, Offre $offre): Response
+    // {
+    //     $avis = new Avis();
+    //     $avis->setOffre($offre);
+    //     $avis->setAuteur($this->getUser()); // Utilisateur connecté
+
+    //     $form = $this->createForm(AvisType::class, $avis);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager = $this->getDoctrine()->getManager();
+    //         $entityManager->persist($avis);
+    //         $entityManager->flush();
+
+    //         $this->addFlash('success', 'Votre avis a été enregistré !');
+    //         return $this->redirectToRoute('offre_show', ['id' => $offre->getId()]);
+    //     }
+
+    //     return $this->render('offre/avis.html.twig', [
+    //         'offre' => $offre,
+    //         'form' => $form->createView(),
+    //     ]);
+    // }
+
+
+    // #[Route('/offre/{id}', name: 'offre_show', methods: ['GET'])]
+    // public function showAvis(Offre $offre): Response
+    // {
+    //     return $this->render('offre/show.html.twig', [
+    //         'offre' => $offre,
+    //     ]);
+    // }
+
 
 
 

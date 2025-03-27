@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Doctrine\DBAL;
 
 use Doctrine\DBAL\Driver\API\ExceptionConverter;
 use Doctrine\DBAL\Driver\Connection as DriverConnection;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use SensitiveParameter;
 
 /**
@@ -30,8 +29,8 @@ interface Driver
      */
     public function connect(
         #[SensitiveParameter]
-        array $params,
-    ): DriverConnection;
+        array $params
+    );
 
     /**
      * Gets the DatabasePlatform instance that provides all the metadata about
@@ -39,7 +38,17 @@ interface Driver
      *
      * @return AbstractPlatform The database platform.
      */
-    public function getDatabasePlatform(ServerVersionProvider $versionProvider): AbstractPlatform;
+    public function getDatabasePlatform();
+
+    /**
+     * Gets the SchemaManager that can be used to inspect and change the underlying
+     * database schema of the platform this driver connects to.
+     *
+     * @deprecated Use {@link AbstractPlatform::createSchemaManager()} instead.
+     *
+     * @return AbstractSchemaManager
+     */
+    public function getSchemaManager(Connection $conn, AbstractPlatform $platform);
 
     /**
      * Gets the ExceptionConverter that can be used to convert driver-level exceptions into DBAL exceptions.

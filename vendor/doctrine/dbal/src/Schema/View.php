@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Doctrine\DBAL\Schema;
 
 /**
@@ -9,12 +7,21 @@ namespace Doctrine\DBAL\Schema;
  */
 class View extends AbstractAsset
 {
-    public function __construct(string $name, private readonly string $sql)
+    /** @var string */
+    private $sql;
+
+    /**
+     * @param string $name
+     * @param string $sql
+     */
+    public function __construct($name, $sql)
     {
         $this->_setName($name);
+        $this->sql = $sql;
     }
 
-    public function getSql(): string
+    /** @return string */
+    public function getSql()
     {
         return $this->sql;
     }

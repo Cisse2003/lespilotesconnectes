@@ -119,6 +119,10 @@
             const url = `{{ path('app_search') }}?year=${year}&make=${make}&model=${model}&price=${price}&places=${places}&livraison=${livraison}`;
             window.location.href = url;
         }
+
+        {% for message in app.flashes('error') %}
+            alert("{{ message|e('js') }}");
+        {% endfor %}
     </script>
 
 

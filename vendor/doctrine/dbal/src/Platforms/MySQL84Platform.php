@@ -1,19 +1,28 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\MySQL84Keywords;
+use Doctrine\Deprecations\Deprecation;
 
 /**
  * Provides the behavior, features and SQL dialect of the MySQL 8.4 database platform.
  */
 class MySQL84Platform extends MySQL80Platform
 {
-    protected function createReservedKeywordsList(): KeywordList
+    /**
+     * {@inheritDoc}
+     *
+     * @deprecated Implement {@see createReservedKeywordsList()} instead.
+     */
+    protected function getReservedKeywordsClass()
     {
-        return new MySQL84Keywords();
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/issues/4510',
+            'MySQL84Platform::getReservedKeywordsClass() is deprecated,'
+                . ' use MySQL84Platform::createReservedKeywordsList() instead.',
+        );
+
+        return Keywords\MySQL84Keywords::class;
     }
 }

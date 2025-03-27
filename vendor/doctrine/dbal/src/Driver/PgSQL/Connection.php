@@ -1,16 +1,21 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Doctrine\DBAL\Driver\PgSQL;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Exception\NoIdentityValue;
+use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\SQL\Parser;
+use Doctrine\Deprecations\Deprecation;
 use PgSql\Connection as PgSqlConnection;
+use TypeError;
 
 use function assert;
+use function get_class;
+use function gettype;
+use function is_object;
+use function is_resource;
 use function pg_close;
+use function pg_escape_bytea;
 use function pg_escape_literal;
 use function pg_get_result;
 use function pg_last_error;
@@ -18,15 +23,29 @@ use function pg_result_error;
 use function pg_send_prepare;
 use function pg_send_query;
 use function pg_version;
+use function sprintf;
 use function uniqid;
 
-final class Connection implements ConnectionInterface
+final class Connection implements ServerInfoAwareConnection
 {
-    private readonly Parser $parser;
+    /** @var PgSqlConnection|resource */
+    private $connection;
 
-    public function __construct(private readonly PgSqlConnection $connection)
+    private Parser $parser;
+
+    /** @param PgSqlConnection|resource $connection */
+    public function __construct($connection)
     {
-        $this->parser = new Parser(false);
+        if (! is_resource($connection) && ! $connection instanceof PgSqlConnection) {
+            throw new TypeError(sprintf(
+                'Expected connection to be a resource or an instance of %s, got %s.',
+                PgSqlConnection::class,
+                is_object($connection) ? get_class($connection) : gettype($connection),
+            ));
+        }
+
+        $this->connection = $connection;
+        $this->parser     = new Parser(false);
     }
 
     public function __destruct()
@@ -75,12 +94,13 @@ final class Connection implements ConnectionInterface
     }
 
     /** {@inheritDoc} */
-    public function quote(string $value): string
+    public function quote($value, $type = ParameterType::STRING)
     {
-        $quotedValue = pg_escape_literal($this->connection, $value);
-        assert($quotedValue !== false);
+        if ($type === ParameterType::BINARY || $type === ParameterType::LARGE_OBJECT) {
+            return sprintf("'%s'", pg_escape_bytea($this->connection, $value));
+        }
 
-        return $quotedValue;
+        return pg_escape_literal($this->connection, $value);
     }
 
     public function exec(string $sql): int
@@ -89,32 +109,43 @@ final class Connection implements ConnectionInterface
     }
 
     /** {@inheritDoc} */
-    public function lastInsertId(): int|string
+    public function lastInsertId($name = null)
     {
-        try {
-            return $this->query('SELECT LASTVAL()')->fetchOne();
-        } catch (Exception $exception) {
-            if ($exception->getSQLState() === '55000') {
-                throw NoIdentityValue::new($exception);
-            }
+        if ($name !== null) {
+            Deprecation::triggerIfCalledFromOutside(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/issues/4687',
+                'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
+            );
 
-            throw $exception;
+            return $this->query(sprintf('SELECT CURRVAL(%s)', $this->quote($name)))->fetchOne();
         }
+
+        return $this->query('SELECT LASTVAL()')->fetchOne();
     }
 
-    public function beginTransaction(): void
+    /** @return true */
+    public function beginTransaction(): bool
     {
         $this->exec('BEGIN');
+
+        return true;
     }
 
-    public function commit(): void
+    /** @return true */
+    public function commit(): bool
     {
         $this->exec('COMMIT');
+
+        return true;
     }
 
-    public function rollBack(): void
+    /** @return true */
+    public function rollBack(): bool
     {
         $this->exec('ROLLBACK');
+
+        return true;
     }
 
     public function getServerVersion(): string
@@ -122,7 +153,8 @@ final class Connection implements ConnectionInterface
         return (string) pg_version($this->connection)['server'];
     }
 
-    public function getNativeConnection(): PgSqlConnection
+    /** @return PgSqlConnection|resource */
+    public function getNativeConnection()
     {
         return $this->connection;
     }

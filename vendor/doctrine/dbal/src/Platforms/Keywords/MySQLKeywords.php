@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Doctrine\DBAL\Platforms\Keywords;
+
+use Doctrine\Deprecations\Deprecation;
 
 /**
  * MySQL Keywordlist.
@@ -12,9 +12,23 @@ class MySQLKeywords extends KeywordList
     /**
      * {@inheritDoc}
      *
-     * @link https://dev.mysql.com/doc/mysqld-version-reference/en/keywords-5-7.html
+     * @deprecated
      */
-    protected function getKeywords(): array
+    public function getName()
+    {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5433',
+            'MySQLKeywords::getName() is deprecated.',
+        );
+
+        return 'MySQL';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getKeywords()
     {
         return [
             'ACCESSIBLE',
@@ -43,6 +57,7 @@ class MySQLKeywords extends KeywordList
             'COLLATE',
             'COLUMN',
             'CONDITION',
+            'CONNECTION',
             'CONSTRAINT',
             'CONTINUE',
             'CONVERT',
@@ -92,8 +107,8 @@ class MySQLKeywords extends KeywordList
             'FOREIGN',
             'FROM',
             'FULLTEXT',
-            'GENERATED',
-            'GET',
+            'GENERAL',
+            'GOTO',
             'GRANT',
             'GROUP',
             'HAVING',
@@ -103,6 +118,7 @@ class MySQLKeywords extends KeywordList
             'HOUR_SECOND',
             'IF',
             'IGNORE',
+            'IGNORE_SERVER_IDS',
             'IN',
             'INDEX',
             'INFILE',
@@ -119,14 +135,13 @@ class MySQLKeywords extends KeywordList
             'INTEGER',
             'INTERVAL',
             'INTO',
-            'IO_AFTER_GTIDS',
-            'IO_BEFORE_GTIDS',
             'IS',
             'ITERATE',
             'JOIN',
             'KEY',
             'KEYS',
             'KILL',
+            'LABEL',
             'LEADING',
             'LEAVE',
             'LEFT',
@@ -143,7 +158,7 @@ class MySQLKeywords extends KeywordList
             'LONGTEXT',
             'LOOP',
             'LOW_PRIORITY',
-            'MASTER_BIND',
+            'MASTER_HEARTBEAT_PERIOD',
             'MASTER_SSL_VERIFY_SERVER_CERT',
             'MATCH',
             'MAXVALUE',
@@ -162,7 +177,6 @@ class MySQLKeywords extends KeywordList
             'NUMERIC',
             'ON',
             'OPTIMIZE',
-            'OPTIMIZER_COSTS',
             'OPTION',
             'OPTIONALLY',
             'OR',
@@ -175,11 +189,13 @@ class MySQLKeywords extends KeywordList
             'PRIMARY',
             'PROCEDURE',
             'PURGE',
+            'RAID0',
             'RANGE',
             'READ',
             'READ_WRITE',
             'READS',
             'REAL',
+            'RECURSIVE',
             'REFERENCES',
             'REGEXP',
             'RELEASE',
@@ -193,6 +209,7 @@ class MySQLKeywords extends KeywordList
             'REVOKE',
             'RIGHT',
             'RLIKE',
+            'ROWS',
             'SCHEMA',
             'SCHEMAS',
             'SECOND_MICROSECOND',
@@ -202,7 +219,9 @@ class MySQLKeywords extends KeywordList
             'SET',
             'SHOW',
             'SIGNAL',
+            'SLOW',
             'SMALLINT',
+            'SONAME',
             'SPATIAL',
             'SPECIFIC',
             'SQL',
@@ -214,7 +233,6 @@ class MySQLKeywords extends KeywordList
             'SQLWARNING',
             'SSL',
             'STARTING',
-            'STORED',
             'STRAIGHT_JOIN',
             'TABLE',
             'TERMINATED',
@@ -243,12 +261,12 @@ class MySQLKeywords extends KeywordList
             'VARCHAR',
             'VARCHARACTER',
             'VARYING',
-            'VIRTUAL',
             'WHEN',
             'WHERE',
             'WHILE',
             'WITH',
             'WRITE',
+            'X509',
             'XOR',
             'YEAR_MONTH',
             'ZEROFILL',

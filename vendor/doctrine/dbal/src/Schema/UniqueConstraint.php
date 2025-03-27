@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -13,34 +11,41 @@ use function strtolower;
 /**
  * Class for a unique constraint.
  */
-class UniqueConstraint extends AbstractAsset
+class UniqueConstraint extends AbstractAsset implements Constraint
 {
     /**
      * Asset identifier instances of the column names the unique constraint is associated with.
+     * array($columnName => Identifier)
      *
-     * @var array<string, Identifier>
+     * @var Identifier[]
      */
-    protected array $columns = [];
+    protected $columns = [];
 
     /**
-     * Platform specific flags
+     * Platform specific flags.
+     * array($flagName => true)
      *
-     * @var array<string, true>
+     * @var true[]
      */
-    protected array $flags = [];
+    protected $flags = [];
 
     /**
-     * @param array<string>        $columns
-     * @param array<string>        $flags
-     * @param array<string, mixed> $options
+     * Platform specific options.
+     *
+     * @var mixed[]
      */
-    public function __construct(
-        string $name,
-        array $columns,
-        array $flags = [],
-        private readonly array $options = [],
-    ) {
+    private array $options;
+
+    /**
+     * @param string[] $columns
+     * @param string[] $flags
+     * @param mixed[]  $options
+     */
+    public function __construct(string $name, array $columns, array $flags = [], array $options = [])
+    {
         $this->_setName($name);
+
+        $this->options = $options;
 
         foreach ($columns as $column) {
             $this->addColumn($column);
@@ -52,27 +57,17 @@ class UniqueConstraint extends AbstractAsset
     }
 
     /**
-     * Returns the names of the referencing table columns the constraint is associated with.
-     *
-     * @return list<string>
+     * {@inheritDoc}
      */
-    public function getColumns(): array
+    public function getColumns()
     {
         return array_keys($this->columns);
     }
 
     /**
-     * Returns the quoted representation of the column names the constraint is associated with.
-     *
-     * But only if they were defined with one or a column name
-     * is a keyword reserved by the platform.
-     * Otherwise, the plain unquoted value as inserted is returned.
-     *
-     * @param AbstractPlatform $platform The platform to use for quotation.
-     *
-     * @return list<string>
+     * {@inheritDoc}
      */
-    public function getQuotedColumns(AbstractPlatform $platform): array
+    public function getQuotedColumns(AbstractPlatform $platform)
     {
         $columns = [];
 
@@ -83,16 +78,16 @@ class UniqueConstraint extends AbstractAsset
         return $columns;
     }
 
-    /** @return array<int, string> */
+    /** @return string[] */
     public function getUnquotedColumns(): array
     {
-        return array_map($this->trimQuotes(...), $this->getColumns());
+        return array_map([$this, 'trimQuotes'], $this->getColumns());
     }
 
     /**
      * Returns platform specific flags for unique constraint.
      *
-     * @return array<int, string>
+     * @return string[]
      */
     public function getFlags(): array
     {
@@ -106,7 +101,7 @@ class UniqueConstraint extends AbstractAsset
      *
      * @example $uniqueConstraint->addFlag('CLUSTERED')
      */
-    public function addFlag(string $flag): self
+    public function addFlag(string $flag): UniqueConstraint
     {
         $this->flags[strtolower($flag)] = true;
 
@@ -129,22 +124,29 @@ class UniqueConstraint extends AbstractAsset
         unset($this->flags[strtolower($flag)]);
     }
 
+    /**
+     * Does this unique constraint have a specific option?
+     */
     public function hasOption(string $name): bool
     {
         return isset($this->options[strtolower($name)]);
     }
 
-    public function getOption(string $name): mixed
+    /** @return mixed */
+    public function getOption(string $name)
     {
         return $this->options[strtolower($name)];
     }
 
-    /** @return array<string, mixed> */
+    /** @return mixed[] */
     public function getOptions(): array
     {
         return $this->options;
     }
 
+    /**
+     * Adds a new column to the unique constraint.
+     */
     protected function addColumn(string $column): void
     {
         $this->columns[$column] = new Identifier($column);

@@ -19,8 +19,14 @@ class ReservationController extends AbstractController
     #[Route('/reserver/{id}', name: 'reserver_voiture')]
     public function reserver(int $id, Offre $offre, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
         if (!$offre->getDisponibilite()) {
             $this->addFlash('error', 'Cette offre n\'est plus disponible.');
+            return $this->redirectToRoute('homepage');
+        }
+
+        if ($offre->getProprietaire()->getUtilisateur() === $user) {
+            $this->addFlash('error', '❌ Vous ne pouvez pas réserver votre propre voiture.');
             return $this->redirectToRoute('homepage');
         }
 
@@ -83,24 +89,39 @@ public function validerReservation(Request $request, EntityManagerInterface $ent
         return new JsonResponse(['success' => false, 'error' => 'Offre introuvable.']);
     }
 
-    // Vérification des disponibilités
+    $proprietaire = $offre->getProprietaire();
+    if ($proprietaire && $proprietaire->getUtilisateur() === $utilisateur) {
+    return new JsonResponse([
+        'success' => false,
+        'error' => '❌ Vous ne pouvez pas réserver votre propre voiture.'
+    ]);
+    }
+
+    if ($dateDebut < $offre->getDateDebutDisponibilite() || $dateFin > $offre->getDateFinDisponibilite()) {
+        return new JsonResponse([
+            'success' => false,
+            'error' => 'Les dates choisies ne correspondent pas à la période de disponibilité de ce véhicule.'
+        ]);
+    }
+    
+
     $locations = $entityManager->getRepository(Location::class)->findBy(['offre' => $offre]);
     foreach ($locations as $location) {
-        if (($dateDebut >= $location->getDateDebut() && $dateDebut <= $location->getDateFin()) ||
-            ($dateFin >= $location->getDateDebut() && $dateFin <= $location->getDateFin()) ||
-            ($dateDebut <= $location->getDateDebut() && $dateFin >= $location->getDateFin())) {
-            return new JsonResponse([
-                'success' => false,
-                'error' => 'Ces dates ne sont pas disponibles.',
-                'datesIndisponibles' => array_map(function ($l) {
-                    return [
-                        'debut' => $l->getDateDebut()->format('Y-m-d'),
-                        'fin' => $l->getDateFin()->format('Y-m-d')
-                    ];
-                }, $locations)
-            ]);
-        }
+    if (($dateDebut >= $location->getDateDebut() && $dateDebut <= $location->getDateFin()) ||
+        ($dateFin >= $location->getDateDebut() && $dateFin <= $location->getDateFin()) ||
+        ($dateDebut <= $location->getDateDebut() && $dateFin >= $location->getDateFin())) {
+        return new JsonResponse([
+            'success' => false,
+            'error' => 'Ces dates ne sont pas disponibles.',
+            'datesIndisponibles' => array_map(function ($l) {
+                return [
+                    'debut' => $l->getDateDebut()->format('Y-m-d'),
+                    'fin' => $l->getDateFin()->format('Y-m-d')
+                ];
+            }, $locations)
+        ]);
     }
+}
 
     // Création de la réservation
     $location = new Location();

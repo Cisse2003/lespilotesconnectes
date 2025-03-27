@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Types\Exception\TypeAlreadyRegistered;
-use Doctrine\DBAL\Types\Exception\TypeNotFound;
-use Doctrine\DBAL\Types\Exception\TypeNotRegistered;
-use Doctrine\DBAL\Types\Exception\TypesAlreadyExists;
-use Doctrine\DBAL\Types\Exception\UnknownColumnType;
 
 use function spl_object_id;
 
 /**
  * The type registry is responsible for holding a map of all known DBAL types.
+ * The types are stored using the flyweight pattern so that one type only exists as exactly one instance.
  */
 final class TypeRegistry
 {
@@ -42,7 +38,7 @@ final class TypeRegistry
     {
         $type = $this->instances[$name] ?? null;
         if ($type === null) {
-            throw UnknownColumnType::new($name);
+            throw Exception::unknownColumnType($name);
         }
 
         return $type;
@@ -58,7 +54,7 @@ final class TypeRegistry
         $name = $this->findTypeName($type);
 
         if ($name === null) {
-            throw TypeNotRegistered::new($type);
+            throw Exception::typeNotRegistered($type);
         }
 
         return $name;
@@ -80,11 +76,11 @@ final class TypeRegistry
     public function register(string $name, Type $type): void
     {
         if (isset($this->instances[$name])) {
-            throw TypesAlreadyExists::new($name);
+            throw Exception::typeExists($name);
         }
 
         if ($this->findTypeName($type) !== null) {
-            throw TypeAlreadyRegistered::new($type);
+            throw Exception::typeAlreadyRegistered($type);
         }
 
         $this->instances[$name]                            = $type;
@@ -100,11 +96,11 @@ final class TypeRegistry
     {
         $origType = $this->instances[$name] ?? null;
         if ($origType === null) {
-            throw TypeNotFound::new($name);
+            throw Exception::typeNotFound($name);
         }
 
         if (($this->findTypeName($type) ?? $name) !== $name) {
-            throw TypeAlreadyRegistered::new($type);
+            throw Exception::typeAlreadyRegistered($type);
         }
 
         unset($this->instancesReverseIndex[spl_object_id($origType)]);

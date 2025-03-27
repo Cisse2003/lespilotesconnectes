@@ -30,20 +30,6 @@ class Location
     #[ORM\Column(type: "string", length: 20, options: ["default" => "en attente"])]
     private ?string $statut = "en attente";
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
-    private float $commission;
-
-    public function getCommission(): ?float
-    {
-        return $this->commission;
-    }
-
-    public function setCommission(?float $commission): self
-    {
-        $this->commission = $commission;
-        return $this;
-    }
-
     public function getId(): ?int
     {
         return $this->id;

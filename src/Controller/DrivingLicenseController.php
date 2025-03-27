@@ -43,7 +43,7 @@ class DrivingLicenseController extends AbstractController
             $dataExtracted = $ocrService->extractLicenseInfo($filePath);
         }
 
-        return $this->render('driving_license/form.html.twig', [
+        return $this->render('emprunteur/form.html.twig', [
             'controller_name' => 'DrivingLicenseController',
             'dataExtracted' => $dataExtracted
         ]);

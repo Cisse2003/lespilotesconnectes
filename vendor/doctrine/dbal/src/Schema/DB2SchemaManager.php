@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Exception;
@@ -9,6 +7,7 @@ use Doctrine\DBAL\Platforms\DB2Platform;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\Deprecations\Deprecation;
 
 use function array_change_key_case;
 use function implode;
@@ -30,16 +29,76 @@ class DB2SchemaManager extends AbstractSchemaManager
 {
     /**
      * {@inheritDoc}
+     */
+    public function listTableNames()
+    {
+        return $this->doListTableNames();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listTables()
+    {
+        return $this->doListTables();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @deprecated Use {@see introspectTable()} instead.
+     */
+    public function listTableDetails($name)
+    {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5595',
+            '%s is deprecated. Use introspectTable() instead.',
+            __METHOD__,
+        );
+
+        return $this->doListTableDetails($name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listTableColumns($table, $database = null)
+    {
+        return $this->doListTableColumns($table, $database);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listTableIndexes($table)
+    {
+        return $this->doListTableIndexes($table);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listTableForeignKeys($table, $database = null)
+    {
+        return $this->doListTableForeignKeys($table, $database);
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @throws Exception
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
+    protected function _getPortableTableColumnDefinition($tableColumn)
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
 
-        $length = $precision = $default = null;
-        $scale  = 0;
-        $fixed  = false;
+        $length    = null;
+        $fixed     = null;
+        $scale     = false;
+        $precision = false;
+
+        $default = null;
 
         if ($tableColumn['default'] !== null && $tableColumn['default'] !== 'NULL') {
             $default = $tableColumn['default'];
@@ -49,7 +108,12 @@ class DB2SchemaManager extends AbstractSchemaManager
             }
         }
 
-        $type = $this->platform->getDoctrineTypeMapping($tableColumn['typename']);
+        $type = $this->_platform->getDoctrineTypeMapping($tableColumn['typename']);
+
+        if (isset($tableColumn['comment'])) {
+            $type                   = $this->extractDoctrineTypeFromComment($tableColumn['comment'], $type);
+            $tableColumn['comment'] = $this->removeDoctrineTypeFromComment($tableColumn['comment'], $type);
+        }
 
         switch (strtolower($tableColumn['typename'])) {
             case 'varchar':
@@ -58,6 +122,7 @@ class DB2SchemaManager extends AbstractSchemaManager
                 }
 
                 $length = $tableColumn['length'];
+                $fixed  = false;
                 break;
 
             case 'character':
@@ -82,18 +147,15 @@ class DB2SchemaManager extends AbstractSchemaManager
         }
 
         $options = [
-            'length'          => $length,
-            'unsigned'        => false,
-            'fixed'           => $fixed,
-            'default'         => $default,
-            'autoincrement'   => (bool) $tableColumn['autoincrement'],
-            'notnull'         => $tableColumn['nulls'] === 'N',
-            'platformOptions' => [],
+            'length'        => $length,
+            'fixed'         => (bool) $fixed,
+            'default'       => $default,
+            'autoincrement' => (bool) $tableColumn['autoincrement'],
+            'notnull'       => $tableColumn['nulls'] === 'N',
+            'comment'       => isset($tableColumn['comment']) && $tableColumn['comment'] !== ''
+                ? $tableColumn['comment']
+                : null,
         ];
-
-        if (isset($tableColumn['comment'])) {
-            $options['comment'] = $tableColumn['comment'];
-        }
 
         if ($scale !== null && $precision !== null) {
             $options['scale']     = $scale;
@@ -106,7 +168,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableDefinition(array $table): string
+    protected function _getPortableTableDefinition($table)
     {
         $table = array_change_key_case($table, CASE_LOWER);
 
@@ -116,7 +178,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableIndexesList(array $tableIndexes, string $tableName): array
+    protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
         foreach ($tableIndexes as &$tableIndexRow) {
             $tableIndexRow            = array_change_key_case($tableIndexRow, CASE_LOWER);
@@ -129,7 +191,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition($tableForeignKey)
     {
         return new ForeignKeyConstraint(
             $tableForeignKey['local_columns'],
@@ -143,7 +205,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeysList(array $tableForeignKeys): array
+    protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {
         $foreignKeys = [];
 
@@ -171,9 +233,27 @@ class DB2SchemaManager extends AbstractSchemaManager
     }
 
     /**
+     * @param string $def
+     *
+     * @return string|null
+     */
+    protected function _getPortableForeignKeyRuleDef($def)
+    {
+        if ($def === 'C') {
+            return 'CASCADE';
+        }
+
+        if ($def === 'N') {
+            return 'SET NULL';
+        }
+
+        return null;
+    }
+
+    /**
      * {@inheritDoc}
      */
-    protected function _getPortableViewDefinition(array $view): View
+    protected function _getPortableViewDefinition($view)
     {
         $view = array_change_key_case($view, CASE_LOWER);
 
@@ -203,7 +283,7 @@ WHERE TYPE = 'T'
   AND CREATOR = ?
 SQL;
 
-        return $this->connection->executeQuery($sql, [$databaseName]);
+        return $this->_conn->executeQuery($sql, [$databaseName]);
     }
 
     protected function selectTableColumns(string $databaseName, ?string $tableName = null): Result
@@ -243,7 +323,7 @@ SQL;
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions) . ' ORDER BY C.TABNAME, C.COLNO';
 
-        return $this->connection->executeQuery($sql, $params);
+        return $this->_conn->executeQuery($sql, $params);
     }
 
     protected function selectIndexColumns(string $databaseName, ?string $tableName = null): Result
@@ -282,7 +362,7 @@ SQL;
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions) . ' ORDER BY IDX.INDNAME, IDXCOL.COLSEQ';
 
-        return $this->connection->executeQuery($sql, $params);
+        return $this->_conn->executeQuery($sql, $params);
     }
 
     protected function selectForeignKeyColumns(string $databaseName, ?string $tableName = null): Result
@@ -331,7 +411,7 @@ SQL;
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions) . ' ORDER BY R.CONSTNAME, FKCOL.COLSEQ';
 
-        return $this->connection->executeQuery($sql, $params);
+        return $this->_conn->executeQuery($sql, $params);
     }
 
     /**
@@ -356,7 +436,7 @@ SQL;
         }
 
         /** @var array<string,array<string,mixed>> $metadata */
-        $metadata = $this->connection->executeQuery($sql, $params)
+        $metadata = $this->_conn->executeQuery($sql, $params)
             ->fetchAllAssociativeIndexed();
 
         $tableOptions = [];

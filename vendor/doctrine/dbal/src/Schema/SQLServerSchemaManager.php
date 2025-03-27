@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Exception;
@@ -9,16 +7,18 @@ use Doctrine\DBAL\Platforms\SQLServer;
 use Doctrine\DBAL\Platforms\SQLServerPlatform;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\Deprecations\Deprecation;
 
 use function array_change_key_case;
 use function assert;
+use function count;
 use function explode;
 use function implode;
 use function is_string;
 use function preg_match;
 use function sprintf;
-use function str_contains;
 use function str_replace;
+use function strpos;
 use function strtok;
 
 use const CASE_LOWER;
@@ -35,9 +35,66 @@ class SQLServerSchemaManager extends AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
+    public function listTableNames()
+    {
+        return $this->doListTableNames();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listTables()
+    {
+        return $this->doListTables();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @deprecated Use {@see introspectTable()} instead.
+     */
+    public function listTableDetails($name)
+    {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5595',
+            '%s is deprecated. Use introspectTable() instead.',
+            __METHOD__,
+        );
+
+        return $this->doListTableDetails($name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listTableColumns($table, $database = null)
+    {
+        return $this->doListTableColumns($table, $database);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listTableIndexes($table)
+    {
+        return $this->doListTableIndexes($table);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function listTableForeignKeys($table, $database = null)
+    {
+        return $this->doListTableForeignKeys($table, $database);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function listSchemaNames(): array
     {
-        return $this->connection->fetchFirstColumn(
+        return $this->_conn->fetchFirstColumn(
             <<<'SQL'
 SELECT name
 FROM   sys.schemas
@@ -49,7 +106,7 @@ SQL,
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableSequenceDefinition(array $sequence): Sequence
+    protected function _getPortableSequenceDefinition($sequence)
     {
         return new Sequence($sequence['name'], (int) $sequence['increment'], (int) $sequence['start_value']);
     }
@@ -57,28 +114,21 @@ SQL,
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
+    protected function _getPortableTableColumnDefinition($tableColumn)
     {
         $dbType = strtok($tableColumn['type'], '(), ');
         assert(is_string($dbType));
 
-        $length = (int) $tableColumn['length'];
-
-        $precision = null;
-
-        $scale = 0;
-        $fixed = false;
+        $fixed   = null;
+        $length  = (int) $tableColumn['length'];
+        $default = $tableColumn['default'];
 
         if (! isset($tableColumn['name'])) {
             $tableColumn['name'] = '';
         }
 
-        if ($tableColumn['scale'] !== null) {
-            $scale = (int) $tableColumn['scale'];
-        }
-
-        if ($tableColumn['precision'] !== null) {
-            $precision = (int) $tableColumn['precision'];
+        if ($default !== null) {
+            $default = $this->parseDefaultExpression($default);
         }
 
         switch ($dbType) {
@@ -117,35 +167,26 @@ SQL,
             $fixed = true;
         }
 
-        $type = $this->platform->getDoctrineTypeMapping($dbType);
+        $type                   = $this->_platform->getDoctrineTypeMapping($dbType);
+        $type                   = $this->extractDoctrineTypeFromComment($tableColumn['comment'], $type);
+        $tableColumn['comment'] = $this->removeDoctrineTypeFromComment($tableColumn['comment'], $type);
 
         $options = [
-            'fixed'         => $fixed,
+            'unsigned'      => false,
+            'fixed'         => (bool) $fixed,
+            'default'       => $default,
             'notnull'       => (bool) $tableColumn['notnull'],
-            'scale'         => $scale,
-            'precision'     => $precision,
+            'scale'         => $tableColumn['scale'],
+            'precision'     => $tableColumn['precision'],
             'autoincrement' => (bool) $tableColumn['autoincrement'],
+            'comment'       => $tableColumn['comment'] !== '' ? $tableColumn['comment'] : null,
         ];
-
-        if (isset($tableColumn['comment'])) {
-            $options['comment'] = $tableColumn['comment'];
-        }
 
         if ($length !== 0 && ($type === 'text' || $type === 'string' || $type === 'binary')) {
             $options['length'] = $length;
         }
 
         $column = new Column($tableColumn['name'], Type::getType($type), $options);
-
-        if ($tableColumn['default'] !== null) {
-            $default = $this->parseDefaultExpression($tableColumn['default']);
-
-            $column->setDefault($default);
-            $column->setPlatformOption(
-                SQLServerPlatform::OPTION_DEFAULT_CONSTRAINT_NAME,
-                $tableColumn['df_name'],
-            );
-        }
 
         if (isset($tableColumn['collation']) && $tableColumn['collation'] !== 'NULL') {
             $column->setPlatformOption('collation', $tableColumn['collation']);
@@ -169,7 +210,7 @@ SQL,
         }
 
         if ($value === 'getdate()') {
-            return $this->platform->getCurrentTimestampSQL();
+            return $this->_platform->getCurrentTimestampSQL();
         }
 
         return $value;
@@ -178,7 +219,7 @@ SQL,
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeysList(array $tableForeignKeys): array
+    protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {
         $foreignKeys = [];
 
@@ -186,15 +227,9 @@ SQL,
             $name = $tableForeignKey['ForeignKey'];
 
             if (! isset($foreignKeys[$name])) {
-                $referencedTableName = $tableForeignKey['ReferenceTableName'];
-
-                if ($tableForeignKey['ReferenceSchemaName'] !== 'dbo') {
-                    $referencedTableName = $tableForeignKey['ReferenceSchemaName'] . '.' . $referencedTableName;
-                }
-
                 $foreignKeys[$name] = [
                     'local_columns' => [$tableForeignKey['ColumnName']],
-                    'foreign_table' => $referencedTableName,
+                    'foreign_table' => $tableForeignKey['ReferenceTableName'],
                     'foreign_columns' => [$tableForeignKey['ReferenceColumnName']],
                     'name' => $name,
                     'options' => [
@@ -214,7 +249,7 @@ SQL,
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableIndexesList(array $tableIndexes, string $tableName): array
+    protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
         foreach ($tableIndexes as &$tableIndex) {
             $tableIndex['non_unique'] = (bool) $tableIndex['non_unique'];
@@ -228,7 +263,7 @@ SQL,
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition($tableForeignKey)
     {
         return new ForeignKeyConstraint(
             $tableForeignKey['local_columns'],
@@ -242,7 +277,7 @@ SQL,
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableDefinition(array $table): string
+    protected function _getPortableTableDefinition($table)
     {
         if ($table['schema_name'] !== 'dbo') {
             return $table['schema_name'] . '.' . $table['table_name'];
@@ -254,32 +289,105 @@ SQL,
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableDatabaseDefinition(array $database): string
+    protected function _getPortableDatabaseDefinition($database)
     {
         return $database['name'];
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Use {@see listSchemaNames()} instead.
      */
-    protected function _getPortableViewDefinition(array $view): View
+    protected function getPortableNamespaceDefinition(array $namespace)
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/issues/4503',
+            'SQLServerSchemaManager::getPortableNamespaceDefinition() is deprecated,'
+                . ' use SQLServerSchemaManager::listSchemaNames() instead.',
+        );
+
+        return $namespace['name'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function _getPortableViewDefinition($view)
+    {
+        // @todo
         return new View($view['name'], $view['definition']);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function alterTable(TableDiff $tableDiff)
+    {
+        $droppedColumns = $tableDiff->getDroppedColumns();
+
+        if (count($droppedColumns) > 0) {
+            $tableName = ($tableDiff->getOldTable() ?? $tableDiff->getName($this->_platform))->getName();
+
+            foreach ($droppedColumns as $col) {
+                foreach ($this->getColumnConstraints($tableName, $col->getName()) as $constraint) {
+                    $this->_conn->executeStatement(
+                        sprintf(
+                            'ALTER TABLE %s DROP CONSTRAINT %s',
+                            $tableName,
+                            $constraint,
+                        ),
+                    );
+                }
+            }
+        }
+
+        parent::alterTable($tableDiff);
+    }
+
+    /**
+     * Returns the names of the constraints for a given column.
+     *
+     * @return iterable<string>
+     *
+     * @throws Exception
+     */
+    private function getColumnConstraints(string $table, string $column): iterable
+    {
+        return $this->_conn->iterateColumn(
+            <<<'SQL'
+SELECT o.name
+FROM sys.objects o
+         INNER JOIN sys.objects t
+                    ON t.object_id = o.parent_object_id
+                        AND t.type = 'U'
+         INNER JOIN sys.default_constraints dc
+                    ON dc.object_id = o.object_id
+         INNER JOIN sys.columns c
+                    ON c.column_id = dc.parent_column_id
+                        AND c.object_id = t.object_id
+WHERE t.name = ?
+  AND c.name = ?
+SQL
+            ,
+            [$table, $column],
+        );
     }
 
     /** @throws Exception */
     public function createComparator(): Comparator
     {
-        return new SQLServer\Comparator($this->platform, $this->getDatabaseCollation());
+        return new SQLServer\Comparator($this->_platform, $this->getDatabaseCollation());
     }
 
     /** @throws Exception */
     private function getDatabaseCollation(): string
     {
         if ($this->databaseCollation === null) {
-            $databaseCollation = $this->connection->fetchOne(
+            $databaseCollation = $this->_conn->fetchOne(
                 'SELECT collation_name FROM sys.databases WHERE name = '
-                . $this->platform->getCurrentDatabaseExpression(),
+                . $this->_platform->getCurrentDatabaseExpression(),
             );
 
             // a database is always selected, even if omitted in the connection parameters
@@ -303,7 +411,7 @@ WHERE type = 'U'
 ORDER BY name
 SQL;
 
-        return $this->connection->executeQuery($sql);
+        return $this->_conn->executeQuery($sql);
     }
 
     protected function selectTableColumns(string $databaseName, ?string $tableName = null): Result
@@ -320,7 +428,6 @@ SQL;
                           col.max_length AS length,
                           ~col.is_nullable AS notnull,
                           def.definition AS [default],
-                          def.name AS df_name,
                           col.scale,
                           col.precision,
                           col.is_identity AS autoincrement,
@@ -353,7 +460,7 @@ SQL;
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
 
-        return $this->connection->executeQuery($sql, $params);
+        return $this->_conn->executeQuery($sql, $params);
     }
 
     protected function selectIndexColumns(string $databaseName, ?string $tableName = null): Result
@@ -397,7 +504,7 @@ SQL;
 
         $sql .= ' ORDER BY idx.index_id, idxcol.key_ordinal';
 
-        return $this->connection->executeQuery($sql, $params);
+        return $this->_conn->executeQuery($sql, $params);
     }
 
     protected function selectForeignKeyColumns(string $databaseName, ?string $tableName = null): Result
@@ -439,7 +546,7 @@ SQL;
 
         $sql .= ' ORDER BY fc.constraint_column_id';
 
-        return $this->connection->executeQuery($sql, $params);
+        return $this->_conn->executeQuery($sql, $params);
     }
 
     /**
@@ -449,29 +556,31 @@ SQL;
     {
         $sql = <<<'SQL'
           SELECT
-            scm.name AS schema_name,
-            tbl.name AS table_name,
+            tbl.name,
             p.value AS [table_comment]
           FROM
             sys.tables AS tbl
-            JOIN sys.schemas AS scm
-              ON tbl.schema_id = scm.schema_id
             INNER JOIN sys.extended_properties AS p ON p.major_id=tbl.object_id AND p.minor_id=0 AND p.class=1
 SQL;
 
-        $conditions = ["p.name = N'MS_Description'"];
+        $conditions = ["SCHEMA_NAME(tbl.schema_id) = N'dbo'", "p.name = N'MS_Description'"];
+        $params     = [];
 
         if ($tableName !== null) {
-            $conditions[] = $this->getTableWhereClause($tableName, 'scm.name', 'tbl.name');
+            $conditions[] = "tbl.name = N'" . $tableName . "'";
         }
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
 
+        /** @var array<string,array<string,mixed>> $metadata */
+        $metadata = $this->_conn->executeQuery($sql, $params)
+            ->fetchAllAssociativeIndexed();
+
         $tableOptions = [];
-        foreach ($this->connection->iterateAssociative($sql) as $data) {
+        foreach ($metadata as $table => $data) {
             $data = array_change_key_case($data, CASE_LOWER);
 
-            $tableOptions[$this->_getPortableTableDefinition($data)] = [
+            $tableOptions[$table] = [
                 'comment' => $data['table_comment'],
             ];
         }
@@ -486,15 +595,15 @@ SQL;
      * @param string $schemaColumn The name of the column to compare the schema to in the where clause.
      * @param string $tableColumn  The name of the column to compare the table to in the where clause.
      */
-    private function getTableWhereClause(string $table, string $schemaColumn, string $tableColumn): string
+    private function getTableWhereClause($table, $schemaColumn, $tableColumn): string
     {
-        if (str_contains($table, '.')) {
+        if (strpos($table, '.') !== false) {
             [$schema, $table] = explode('.', $table);
-            $schema           = $this->platform->quoteStringLiteral($schema);
-            $table            = $this->platform->quoteStringLiteral($table);
+            $schema           = $this->_platform->quoteStringLiteral($schema);
+            $table            = $this->_platform->quoteStringLiteral($table);
         } else {
             $schema = 'SCHEMA_NAME()';
-            $table  = $this->platform->quoteStringLiteral($table);
+            $table  = $this->_platform->quoteStringLiteral($table);
         }
 
         return sprintf('(%s = %s AND %s = %s)', $tableColumn, $table, $schemaColumn, $schema);

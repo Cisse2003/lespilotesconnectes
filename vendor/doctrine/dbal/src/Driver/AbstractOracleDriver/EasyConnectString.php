@@ -15,8 +15,11 @@ use function sprintf;
  */
 final class EasyConnectString
 {
-    private function __construct(private readonly string $string)
+    private string $string;
+
+    private function __construct(string $string)
     {
+        $this->string = $string;
     }
 
     public function __toString(): string
@@ -74,7 +77,7 @@ final class EasyConnectString
         return self::fromArray([
             'DESCRIPTION' => [
                 'ADDRESS' => [
-                    'PROTOCOL' => $params['driverOptions']['protocol'] ?? 'TCP',
+                    'PROTOCOL' => 'TCP',
                     'HOST' => $params['host'],
                     'PORT' => $params['port'] ?? 1521,
                 ],
@@ -101,7 +104,8 @@ final class EasyConnectString
         return implode('', $chunks);
     }
 
-    private static function renderValue(mixed $value): string
+    /** @param mixed $value */
+    private static function renderValue($value): string
     {
         if (is_array($value)) {
             return self::renderParams($value);

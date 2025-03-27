@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\OffreRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: OffreRepository::class)]
 class Offre
@@ -55,6 +57,9 @@ class Offre
     // Nouveau champ pour la suspension
     #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $suspendedUntil = null;
+
+    #[ORM\OneToMany(mappedBy: "offre", targetEntity: Avis::class, cascade: ["persist", "remove"])]
+    private Collection $avis;
 
     public function getId(): ?int
     {
@@ -194,6 +199,36 @@ class Offre
     public function setSuspendedUntil(?\DateTimeInterface $suspendedUntil): self
     {
         $this->suspendedUntil = $suspendedUntil;
+        return $this;
+    }
+
+
+    public function __construct()
+    {
+        $this->avis = new ArrayCollection();
+    }
+
+    public function getAvis(): Collection
+    {
+        return $this->avis;
+    }
+
+    public function addAvis(Avis $avis): self
+    {
+        if (!$this->avis->contains($avis)) {
+            $this->avis->add($avis);
+            $avis->setOffre($this);
+        }
+        return $this;
+    }
+
+    public function removeAvis(Avis $avis): self
+    {
+        if ($this->avis->removeElement($avis)) {
+            if ($avis->getOffre() === $this) {
+                $avis->setOffre(null);
+            }
+        }
         return $this;
     }
 }

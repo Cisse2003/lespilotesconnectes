@@ -173,20 +173,28 @@ class ReservationController extends AbstractController
     }
 
     #[Route('/reservation/annuler/{id}', name: 'annuler_reservation', methods: ['POST'])]
-    public function annulerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function annulerReservation(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $reservation = $entityManager->getRepository(Location::class)->find($id);
+    $reservation = $entityManager->getRepository(Location::class)->find($id);
 
-        if (!$reservation) {
-            return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
-        }
-
-        $reservation->setStatut('Annulé');
-        $entityManager->persist($reservation);
-        $entityManager->flush();
-
-        return new JsonResponse(['success' => true]);
+    if (!$reservation) {
+        $this->addFlash('error', 'Réservation introuvable.');
+        return $this->redirectToRoute('mes_reservations');
     }
+
+    $submittedToken = $request->request->get('_token');
+    if (!$this->isCsrfTokenValid('cancel_reservation_' . $reservation->getId(), $submittedToken)) {
+        $this->addFlash('error', 'Token CSRF invalide.');
+        return $this->redirectToRoute('mes_reservations');
+    }
+
+    $reservation->setStatut('Annulé');
+    $entityManager->flush();
+
+    $this->addFlash('success', '✅ Réservation annulée avec succès.');
+    return $this->redirectToRoute('mes_reservations');
+}
+
 
     #[Route('/reservation/supprimer/{id}', name: 'supprimer_reservation', methods: ['POST'])]
     public function supprimerReservation(int $id, Request $request, EntityManagerInterface $entityManager): Response

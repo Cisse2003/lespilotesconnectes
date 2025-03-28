@@ -124,10 +124,92 @@
                 padding: 10px;
             }
         }
+        .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.top-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+}
+
+.top-buttons form {
+    flex: 1;
+}
+
+.btn-annuler,
+.btn-supprimer {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-annuler {
+    background-color: #f39c12;
+}
+.btn-annuler:hover {
+    background-color: #d68910;
+}
+
+.btn-supprimer {
+    background-color: #e74c3c;
+}
+.btn-supprimer:hover {
+    background-color: #c0392b;
+}
+
+.btn-litige {
+    display: inline-block;
+    background-color: #4b0082;
+    color: white;
+    font-size: 14px;
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+.btn-litige:hover {
+    background-color: #3a0061;
+}
+
+
     </style>
 
     <div class="container">
         <h2>Mes Réservations</h2>
+        {% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label == 'success' ? 'success' : 'danger' }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
 
         {% if reservations is empty %}
             <p class="no-reservations">📌 Vous n'avez effectué aucune réservation.</p>
@@ -158,12 +240,25 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ path('signaler_litige', {'id': reservation.id}) }}" class="btn-report">Signaler un litige</a>
-                            <form method="post" action="{{ path('supprimer_reservation', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?');" style="display:inline-block;">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete_reservation_' ~ reservation.id) }}">
-                            <button class="btn-report" style="background-color:#a93226;">🗑️ Supprimer</button>
-                            </form>
-                        </td>
+    <div class="action-buttons">
+        <div class="top-buttons">
+            <form method="post" action="{{ path('annuler_reservation', {'id': reservation.id}) }}" onsubmit="return confirm('Voulez-vous vraiment annuler cette réservation ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('cancel_reservation_' ~ reservation.id) }}">
+                <button type="submit" class="btn-annuler">Annuler</button>
+            </form>
+
+            <form method="post" action="{{ path('supprimer_reservation', {'id': reservation.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette réservation ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_reservation_' ~ reservation.id) }}">
+                <button type="submit" class="btn-supprimer">Supprimer</button>
+            </form>
+        </div>
+
+        <a href="{{ path('signaler_litige', {'id': reservation.id}) }}" class="btn-litige">Signaler un litige</a>
+    </div>
+</td>
+
+
+
                     </tr>
                 {% endfor %}
                 </tbody>

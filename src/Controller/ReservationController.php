@@ -189,19 +189,28 @@ class ReservationController extends AbstractController
     }
 
     #[Route('/reservation/supprimer/{id}', name: 'supprimer_reservation', methods: ['POST'])]
-    public function supprimerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function supprimerReservation(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $reservation = $entityManager->getRepository(Location::class)->find($id);
+    $reservation = $entityManager->getRepository(Location::class)->find($id);
 
-        if (!$reservation) {
-            return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
-        }
-
-        $entityManager->remove($reservation);
-        $entityManager->flush();
-
-        return new JsonResponse(['success' => true]);
+    if (!$reservation) {
+        $this->addFlash('error', 'Réservation introuvable.');
+        return $this->redirectToRoute('mes_reservations');
     }
+
+    $submittedToken = $request->request->get('_token');
+    if (!$this->isCsrfTokenValid('delete_reservation_' . $reservation->getId(), $submittedToken)) {
+        $this->addFlash('error', 'Token CSRF invalide.');
+        return $this->redirectToRoute('mes_reservations');
+    }
+
+    $entityManager->remove($reservation);
+    $entityManager->flush();
+
+    $this->addFlash('success', 'Réservation supprimée avec succès.');
+    return $this->redirectToRoute('mes_reservations');
+}
+
 
     #[Route('/signaler-litige/{id}', name: 'signaler_litige')]
     public function signalerLitige(int $id, EntityManagerInterface $entityManager): Response

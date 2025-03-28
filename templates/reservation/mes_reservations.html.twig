@@ -159,6 +159,10 @@
                         </td>
                         <td>
                             <a href="{{ path('signaler_litige', {'id': reservation.id}) }}" class="btn-report">Signaler un litige</a>
+                            <form method="post" action="{{ path('supprimer_reservation', {'id': reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?');" style="display:inline-block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_reservation_' ~ reservation.id) }}">
+                            <button class="btn-report" style="background-color:#a93226;">🗑️ Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

@@ -23,8 +23,13 @@ class ReservationController extends AbstractController
     #[Route('/reserver/{id}', name: 'reserver_voiture')]
     public function reserver(int $id, Offre $offre, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
         if (!$offre->getDisponibilite()) {
             $this->addFlash('error', 'Cette offre n\'est plus disponible.');
+            return $this->redirectToRoute('homepage');
+        }
+        if ($offre->getProprietaire()->getUtilisateur() === $user) {
+            $this->addFlash('error', '❌ Vous ne pouvez pas réserver votre propre voiture.');
             return $this->redirectToRoute('homepage');
         }
 
@@ -120,6 +125,19 @@ class ReservationController extends AbstractController
 
         // Mise à jour du revenuTotal du propriétaire
         $proprietaire = $offre->getProprietaire();
+        if ($proprietaire && $proprietaire->getUtilisateur() === $utilisateur){
+            return new JsonResponse([
+                'success' => false,
+                'error' => '❌ Vous ne pouvez pas réserver votre propre voiture.'
+            ]);
+        }
+
+        if ($dateDebut < $offre->getDateDebutDisponibilite() || $dateFin > $offre->getDateFinDisponibilite()) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => 'Les dates choisies ne correspondent pas à la période de disponibilité de ce véhicule.'
+            ]);
+        }
         $prixOffre = $offre->getPrix();
         $revenuActuel = $proprietaire->getRevenuTotal() ?? 0.0;
         $nouveauRevenu = $revenuActuel + $prixOffre;

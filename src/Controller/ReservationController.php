@@ -23,8 +23,13 @@ class ReservationController extends AbstractController
     #[Route('/reserver/{id}', name: 'reserver_voiture')]
     public function reserver(int $id, Offre $offre, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
         if (!$offre->getDisponibilite()) {
             $this->addFlash('error', 'Cette offre n\'est plus disponible.');
+            return $this->redirectToRoute('homepage');
+        }
+        if ($offre->getProprietaire()->getUtilisateur() === $user) {
+            $this->addFlash('error', '❌ Vous ne pouvez pas réserver votre propre voiture.');
             return $this->redirectToRoute('homepage');
         }
 
@@ -120,6 +125,19 @@ class ReservationController extends AbstractController
 
         // Mise à jour du revenuTotal du propriétaire
         $proprietaire = $offre->getProprietaire();
+        if ($proprietaire && $proprietaire->getUtilisateur() === $utilisateur){
+            return new JsonResponse([
+                'success' => false,
+                'error' => '❌ Vous ne pouvez pas réserver votre propre voiture.'
+            ]);
+        }
+
+        if ($dateDebut < $offre->getDateDebutDisponibilite() || $dateFin > $offre->getDateFinDisponibilite()) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => 'Les dates choisies ne correspondent pas à la période de disponibilité de ce véhicule.'
+            ]);
+        }
         $prixOffre = $offre->getPrix();
         $revenuActuel = $proprietaire->getRevenuTotal() ?? 0.0;
         $nouveauRevenu = $revenuActuel + $prixOffre;
@@ -154,50 +172,53 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    #[Route('/location/annuler/{id}', name: 'annuler_location')]
-    public function annulerLocation(Location $location, EntityManagerInterface $entityManager, Request $request): Response
+    #[Route('/reservation/annuler/{id}', name: 'annuler_reservation', methods: ['POST'])]
+    public function annulerReservation(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Vérifier que l'utilisateur est bien le propriétaire de la location
-        if ($location->getEmprunteur() !== $this->getUser()) {
-            $this->addFlash('error', 'Vous ne pouvez pas annuler cette location.');
-            return $this->redirectToRoute('mes_reservations');
-        }
+    $reservation = $entityManager->getRepository(Location::class)->find($id);
 
-        // Vérifier que la location n'est pas déjà annulée ou expirée
-        if ($location->getStatut() === 'Annulée' || $location->getDateFin() < new \DateTime()) {
-            $this->addFlash('error', 'Cette location ne peut pas être annulée.');
-            return $this->redirectToRoute('mes_reservations');
-        }
-
-        // Option 1: Suppression de la réservation de la base de données
-        $entityManager->remove($location);
-        $entityManager->flush();
-
-        // Option 2: Marquer la location comme annulée, sans la supprimer
-        // $location->setStatut('Annulée');
-        // $entityManager->persist($location);
-        // $entityManager->flush();
-
-        $this->addFlash('success', 'Votre réservation a été annulée avec succès.');
-
+    if (!$reservation) {
+        $this->addFlash('error', 'Réservation introuvable.');
         return $this->redirectToRoute('mes_reservations');
     }
 
+    $submittedToken = $request->request->get('_token');
+    if (!$this->isCsrfTokenValid('cancel_reservation_' . $reservation->getId(), $submittedToken)) {
+        $this->addFlash('error', 'Token CSRF invalide.');
+        return $this->redirectToRoute('mes_reservations');
+    }
+
+    $reservation->setStatut('Annulé');
+    $entityManager->flush();
+
+    $this->addFlash('success', '✅ Réservation annulée avec succès.');
+    return $this->redirectToRoute('mes_reservations');
+}
+
 
     #[Route('/reservation/supprimer/{id}', name: 'supprimer_reservation', methods: ['POST'])]
-    public function supprimerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function supprimerReservation(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $reservation = $entityManager->getRepository(Location::class)->find($id);
+    $reservation = $entityManager->getRepository(Location::class)->find($id);
 
-        if (!$reservation) {
-            return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
-        }
-
-        $entityManager->remove($reservation);
-        $entityManager->flush();
-
-        return new JsonResponse(['success' => true]);
+    if (!$reservation) {
+        $this->addFlash('error', 'Réservation introuvable.');
+        return $this->redirectToRoute('mes_reservations');
     }
+
+    $submittedToken = $request->request->get('_token');
+    if (!$this->isCsrfTokenValid('delete_reservation_' . $reservation->getId(), $submittedToken)) {
+        $this->addFlash('error', 'Token CSRF invalide.');
+        return $this->redirectToRoute('mes_reservations');
+    }
+
+    $entityManager->remove($reservation);
+    $entityManager->flush();
+
+    $this->addFlash('success', 'Réservation supprimée avec succès.');
+    return $this->redirectToRoute('mes_reservations');
+}
+
 
     #[Route('/signaler-litige/{id}', name: 'signaler_litige')]
     public function signalerLitige(int $id, EntityManagerInterface $entityManager): Response

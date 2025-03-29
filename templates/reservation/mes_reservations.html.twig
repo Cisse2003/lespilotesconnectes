@@ -124,13 +124,30 @@
                 padding: 10px;
             }
         }
+
+        .btn-cancel {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .btn-cancel:hover {
+            background: #c0392b;
+        }
     </style>
 
     <div class="container">
         <h2>Mes Réservations</h2>
 
         {% if reservations is empty %}
-            <p class="no-reservations">📌 Vous n'avez effectué aucune réservation.</p>
+            <p class="no-reservations">Vous n'avez effectué aucune réservation.</p>
         {% else %}
             <table>
                 <thead>
@@ -154,11 +171,14 @@
                             {% elseif reservation.dateFin < "now"|date("Y-m-d") %}
                                 <span class="status-expired">⌛ Expiré</span>
                             {% else %}
-                                <span class="status-confirmed">✅ Payé</span>
+                                <span class="status-confirmed">Payé</span>
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ path('signaler_litige', {'id': reservation.id}) }}" class="btn-report">Signaler un litige</a>
+                           <!-- {% if reservation.statut != 'Annulée' and reservation.dateFin >= "now"|date("Y-m-d") %}
+                                <a href="{{ path('annuler_location', {'id': reservation.id}) }}" class="btn-cancel"> Annuler</a>
+                            {% endif %} -->
+                            <a href="{{ path('signaler_litige', {'id': reservation.id}) }}" class="btn-report"> Signaler un litige</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -167,6 +187,6 @@
         {% endif %}
 
         <!-- 🔙 Bouton Retour à l'accueil -->
-        <a href="{{ path('homepage') }}" class="btn-back">🏠 Retour à l'accueil</a>
+        <a href="{{ path('homepage') }}" class="btn-back">Retour à l'accueil</a>
     </div>
 {% endblock %}

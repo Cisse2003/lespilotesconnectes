@@ -162,7 +162,7 @@
                         <h3>{{ proprietaire.utilisateur.nom }} {{ proprietaire.utilisateur.prenom }}</h3>
                         <p><strong>Email :</strong> {{ proprietaire.utilisateur.email }}</p>
                         <p><strong>Rôle :</strong> {{ proprietaire.utilisateur.roles|join(', ') }}</p>
-                        <p><strong>Montant Total des Locations :</strong> {{ proprietaire.revenuTotal|number_format(2, ',', ' ') }} €</p>
+                        <p><strong>Montant Total des Locations :</strong> {{ proprietaire.calculerTotalRevenu()|number_format(2, ',', ' ') }} €</p>
                         <div class="actions">
                             <a href="{{ path('admin_offres_utilisateur', {id: proprietaire.utilisateur.id}) }}" class="btn">Voir offres</a>
                             <form action="{{ path('admin_admin_verser_montant', {id: proprietaire.utilisateur.id}) }}" method="POST" onsubmit="return effectuerVersement(event, this)">

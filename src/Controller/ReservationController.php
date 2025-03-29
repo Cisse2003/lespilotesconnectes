@@ -154,21 +154,35 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    #[Route('/reservation/annuler/{id}', name: 'annuler_reservation', methods: ['POST'])]
-    public function annulerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/location/annuler/{id}', name: 'annuler_location')]
+    public function annulerLocation(Location $location, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $reservation = $entityManager->getRepository(Location::class)->find($id);
-
-        if (!$reservation) {
-            return new JsonResponse(['success' => false, 'error' => 'Réservation introuvable.']);
+        // Vérifier que l'utilisateur est bien le propriétaire de la location
+        if ($location->getEmprunteur() !== $this->getUser()) {
+            $this->addFlash('error', 'Vous ne pouvez pas annuler cette location.');
+            return $this->redirectToRoute('mes_reservations');
         }
 
-        $reservation->setStatut('Annulé');
-        $entityManager->persist($reservation);
+        // Vérifier que la location n'est pas déjà annulée ou expirée
+        if ($location->getStatut() === 'Annulée' || $location->getDateFin() < new \DateTime()) {
+            $this->addFlash('error', 'Cette location ne peut pas être annulée.');
+            return $this->redirectToRoute('mes_reservations');
+        }
+
+        // Option 1: Suppression de la réservation de la base de données
+        $entityManager->remove($location);
         $entityManager->flush();
 
-        return new JsonResponse(['success' => true]);
+        // Option 2: Marquer la location comme annulée, sans la supprimer
+        // $location->setStatut('Annulée');
+        // $entityManager->persist($location);
+        // $entityManager->flush();
+
+        $this->addFlash('success', 'Votre réservation a été annulée avec succès.');
+
+        return $this->redirectToRoute('mes_reservations');
     }
+
 
     #[Route('/reservation/supprimer/{id}', name: 'supprimer_reservation', methods: ['POST'])]
     public function supprimerReservation(int $id, EntityManagerInterface $entityManager): JsonResponse

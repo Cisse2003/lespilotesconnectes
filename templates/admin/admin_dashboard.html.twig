@@ -74,6 +74,53 @@
             font-size: 22px;
             font-weight: bold;
             color: #4b0082;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /
+        }
+
+        .center-line {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .prekar span {
+            display: inline-block;
+            opacity: 0;
+            animation: letterFadeIn 0.5s forwards;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            transform: translateY(0);
+        }
+
+        @keyframes letterFadeIn {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .prekar span:nth-child(1) { animation-delay: 0s; }
+        .prekar span:nth-child(2) { animation-delay: 0.5s; }
+        .prekar span:nth-child(3) { animation-delay: 1s; }
+        .prekar span:nth-child(4) { animation-delay: 1.5s; }
+        .prekar span:nth-child(5) { animation-delay: 2s; }
+        .prekar span:nth-child(6) { animation-delay: 2.5s; }
+
+        .prekar {
+            animation: resetPrekar 3.5s infinite;
+        }
+
+        @keyframes resetPrekar {
+            0%, 85% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
         .actions-section {
@@ -120,6 +167,17 @@
         .logout-btn:hover {
             background: #c0392b;
         }
+
+        @media (max-width: 768px) {
+            .top-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .center-line {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -128,6 +186,12 @@
         <div class="welcome">
             <h1>Bienvenue, {{ admin.nom }} {{ admin.prenom }}</h1>
             <p>Votre tableau de bord d'administration</p>
+        </div>
+
+        <div class="center-line">
+            <span class="prekar">
+                <span>P</span><span>R</span><span>É</span><span>K</span><span>A</span><span>R</span>
+            </span>
         </div>
         <div class="commission-box">
             <h2>Total des commissions</h2>
@@ -175,4 +239,4 @@
     });
 </script>
 </body>
-</html>
+</html>f

@@ -40,7 +40,7 @@ class Proprietaire
     {
         $total = 0;
         foreach ($this->offres as $offre) {
-            $total += $offre->getPrix() * 0.90; // Déduction de 10%
+            $total += $offre->getRevenuProprietaire();
         }
         $this->setRevenuTotal($total);
         return $total;

@@ -44,6 +44,23 @@ class Administrateur implements UserInterface, PasswordAuthenticatedUserInterfac
         return $this->commissionTotale;
     }
 
+    public function calculerCommissionTotale(array $locations): float
+    {
+        $commissionTotale = 0;
+
+        foreach ($locations as $location) {
+            $offre = $location->getOffre();
+            if ($offre) {
+                $commissionTotale += $offre->getCommission();
+            }
+        }
+
+        $this->commissionTotale = $commissionTotale;
+
+        return $this->commissionTotale;
+    }
+
+
     public function setCommissionTotale(float $commission): self
     {
         $this->commissionTotale = $commission;

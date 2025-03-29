@@ -28,6 +28,19 @@ class AppFixtures extends Fixture
          $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin123'));
 
         $manager->persist($admin);
+
+        // Création d'un juriste
+        $juriste = new Juriste();
+        $juriste->setNom('Durand');
+        $juriste->setPrenom('Marc');
+        $juriste->setEmail('marc.durand@juriste.com');
+        $juriste->setRole('ROLE_JURISTE');
+
+        $juriste->setPassword($this->passwordHasher->hashPassword($juriste, 'juriste123'));
+        $juriste->setIsConnected(false);  // Initialiser à false, non connecté
+
+        $manager->persist($juriste);
+
         $manager->flush();
     }
 }

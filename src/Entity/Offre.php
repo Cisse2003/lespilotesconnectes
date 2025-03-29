@@ -197,14 +197,25 @@ class Offre
         return $this;
     }
 
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2, nullable: true)]
+    private ?float $commission = 0.10;
+
+
     public function getCommission(): float
     {
-        return $this->prix * 0.10;
+        return $this->prix * $this->commission;
     }
+
+    public function setCommission(?float $commission): self
+    {
+        $this->commission = $commission / 100;
+        return $this;
+    }
+
 
     public function getRevenuProprietaire(): float
     {
-        return $this->prix * 0.90; // Déduit 10% de commission
+        return $this->prix * (1 - $this->commission);
     }
 
 }

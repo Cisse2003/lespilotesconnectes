@@ -18,13 +18,17 @@ use App\Entity\Utilisateur;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use App\Entity\Litige;
+use App\Repository\LocationRepository;
+use App\Repository\AdministrateurRepository;
 
 #[Route('/admin', name: 'admin_')]
 class AdminController extends AbstractController
 {
     #[Route('/dashboard', name: 'dashboard')]
     #[IsGranted('ROLE_ADMIN')]
-    public function dashboard(): Response
+    public function dashboard(LocationRepository $locationRepository,
+                              AdministrateurRepository $adminRepository,
+                              EntityManagerInterface $entityManager): Response
     {
         $admin = $this->getUser();
 
@@ -32,9 +36,41 @@ class AdminController extends AbstractController
             throw $this->createAccessDeniedException("Accès refusé. Vous devez être administrateur.");
         }
 
+        // Vérifier si l'administrateur existe
+        if ($admin) {
+            // Récupérer toutes les locations et recalculer la commission totale
+            $locations = $locationRepository->findAll();
+            $admin->calculerCommissionTotale($locations);
+
+            // Sauvegarder la nouvelle commission
+            $entityManager->persist($admin);
+            $entityManager->flush();
+        }
         return $this->render('admin/admin_dashboard.html.twig', [
             'admin' => $admin
         ]);
+    }
+
+    #[Route('/admin/commission/calculer', name: 'admin_calculer_commission')]
+    public function calculerCommission(
+        LocationRepository $locationRepository,
+        AdministrateurRepository $adminRepository,
+        EntityManagerInterface $entityManager
+    ) {
+        // Récupérer toutes les locations actives
+        $locations = $locationRepository->findAll();
+
+        // Récupérer l'administrateur (supposons qu'il y en ait un seul)
+        $admin = $adminRepository->find(1); // À adapter selon ta logique
+
+        if ($admin) {
+            // Calculer et enregistrer la commission totale
+            $admin->calculerCommissionTotale($locations);
+            $entityManager->persist($admin);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('admin_dashboard'); // Adapter la redirection
     }
 
     #[Route('/utilisateur', name: 'utilisateurs')]
@@ -228,9 +264,17 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_locations');
         }
 
-        $location->setCommission(floatval($commission));
-        $entityManager->persist($location);
+        $offre = $location->getOffre(); // Récupérer l'offre associée à la location
+
+        if (!$offre) {
+            $this->addFlash('danger', "Aucune offre associée à cette location.");
+            return $this->redirectToRoute('admin_locations');
+        }
+
+        $offre->setCommission(floatval($commission));
+        $entityManager->persist($offre);
         $entityManager->flush();
+
 
         $this->addFlash('success', "Commission mise à jour avec succès !");
         return $this->redirectToRoute('admin_locations');

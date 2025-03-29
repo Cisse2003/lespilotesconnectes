@@ -134,7 +134,8 @@
                     <td>{{ location.dateFin|date('d/m/Y') }}</td>
                     <td>
                         <form action="{{ path('admin_set_commission', {'id': location.id}) }}" method="post">
-                            <input type="number" name="commission" value="{{ location.commission ?: 0 }}" step="0.01" min="0">
+                            <input type="number" name="commission" value="{{ location.offre.getCommission() ?: 0 }}" step="0.01" min="0">
+
                             <button type="submit" class="btn">Mettre à jour</button>
                         </form>
                     </td>

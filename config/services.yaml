@@ -3,6 +3,7 @@ parameters:
     images_directory: '%kernel.project_dir%/public/uploads/offres'
     photos_directory: '%kernel.project_dir%/public/uploads/photos'
     licenses_directory: '%kernel.project_dir%/public/uploads/licenses'
+    uploads_directory: '%kernel.project_dir%/public/uploads'
 
 
 services:

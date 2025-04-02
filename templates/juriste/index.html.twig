@@ -1,33 +1,96 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juriste - Dashboard</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-{% block title %}Liste des juristes{% endblock %}
+        .dashboard-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
 
-{% block body %}
-    <h1>Liste des juristes</h1>
+        .dashboard-container h1 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Statut</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for juriste in juristes %}
-                <tr>
-                    <td>{{ juriste.nom }}</td>
-                    <td>{{ juriste.email }}</td>
-                    <td>{{ juriste.statut }}</td>
-                    <td>
-                        <a href="{{ path('juriste_show', {'id': juriste.id}) }}">Voir</a> |
-                        <a href="{{ path('juriste_edit', {'id': juriste.id}) }}">Modifier</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        .dashboard-container p {
+            font-size: 16px;
+            color: #555;
+        }
 
-    <a href="{{ path('juriste_new') }}">Ajouter un juriste</a>
-{% endblock %}
+        .dashboard-container ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .dashboard-container ul li {
+            margin: 10px 0;
+        }
+
+        .dashboard-container ul li a {
+            display: block;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .dashboard-container ul li a:hover {
+            background: linear-gradient(135deg, #556cd6, #5a3d91);
+        }
+
+        .logout-btn {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 15px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <h1>Bienvenue, {{ juriste.nom }}</h1>
+    <p>Ceci est votre tableau de bord de juriste.</p>
+
+    <ul>
+        <li><a href="{{ path('juriste_litiges') }}">Gérer les litiges</a></li>
+    </ul>
+
+    <a href="{{ path('juriste_logout') }}" class="logout-btn">Déconnexion</a>
+</div>
+</body>
+</html>

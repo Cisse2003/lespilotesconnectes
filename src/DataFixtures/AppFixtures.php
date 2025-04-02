@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Administrateur;
+use App\Entity\Juriste;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -35,9 +36,7 @@ class AppFixtures extends Fixture
         $juriste->setPrenom('Marc');
         $juriste->setEmail('marc.durand@juriste.com');
         $juriste->setRole('ROLE_JURISTE');
-
         $juriste->setPassword($this->passwordHasher->hashPassword($juriste, 'juriste123'));
-        $juriste->setIsConnected(false);  // Initialiser à false, non connecté
 
         $manager->persist($juriste);
 

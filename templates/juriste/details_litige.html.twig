@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du litige</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #b19cd9;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 900px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+            text-align: center;
+            margin-top: 30px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4b0082;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .fichiers img {
+            width: 150px;
+            height: auto;
+            margin: 10px;
+            border: 3px solid #4b0082;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .fichiers img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .fichiers a {
+            display: inline-block;
+            color: #4b0082;
+            font-weight: bold;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .fichiers a:hover {
+            text-decoration: underline;
+        }
+
+        .no-litiges {
+            font-size: 16px;
+            color: #4b0082;
+            margin-top: 20px;
+        }
+
+        .return-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .return-btn:hover {
+            background-color: #3a0061;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Détails du litige {{ litige.id }}</h1>
+    <p><strong>Titre - Description:</strong> {{ litige.description }}</p>
+    <p><strong>Statut:</strong> {{ litige.statut }}</p>
+    <p><strong>Date de signalement:</strong> {{ litige.dateSignalement|date('d/m/Y') }}</p>
+
+    <h3>Fichiers associés :</h3>
+    {% if litige.fichiers is not empty %}
+        <div class="fichiers">
+            {% for fichier in litige.fichiers %}
+                <div class="file-item">
+                    {# Vérification des types de fichiers #}
+                    {% if fichier matches '/\.(jpg|jpeg|png|gif)$/i' %}
+                        <img src="{{ asset(fichier) }}" alt="Image du litige">
+                    {% elseif fichier matches '/\.(pdf)$/i' %}
+                        <a href="{{ asset(fichier) }}" target="_blank">Télécharger le PDF</a>
+                    {% elseif fichier matches '/\.(docx|doc)$/i' %}
+                        <a href="{{ asset(fichier) }}" target="_blank">Télécharger le document Word</a>
+                    {% else %}
+                        <a href="{{ asset(fichier) }}" target="_blank">Télécharger le fichier</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun fichier associé.</p>
+    {% endif %}
+
+    <a href="{{ path('juriste_dashboard') }}" class="return-btn">Retour au tableau de bord</a>
+</div>
+
+</body>
+</html>

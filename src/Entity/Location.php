@@ -1,5 +1,6 @@
 <?php
 
+// src/Entity/Location.php
 namespace App\Entity;
 
 use App\Repository\LocationRepository;
@@ -13,6 +14,9 @@ class Location
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: "string", length: 255)]
+    private ?string $nom = null;  // Propriété 'nom' ajoutée
+
     #[ORM\Column(type: "date")]
     private ?\DateTimeInterface $dateDebut = null;
 
@@ -24,11 +28,26 @@ class Location
     private ?Offre $offre = null;
 
     #[ORM\ManyToOne(targetEntity: Emprunteur::class)]
-    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")] 
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Emprunteur $emprunteur = null;
 
     #[ORM\Column(type: "string", length: 20, options: ["default" => "en attente"])]
     private ?string $statut = "en attente";
+
+    // Getter pour la propriété 'nom'
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    // Setter pour la propriété 'nom'
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+        return $this;
+    }
+
+    // Autres méthodes et propriétés existantes...
 
     public function getId(): ?int
     {
@@ -81,14 +100,12 @@ class Location
 
     public function getStatut(): string
     {
-        return $this->statut; 
-    }    
+        return $this->statut;
+    }
 
-
-public function setStatut(string $statut): self
-{
-    $this->statut = $statut;
-    return $this;
-}
-
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
+        return $this;
+    }
 }

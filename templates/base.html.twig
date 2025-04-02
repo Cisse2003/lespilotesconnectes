@@ -56,11 +56,11 @@
                                 <li class="scroll active"><a href="#home">Accueil</a></li>
                                 <li class="scroll"><a href="#service">Services</a></li>
                                 <li class="scroll"><a href="#voitures">Voitures</a></li>
-                                <li class="scroll"><a href="#deposer-offre">Déposer un offre</a></li>
+                                <li class="scroll"><a href="#deposer-offre">Déposer une offre</a></li>
                                 <li class="scroll"><a href="#brand">Brands</a></li>
                                 <li class="scroll"><a href="#contact">Contact</a></li>
 
-                                {# Boutons Connexion / Inscription / Déconnexion #}
+                                {# Boutons Connexion / Inscription / Déconnexion / Admin / Juriste #}
                                 {% if app.user %}
                                     <li class="nav-item">
                                         <a class="nav-link profile-link" href="{{ path('app_profile') }}">
@@ -68,14 +68,14 @@
                                                 <img src="{{ asset(app.user.profileImage ? 'uploads/profile_images/' ~ app.user.profileImage : 'uploads/profile_images/default-photo.png') }}"
                                                      alt="Profil"
                                                      style="
-						       width:50px !important;
-						       height:50px !important;
-						       max-width:none !important;
-						       max-height:none !important;
-						       border-radius:50% !important;
-						       object-fit:cover !important;
-						       margin-top: -15px !important;
-						     ">
+                                                        width:50px !important;
+                                                        height:50px !important;
+                                                        max-width:none !important;
+                                                        max-height:none !important;
+                                                        border-radius:50% !important;
+                                                        object-fit:cover !important;
+                                                        margin-top: -15px !important;
+                                                     ">
                                             </div>
                                         </a>
                                     </li>
@@ -85,9 +85,9 @@
                                 {% else %}
                                     <li><a href="{{ path('app_login') }}">Connexion</a></li>
                                     <li><a href="{{ path('app_register') }}">Inscription</a></li>
+                                    <li><a href="{{ path('admin_login') }}">Admin</a></li>
+                                    <li><a href="{{ path('juriste_login') }}">Juriste</a></li> {# Nouveau bouton Juriste #}
                                 {% endif %}
-
-                                <li><a href="{{ path('admin_login') }}">Admin</a></li>
                             </ul>
 
                         </div>

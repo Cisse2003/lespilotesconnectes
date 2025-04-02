@@ -343,4 +343,25 @@ class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/litige/{id}/decision', name: 'decision_litige', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function decisionLitige(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $litige = $entityManager->getRepository(\App\Entity\Litige::class)->find($id);
+
+        if (!$litige) {
+            throw $this->createNotFoundException("Litige introuvable.");
+        }
+
+        if ($litige->getStatut() === 'en cours') {
+            $litige->setStatut('traité');
+            $entityManager->persist($litige);
+            $entityManager->flush();
+
+            $this->addFlash('success', "La décision du juriste a été validée. Le litige est maintenant traité.");
+        }
+
+        return $this->redirectToRoute('admin_litiges');
+    }
+
 }

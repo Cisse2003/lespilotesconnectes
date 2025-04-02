@@ -87,6 +87,24 @@
         .return-btn:hover {
             background-color: #3a0061;
         }
+
+        .decision-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #27ae60;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .decision-btn:hover {
+            background-color: #219653;
+        }
     </style>
 </head>
 <body>
@@ -99,6 +117,7 @@
                 <th>ID</th>
                 <th>Description</th>
                 <th>Statut</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -107,6 +126,15 @@
                     <td>{{ litige.id }}</td>
                     <td>{{ litige.description }}</td>
                     <td>{{ litige.statut }}</td>
+                    <td>
+                        {% if litige.statut == 'en cours' %}
+                            <form action="{{ path('admin_decision_litige', {id: litige.id}) }}" method="POST" onsubmit="return confirm('Valider la décision du juriste pour ce litige ?')">
+                                <button type="submit" class="decision-btn">Décision du juriste</button>
+                            </form>
+                        {% else %}
+                            <span>Décision validée</span>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

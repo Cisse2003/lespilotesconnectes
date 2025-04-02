@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des litiges</title>
+    <title>Gérer les offres</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -40,7 +40,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .litige-card {
+        .offer-card {
             background-color: #d8c3f3;
             padding: 15px;
             border-radius: 12px;
@@ -49,7 +49,7 @@
             text-align: left;
         }
 
-        .litige-card h2 {
+        .offer-card h2 {
             font-size: 18px;
             font-weight: bold;
             color: #4b0082;
@@ -57,16 +57,43 @@
             text-transform: uppercase;
         }
 
-        .litige-card p {
+        .offer-card p {
             font-size: 16px;
             margin-bottom: 8px;
             color: #333;
         }
 
-        .no-litiges {
-            font-size: 16px;
-            color: #4b0082;
-            margin-top: 20px;
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #3a0061;
+        }
+
+        .suspend-btn {
+            background-color: #f39c12;
+        }
+
+        .suspend-btn:hover {
+            background-color: #e67e22;
         }
 
         .return-btn {
@@ -87,23 +114,39 @@
         .return-btn:hover {
             background-color: #3a0061;
         }
+
+        .no-offers {
+            font-size: 16px;
+            color: #4b0082;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Gestion des litiges</h1>
-    {% if litiges|length > 0 %}
-        {% for litige in litiges %}
-            <div class="litige-card">
-                <h2>Litige #{{ litige.id }}</h2>
-                <p><strong>Description :</strong> {{ litige.description }}</p>
-                <p><strong>Statut :</strong> {{ litige.statut }}</p>
-                <!-- Ajoutez d'autres champs selon votre entité Litige -->
+    <h1>Gérer les offres disponibles</h1>
+
+    {% if offres|length > 0 %}
+        {% for offre in offres %}
+            <div class="offer-card">
+                <h2>{{ offre.voiture.marque }} {{ offre.voiture.modele }}</h2>
+                <p><strong>Propriétaire :</strong> {{ offre.proprietaire.utilisateur.nom }} {{ offre.proprietaire.utilisateur.prenom }}</p>
+                <p><strong>Lieu :</strong> {{ offre.lieuGarage }}</p>
+                <p><strong>Prix :</strong> {{ offre.prix }} €</p>
+                <p><strong>Date de création :</strong> {{ offre.dateCreation|date('d/m/Y') }}</p>
+                <p><strong>Disponibilité :</strong> {{ offre.disponibilite ? '✅ Disponible' : '❌ Non disponible' }}</p>
+                <div class="actions">
+                    <a href="{{ path('admin_offre_detail', {id: offre.id}) }}" class="btn">Détails</a>
+                    <form action="{{ path('admin_toggle_offre_suspension', {id: offre.id}) }}" method="POST" onsubmit="return confirm('Voulez-vous suspendre cette offre ?')">
+                        <button class="btn suspend-btn" type="submit">Suspendre</button>
+                    </form>
+                </div>
             </div>
         {% endfor %}
     {% else %}
-        <p class="no-litiges">Aucun litige en cours.</p>
+        <p class="no-offers">Aucune offre disponible pour le moment.</p>
     {% endif %}
+
     <a href="{{ path('admin_dashboard') }}" class="return-btn">Retour au tableau de bord</a>
 </div>
 </body>

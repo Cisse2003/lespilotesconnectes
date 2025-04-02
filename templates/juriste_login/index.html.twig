@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Juriste</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/style1.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style2.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-container h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s ease;
+            margin-top: 10px;
+        }
+        .login-container input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+            outline: none;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 15px;
+            transition: 0.3s ease;
+            font-weight: bold;
+        }
+        .login-container button:hover {
+            background: linear-gradient(135deg, #556cd6, #5a3d91);
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border: none;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+            font-weight: bold;
+        }
+        .back-button:hover {
+            background: linear-gradient(135deg, #556cd6, #5a3d91);
+            color: white;
+            text-decoration: none;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .alert-danger {
+            background: #ffdddd;
+            color: #d9534f;
+            border-left: 4px solid #d9534f;
+        }
+        @media screen and (max-width: 480px) {
+            .login-container { padding: 20px; border-radius: 8px; }
+            .login-container h1 { font-size: 22px; }
+            .login-container input { font-size: 14px; padding: 10px; }
+            .login-container button { font-size: 16px; padding: 10px; }
+            .back-button { font-size: 14px; padding: 8px 16px; }
+        }
+        @media screen and (max-width: 768px) {
+            body { padding: 30px; }
+            .login-container { max-width: 350px; }
+            .login-container h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h1>Connexion Juriste</h1>
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form method="post" action="{{ path('juriste_login') }}">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" value="{{ last_username }}" required autofocus>
+
+        <label for="password">Mot de passe</label>
+        <input type="password" name="password" id="password" required>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <button type="submit">Se connecter</button>
+    </form>
+
+    <a href="{{ path('homepage') }}" class="back-button">Retour</a>
+</div>
+</body>
+</html>

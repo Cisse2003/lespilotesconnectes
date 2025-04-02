@@ -35,7 +35,10 @@ class Litige
     private ?\DateTimeInterface $dateSignalement = null;
 
     #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $fichiers = []; // Déjà présent pour stocker les chemins des fichiers
+    private ?array $fichiers = [];
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $decisionJuriste = null;  // Nouveau champ
 
     public function __construct()
     {
@@ -122,6 +125,17 @@ class Litige
     public function setFichiers(?array $fichiers): self
     {
         $this->fichiers = $fichiers;
+        return $this;
+    }
+
+    public function getDecisionJuriste(): ?string
+    {
+        return $this->decisionJuriste;
+    }
+
+    public function setDecisionJuriste(?string $decisionJuriste): self
+    {
+        $this->decisionJuriste = $decisionJuriste;
         return $this;
     }
 }

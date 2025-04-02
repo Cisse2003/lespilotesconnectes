@@ -183,7 +183,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     // ✅ Ajout de la gestion des rôles sécurisée
     public function getRoles(): array
     {
-        return $this->roles ?? ['ROLE_USER'];
+        return ['ROLE_USER'];
     }
 
     public function setRoles(array $roles): self

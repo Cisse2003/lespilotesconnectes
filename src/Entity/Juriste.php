@@ -3,38 +3,39 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\JuristeRepository")
- */
-class Juriste
+#[ORM\Entity(repositoryClass: "App\Repository\JuristeRepository")]
+class Juriste implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $nom;
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
-    private $email;
+    #[ORM\Column(length: 255)]
+    private ?string $prenom = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateCreation;
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $email = null;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $statut;
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
+    #[ORM\Column(type: "datetime")]
+    private ?\DateTimeInterface $dateCreation = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $role = null;
+
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -49,7 +50,17 @@ class Juriste
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+        return $this;
+    }
 
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): self
+    {
+        $this->prenom = $prenom;
         return $this;
     }
 
@@ -61,7 +72,17 @@ class Juriste
     public function setEmail(string $email): self
     {
         $this->email = $email;
+        return $this;
+    }
 
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
         return $this;
     }
 
@@ -73,19 +94,35 @@ class Juriste
     public function setDateCreation(\DateTimeInterface $dateCreation): self
     {
         $this->dateCreation = $dateCreation;
-
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getRoles(): array
     {
-        return $this->statut;
+        // S'assurer que chaque administrateur a toujours ROLE_ADMIN
+        return ['ROLE_JURISTE'];
     }
 
-    public function setStatut(string $statut): self
+    public function setRoles(array $roles): self
     {
-        $this->statut = $statut;
-
+        $this->roles = $roles;
         return $this;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+        return $this;
+    }
+
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Effacer les informations sensibles si nécessaire
     }
 }

@@ -2,85 +2,92 @@
 
 namespace App\Controller;
 
-use App\Entity\Juriste;
-use App\Form\JuristeType;
-use App\Repository\JuristeRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Litige;
+use App\Repository\LitigeRepository;
+use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @Route("/juristes")
- */
+#[Route('/juriste', name: 'juriste_')]
 class JuristeController extends AbstractController
 {
-    /**
-     * @Route("/", name="juriste_index", methods={"GET"})
-     */
-    public function index(JuristeRepository $juristeRepository): Response
+    #[Route('/dashboard', name: 'dashboard')]
+    #[IsGranted('ROLE_JURISTE')]
+    public function dashboard(): Response
     {
-        $juristes = $juristeRepository->findActiveJuristes();
+        $juriste = $this->getUser();
+
+        if (!$juriste) {
+            throw $this->createAccessDeniedException("Accès refusé. Vous devez être juriste.");
+        }
 
         return $this->render('juriste/index.html.twig', [
-            'juristes' => $juristes,
+            'juriste' => $juriste,
         ]);
     }
 
-    /**
-     * @Route("/new", name="juriste_new", methods={"GET", "POST"})
-     */
-    public function new(Request $request, EntityManagerInterface $em): Response
+    #[Route('/litiges', name: 'litiges')]
+    #[IsGranted('ROLE_JURISTE')]
+    public function manageLitiges(LitigeRepository $litigeRepository): Response
     {
-        $juriste = new Juriste();
-        $form = $this->createForm(JuristeType::class, $juriste);
+        $litiges = $litigeRepository->findAll();
 
-        $form->handleRequest($request);
+        return $this->render('juriste/litiges.html.twig', [
+            'litiges' => $litiges,
+        ]);
+    }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $juriste->setDateCreation(new \DateTime());
-            $juriste->setStatut('actif');
-            $em->persist($juriste);
-            $em->flush();
+    #[Route('/litige/{id}/decision', name: 'decision_litige', methods: ['POST'])]
+    #[IsGranted('ROLE_JURISTE')]
+    public function decisionLitige(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $litige = $entityManager->getRepository(Litige::class)->find($id);
 
-            return $this->redirectToRoute('juriste_index');
+        if (!$litige) {
+            throw $this->createNotFoundException("Litige introuvable.");
         }
 
-        return $this->render('juriste/new.html.twig', [
-            'juriste' => $juriste,
-            'form' => $form->createView(),
-        ]);
-    }
+        if ($litige->getStatut() === 'en cours') {
+            $decision = $request->request->get('decision');  // Récupère la décision soumise
 
-    /**
-     * @Route("/{id}", name="juriste_show", methods={"GET"})
-     */
-    public function show(Juriste $juriste): Response
-    {
-        return $this->render('juriste/show.html.twig', [
-            'juriste' => $juriste,
-        ]);
-    }
+            // Enregistre la décision du juriste
+            $litige->setDecisionJuriste($decision);
 
-    /**
-     * @Route("/{id}/edit", name="juriste_edit", methods={"GET", "POST"})
-     */
-    public function edit(Request $request, Juriste $juriste, EntityManagerInterface $em): Response
-    {
-        $form = $this->createForm(JuristeType::class, $juriste);
+            // Change le statut du litige
+            $litige->setStatut('traité');
 
-        $form->handleRequest($request);
+            // Sauvegarde les modifications
+            $entityManager->persist($litige);
+            $entityManager->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-
-            return $this->redirectToRoute('juriste_index');
+            $this->addFlash('success', "La décision a été validée. Le litige est maintenant traité.");
         }
 
-        return $this->render('juriste/edit.html.twig', [
-            'juriste' => $juriste,
-            'form' => $form->createView(),
+        return $this->redirectToRoute('juriste_litiges');
+    }
+
+    // Méthode pour afficher les détails du litige
+    #[Route('/litige/details/{id}', name: 'juriste_details_litige')]
+    public function detailsLitige(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $litige = $entityManager->getRepository(Litige::class)->find($id);
+
+        if (!$litige) {
+            throw $this->createNotFoundException('Le litige n\'a pas été trouvé');
+        }
+
+        return $this->render('juriste/details_litige.html.twig', [
+            'litige' => $litige,
         ]);
+    }
+
+
+    #[Route('/logout', name: 'logout')]
+    public function logout(): void
+    {
+        // Symfony gère la déconnexion automatiquement
     }
 }

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des litiges - Juriste</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #b19cd9;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 900px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+            text-align: center;
+            margin-top: 30px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4b0082;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4b0082;
+            color: white;
+        }
+
+        td {
+            background-color: #d8c3f3;
+        }
+
+        .no-litiges {
+            font-size: 16px;
+            color: #4b0082;
+            margin-top: 20px;
+        }
+
+        .return-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .return-btn:hover {
+            background-color: #3a0061;
+        }
+
+        .details-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            margin: 5px 0;
+        }
+
+        .details-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .details-btn:active {
+            background-color: #003366;
+            transform: scale(1);
+        }
+
+        .decision-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #27ae60;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .decision-btn:hover {
+            background-color: #219653;
+        }
+
+        /* Style de la fenêtre modale */
+        .modal {
+            display: none; /* Par défaut, la fenêtre modale est cachée */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border: 2px solid #4b0082;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .submit-decision {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .submit-decision:hover {
+            background-color: #218838;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gestion des litiges</h1>
+    {% if litiges|length > 0 %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for litige in litiges %}
+                <tr>
+                    <td>{{ litige.id }}</td>
+                    <td>{{ litige.description }}</td>
+                    <td>{{ litige.statut }}</td>
+                    <td>
+                        <a href="{{ path('juriste_juriste_details_litige', {id: litige.id}) }}" class="details-btn">Détails</a>
+                        {% if litige.statut == 'en cours' %}
+                            <button class="decision-btn" onclick="openModal({{ litige.id }})">Décision du juriste</button>
+                        {% else %}
+                            <span>Décision validée</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-litiges">Aucun litige en cours.</p>
+    {% endif %}
+    <a href="{{ path('juriste_dashboard') }}" class="return-btn">Retour au tableau de bord</a>
+</div>
+
+<!-- La fenêtre modale -->
+<div id="decisionModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Décision pour le litige #<span id="litige-id"></span></h2>
+        <form id="decisionForm" action="{{ path('juriste_decision_litige', {id: 'id_placeholder'}) }}" method="POST">
+            <textarea name="decision" placeholder="Entrez votre décision ici..." required></textarea>
+            <button type="submit" class="decision-btn">Soumettre la décision</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Ouvrir la fenêtre modale
+    function openModal(litigeId) {
+        document.getElementById('decisionModal').style.display = 'block';
+        document.getElementById('litige-id').textContent = litigeId;
+
+        // Modifier dynamiquement l'URL du formulaire pour y insérer l'ID du litige
+        var formAction = '{{ path('juriste_decision_litige', {id: 'id_placeholder'}) }}';
+        formAction = formAction.replace('id_placeholder', litigeId);
+        document.getElementById('decisionForm').action = formAction;
+    }
+
+    // Fermer la fenêtre modale
+    function closeModal() {
+        document.getElementById('decisionModal').style.display = 'none';
+    }
+
+    // Lorsque l'utilisateur clique en dehors de la fenêtre modale, la fermer
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('decisionModal')) {
+            closeModal();
+        }
+    }
+
+</script>
+
+</body>
+</html>

@@ -83,24 +83,21 @@ public function ajouterAbonnement(Request $request, EntityManagerInterface $enti
 }
 
 
-#[Route('/abonnement/payer', name: 'payer_abonnement')]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-public function payerAbonnement(Request $request): Response
-{
-    $type = $request->request->get('type');
+    #[Route('/abonnement/payer', name: 'payer_abonnement')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function payerAbonnement(Request $request): Response
+    {
+        $type = $request->request->get('type');
 
-    if (!$type) {
-        $this->addFlash('error', 'Veuillez sélectionner un abonnement.');
-        return $this->redirectToRoute('choisir_abonnement');
+        if (!$type) {
+            $this->addFlash('error', 'Veuillez sélectionner un abonnement.');
+            return $this->redirectToRoute('choisir_abonnement');
+        }
+
+        return $this->render('abonnement/payer.html.twig', [
+            'type' => $type
+        ]);
     }
-
-    return $this->render('abonnement/payer.html.twig', [
-        'type' => $type
-    ]);
-}
-
-
-
 
     #[Route('/abonnement/mes-abonnements', name: 'mes_abonnements')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]

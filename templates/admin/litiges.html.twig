@@ -88,22 +88,16 @@
             background-color: #3a0061;
         }
 
-        .decision-btn {
-            display: inline-block;
-            padding: 8px 16px;
-            font-size: 14px;
+        .decision-text {
             font-weight: bold;
-            color: #fff;
-            background-color: #27ae60;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
         }
 
-        .decision-btn:hover {
-            background-color: #219653;
+        .decision-text.red {
+            color: red;
+        }
+
+        .decision-text.green {
+            color: green;
         }
     </style>
 </head>
@@ -117,7 +111,7 @@
                 <th>ID</th>
                 <th>Description</th>
                 <th>Statut</th>
-                <th>Actions</th>
+                <th>Décision du juriste</th>
             </tr>
             </thead>
             <tbody>
@@ -125,14 +119,18 @@
                 <tr>
                     <td>{{ litige.id }}</td>
                     <td>{{ litige.description }}</td>
-                    <td>{{ litige.statut }}</td>
-                    <td>
-                        {% if litige.statut == 'en cours' %}
-                            <form action="{{ path('admin_decision_litige', {id: litige.id}) }}" method="POST" onsubmit="return confirm('Valider la décision du juriste pour ce litige ?')">
-                                <button type="submit" class="decision-btn">Décision du juriste</button>
-                            </form>
+                    <td class="decision-text {% if litige.statut == 'traité' %}green{% endif %}">
+                        {% if litige.statut == 'traité' %}
+                            Traité
                         {% else %}
-                            <span>Décision validée</span>
+                            {{ litige.statut }}
+                        {% endif %}
+                    </td>
+                    <td class="decision-text {% if litige.decisionJuriste and litige.statut != 'en cours' %}red{% endif %}">
+                        {% if litige.decisionJuriste %}
+                            {{ litige.decisionJuriste }}
+                        {% else %}
+                            En attente de décision
                         {% endif %}
                     </td>
                 </tr>

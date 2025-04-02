@@ -48,7 +48,7 @@ class ProfileController extends AbstractController
 
             // Traitement du changement de mot de passe
             $oldPassword = $form->get('oldPassword')->getData();
-            $newPassword = $form->get('newPassword')->getData(); // Retourne le nouveau mot de passe s'il est saisi
+            $newPassword = $form->get('newPassword')->getData();
 
             if ($oldPassword || $newPassword) {
                 // Vérifie que l'utilisateur a saisi l'ancien mot de passe

@@ -24,7 +24,6 @@
         </div>
     {% endfor %}
 
-
     {{ form_start(registrationForm) }}
 
     <div>
@@ -84,6 +83,17 @@
     </div>
 
     <div>
+        <p class="terms-text">
+            En cochant cette case, vous acceptez les conditions d'utilisation de Prékar. Ces conditions incluent :
+            l'obligation de fournir des informations exactes lors de l'inscription ; l'acceptation des règles de location,
+            notamment le respect des délais de retour des véhicules, le paiement des frais de location et des éventuelles
+            pénalités en cas de retard ou de dommages ; l'interdiction d'utiliser les véhicules à des fins illégales ou
+            dangereuses ; la responsabilité de maintenir le véhicule en bon état pendant la période de location ;
+            l'acceptation des politiques de confidentialité concernant la collecte et l'utilisation de vos données
+            personnelles pour la gestion de votre compte et des réservations ; ainsi que les conditions d'annulation et
+            de remboursement définies sur notre site. Pour plus de détails, veuillez consulter la page complète des
+            <a href="{{ path('conditions_utilisation') }}">conditions d'utilisation</a>.
+        </p>
         {{ form_widget(registrationForm.agreeTerms) }}
         {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions d\'utilisation *') }}
         {% for error in registrationForm.agreeTerms.vars.errors %}
@@ -122,6 +132,21 @@
         background: linear-gradient(135deg, #556cd6, #5a3d91) !important;
         color: white !important;
         text-decoration: none !important;
+    }
+
+    .terms-text {
+        font-size: 14px;
+        color: #555;
+        text-align: left;
+        margin-bottom: 10px;
+        line-height: 1.5;
+    }
+    .terms-text a {
+        color: #667eea;
+        text-decoration: underline;
+    }
+    .terms-text a:hover {
+        color: #556cd6;
     }
 </style>
 

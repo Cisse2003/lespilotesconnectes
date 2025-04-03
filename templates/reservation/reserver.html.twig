@@ -204,24 +204,38 @@ document.getElementById("reservationForm").addEventListener("submit", function(e
         return;
     }
 
-    fetch("{{ path('valider_reservation') }}", {
-        method: "POST",
-        headers: { "X-Requested-With": "XMLHttpRequest", "Content-Type": "application/json" },
-        body: JSON.stringify({ id_offre: idOffre, date_debut: dateDebut, date_fin: dateFin })
-    })
-    .then(response => response.json())
-    .then(data => {
+    fetch("/reservation/valider", {
+    method: "POST",
+    headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ id_offre: idOffre, date_debut: dateDebut, date_fin: dateFin })
+})
+.then(async response => {
+    const contentType = response.headers.get("Content-Type");
+    
+    if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
         if (data.success) {
             alert("✅ Réservation confirmée !");
             window.location.href = "{{ path('homepage') }}";
         } else {
             alert("❌ " + data.error);
         }
-    })
-    .catch(error => {
-        console.error("Erreur:", error);
-        alert("❌ Une erreur est survenue.");
-    });
+    } else {
+        const text = await response.text();
+        console.error("❌ Réponse non JSON :", text);
+        alert("❌ Une erreur inattendue est survenue (non JSON).");
+    }
+})
+.catch(async (error) => {
+    const text = await error.text?.();
+    console.error("Erreur brute:", text || error);
+    alert("❌ Une erreur inattendue est survenue.\n" + (text || error));
+});
+
+
 });
 </script>
 

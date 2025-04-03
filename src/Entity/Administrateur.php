@@ -36,13 +36,20 @@ class Administrateur implements UserInterface, PasswordAuthenticatedUserInterfac
     #[ORM\JoinColumn(nullable: true)] // Permettre un Administrateur sans Utilisateur
     private ?Utilisateur $utilisateur = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2, options: ["default" => 0])]
-    private ?float $commissionTotale = 0;
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+private ?string $commissionTotale = '0.00';
 
-    public function getCommissionTotale(): ?float
-    {
-        return $this->commissionTotale;
-    }
+public function getCommissionTotale(): ?string
+{
+    return $this->commissionTotale;
+}
+
+public function setCommissionTotale(string $commission): self
+{
+    $this->commissionTotale = $commission;
+    return $this;
+}
+
 
     public function calculerCommissionTotale(array $locations): float
     {
@@ -58,13 +65,6 @@ class Administrateur implements UserInterface, PasswordAuthenticatedUserInterfac
         $this->commissionTotale = $commissionTotale;
 
         return $this->commissionTotale;
-    }
-
-
-    public function setCommissionTotale(float $commission): self
-    {
-        $this->commissionTotale = $commission;
-        return $this;
     }
 
     public function ajouterCommission(float $montant): self

@@ -5,6 +5,10 @@ namespace App\Entity;
 use App\Repository\OffreRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Avis;
+
 
 #[ORM\Entity(repositoryClass: OffreRepository::class)]
 class Offre
@@ -27,11 +31,9 @@ class Offre
     #[Assert\NotBlank]
     private ?string $lieuGarage = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]    #[Assert\NotBlank]
     #[Assert\Positive]
-    private ?float $prix = null;
-
+    private ?string $prix = '0.00';
     #[ORM\Column]
     private ?bool $disponibilite = true;
 
@@ -39,9 +41,10 @@ class Offre
     #[ORM\JoinColumn(nullable: false)]
     private ?Voiture $voiture = null;
 
-    #[ORM\ManyToOne(targetEntity: Proprietaire::class)]
+    #[ORM\ManyToOne(targetEntity: Proprietaire::class, inversedBy: 'offres')]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Proprietaire $proprietaire = null;
+
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
@@ -105,16 +108,16 @@ class Offre
         return $this;
     }
 
-    public function getPrix(): ?float
-    {
-        return $this->prix;
-    }
+    public function getPrix(): ?string
+{
+    return $this->prix;
+}
 
-    public function setPrix(float $prix): self
-    {
-        $this->prix = $prix;
-        return $this;
-    }
+public function setPrix(string $prix): self
+{
+    $this->prix = $prix;
+    return $this;
+}
 
     public function getDisponibilite(): ?bool
     {
@@ -198,24 +201,60 @@ class Offre
     }
 
     #[ORM\Column(type: "decimal", precision: 10, scale: 2, nullable: true)]
-    private ?float $commission = 0.10;
-
+    private ?string $commission = '0.10';
 
     public function getCommission(): float
-    {
-        return $this->prix * $this->commission;
-    }
+{
+    return floatval($this->prix) * floatval($this->commission);
+}
 
-    public function setCommission(?float $commission): self
-    {
-        $this->commission = $commission / 100;
-        return $this;
-    }
+public function setCommission(?float $commission): self
+{
+    $this->commission = number_format($commission / 100, 2, '.', '');
+    return $this;
+}
 
 
     public function getRevenuProprietaire(): float
     {
         return $this->prix * (1 - $this->commission);
     }
+
+    #[ORM\OneToMany(mappedBy: 'offre', targetEntity: Avis::class, cascade: ['remove'])]
+private Collection $avis;
+
+public function __construct()
+{
+    $this->avis = new ArrayCollection();
+}
+
+public function getAvis(): Collection
+{
+    return $this->avis;
+}
+
+public function addAvis(Avis $avis): self
+{
+    if (!$this->avis->contains($avis)) {
+        $this->avis[] = $avis;
+        $avis->setOffre($this);
+    }
+
+    return $this;
+}
+
+public function removeAvis(Avis $avis): self
+{
+    if ($this->avis->removeElement($avis)) {
+        if ($avis->getOffre() === $this) {
+            $avis->setOffre(null);
+        }
+    }
+
+    return $this;
+}
+
+
+
 
 }

@@ -73,9 +73,18 @@ class ReservationController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true);
+        file_put_contents(__DIR__ . '/../../var/log/reservation_debug.log', json_encode($data, JSON_PRETTY_PRINT));
         $idOffre = $data['id_offre'] ?? null;
-        $dateDebut = new \DateTime($data['date_debut'] ?? null);
-        $dateFin = new \DateTime($data['date_fin'] ?? null);
+        try {
+            $dateDebut = isset($data['date_debut']) ? new \DateTime($data['date_debut']) : null;
+            $dateFin = isset($data['date_fin']) ? new \DateTime($data['date_fin']) : null;
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => '❌ Format de date invalide.'
+            ]);
+        }
+        
 
         if (!$idOffre || !$dateDebut || !$dateFin) {
             return new JsonResponse(['success' => false, 'error' => 'Données invalides.']);
@@ -122,6 +131,9 @@ class ReservationController extends AbstractController
         $location->setDateFin($dateFin);
         $location->setOffre($offre);
         $location->setEmprunteur($emprunteur);
+        $location->setNom('Réservation de ' . $utilisateur->getPrenom() . ' ' . $utilisateur->getNom());
+        $location->setStatut('en attente');
+
 
         // Mise à jour du revenuTotal du propriétaire
         $proprietaire = $offre->getProprietaire();
@@ -159,10 +171,11 @@ class ReservationController extends AbstractController
         if (!$utilisateur) {
             return $this->redirectToRoute('app_login');
         }
+        
 
         $emprunteur = $entityManager->getRepository(Emprunteur::class)->findOneBy(['utilisateur' => $utilisateur]);
         if (!$emprunteur) {
-            return $this->render('reservation/mes_reservations.html.twig', ['reservations' => []]);
+            return new JsonResponse(['success' => false, 'error' => '⚠️ Vous devez valider votre permis avant de réserver.']);
         }
 
         $reservations = $entityManager->getRepository(Location::class)->findBy(['emprunteur' => $emprunteur]);

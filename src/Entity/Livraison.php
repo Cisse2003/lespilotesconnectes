@@ -14,7 +14,7 @@ class Livraison
     private ?int $id = null;
 
     #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
-    private float $tarifs;
+private ?string $tarifs = '0.00';
 
 
     #[ORM\Column]
@@ -30,15 +30,15 @@ class Livraison
         return $this->id;
     }
 
-    public function setTarifs(?float $tarifs): self
+    public function getTarifs(): ?string
+    {
+        return $this->tarifs;
+    }
+    
+    public function setTarifs(string $tarifs): self
     {
         $this->tarifs = $tarifs;
         return $this;
-    }
-
-    public function getTarifs(): ?float
-    {
-        return $this->tarifs;
     }
 
     public function setDisponibilite(?bool $disponibilite): self

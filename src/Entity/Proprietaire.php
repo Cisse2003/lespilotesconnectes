@@ -22,19 +22,21 @@ class Proprietaire
     #[ORM\OneToMany(mappedBy: "proprietaire", targetEntity: Offre::class, cascade: ["persist", "remove"])]
     private Collection $offres;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2, options: ["default" => 0])]
-    private ?float $revenuTotal = 0.0;
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    private ?string $revenuTotal = '0.00';
 
-    public function getRevenuTotal(): ?float
-    {
-        return $this->revenuTotal;
-    }
 
-    public function setRevenuTotal(float $revenuTotal): static
-    {
-        $this->revenuTotal = $revenuTotal;
-        return $this;
-    }
+    public function getRevenuTotal(): ?string
+{
+    return $this->revenuTotal;
+}
+
+public function setRevenuTotal(string $revenuTotal): self
+{
+    $this->revenuTotal = $revenuTotal;
+    return $this;
+}
+
 
     public function calculerTotalRevenu(): float
     {
